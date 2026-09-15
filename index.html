@@ -395,6 +395,60 @@
     0%,100%{ opacity:1; }
     50%{ opacity:0.75; }
   }
+  .rest-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(10,10,10,0.92);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:30px 20px;
+    z-index:99;
+  }
+  .rest-overlay-label{
+    color:#fff;
+    opacity:0.7;
+    font-size:15px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .rest-overlay-time{
+    color:#fff;
+    font-size:clamp(56px, 18vw, 96px);
+    font-weight:800;
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  @keyframes blinkOverlayNr{
+    0%, 49%{ opacity:1; color:#fff; }
+    50%, 100%{ opacity:1; color:var(--pink); }
+  }
+  .rest-overlay.blinking .rest-overlay-time{
+    animation: blinkOverlayNr 0.5s steps(1) infinite;
+  }
+  .rest-overlay-cancel{
+    margin-top:28px;
+    background:none;
+    border:1px solid rgba(255,255,255,0.3);
+    color:#fff;
+    border-radius:20px;
+    padding:10px 22px;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .rest-alert-banner{
+    background:#ff8c1a;
+    color:#2b1400;
+    font-weight:800;
+    font-size:15px;
+    padding:14px 16px;
+    border-radius:10px;
+    margin:0 0 14px;
+    text-align:center;
+    box-shadow:0 2px 10px rgba(255,140,26,0.45);
+  }
   .tip{
     background:#faf8f2;
     border-left:3px solid var(--pink);
@@ -489,7 +543,7 @@ function buildDay(n, tipo, titulo, items){
 }
 function ejFuerza(){
   return [
-    { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso o mancuernas', sinPeso:true, nota:'Pecho arriba, bajá controlada.', video:null, descanso:'45 seg' },
+    { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso o mancuernas', sinPeso:true, nota:'Pecho arriba, bajá controlada.', video:'https://youtube.com/shorts/0WSUiP0cQDI', descanso:'45 seg' },
     { ejercicio:'Flexiones (rodillas si hace falta)', series:'3 series', reps:'10', peso:'Sin peso', sinPeso:true, video:null, descanso:'45 seg' },
     { ejercicio:'Puente de glúteos', series:'3 series', reps:'15', peso:'Sin peso', sinPeso:true, video:'https://www.youtube.com/shorts/Cxp6D7LEqjM', descanso:'30 seg' },
     { ejercicio:'Plancha', series:'3 series', reps:'20-30 seg', peso:'Sin peso', sinPeso:true, video:null, descanso:'30 seg' }
@@ -540,7 +594,7 @@ const AMORPROPIO_RETOS = [
   'Agradecele a tu cuerpo por lo que hizo esta semana.'
 ];
 
-let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, sigDrawing:false, sigHasContent:false, sigCtx:null };
+let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, uiRestAlert:null, sigDrawing:false, sigHasContent:false, sigCtx:null };
 let restTimerHandles = {};
 let restTimerEndTimes = {};
 let restAudioCtx = null;
@@ -577,6 +631,7 @@ function cancelRestTimer(key){
 function tickRestTimer(key){
   const remaining = Math.max(0, Math.round((restTimerEndTimes[key] - Date.now())/1000));
   state.uiResting[key] = remaining;
+  if(remaining > 0 && remaining <= 10) playTickSoundNr();
   if(remaining <= 0){
     clearInterval(restTimerHandles[key]);
     delete restTimerHandles[key];
@@ -587,31 +642,75 @@ function tickRestTimer(key){
     render();
   }
 }
+const REST_MESSAGES = [
+  '¡Dale {nombre}, vos podés! 💪 Arrancá la siguiente serie',
+  '¡Vamos {nombre}! 🔥 Es hora de la próxima serie',
+  '{nombre}, ya descansaste — ¡a por la siguiente! ✨',
+  '¡Arriba {nombre}! 🌟 Seguí sumando',
+  '{nombre}, cada serie te acerca más 💗 ¡Dale!'
+];
+function getRestMessage(){
+  const msg = REST_MESSAGES[Math.floor(Math.random()*REST_MESSAGES.length)];
+  return msg.replace('{nombre}', state.nombre.split(' ')[0]);
+}
+function playTickSoundNr(){
+  try{
+    ensureRestAudio().then(ctx=>{
+      if(!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 1000;
+      const now = ctx.currentTime;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.15, now + 0.02);
+      gain.gain.linearRampToValueAtTime(0, now + 0.12);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.12);
+    });
+  }catch(e){}
+}
 async function onRestFinished(key){
   try{
     const ctx = await ensureRestAudio();
     if(ctx){
-      const playTone = (freq, startTime, duration)=>{
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0, startTime);
-        gain.gain.linearRampToValueAtTime(0.85, startTime + 0.03);
-        gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(startTime);
-        osc.stop(startTime + duration + 0.05);
-      };
       const now = ctx.currentTime;
-      playTone(659.25, now, 0.3);
-      playTone(880, now + 0.2, 0.3);
-      playTone(1174.66, now + 0.4, 0.5);
+      // Silbato de partido: tono agudo sostenido con vibrato
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const lfo = ctx.createOscillator();
+      const lfoGain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.value = 2200;
+      lfo.frequency.value = 18;
+      lfoGain.gain.value = 40;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.5, now + 0.02);
+      gain.gain.setValueAtTime(0.5, now + 0.35);
+      gain.gain.linearRampToValueAtTime(0, now + 0.42);
+      gain.gain.setValueAtTime(0.5, now + 0.5);
+      gain.gain.linearRampToValueAtTime(0, now + 0.85);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      lfo.start(now);
+      osc.start(now);
+      osc.stop(now + 0.9);
+      lfo.stop(now + 0.9);
     }
   }catch(e){}
   if(navigator.vibrate) navigator.vibrate([250,100,250]);
+  state.uiRestAlert = { key, message: getRestMessage() };
   render();
+  setTimeout(()=>{
+    if(state.uiRestAlert && state.uiRestAlert.key === key){
+      state.uiRestAlert = null;
+      render();
+    }
+  }, 6000);
 }
 function youtubeEmbedUrl(url){
   if(!url) return null;
@@ -940,10 +1039,24 @@ function render(){
         <div class="brand-title">SUMA20</div>
       </div>
       <h1 style="text-align:center;">Día ${d} — ${escapeHtml(info.titulo)}</h1>
+      ${state.uiRestAlert ? `<div class="rest-alert-banner">${escapeHtml(state.uiRestAlert.message)}</div>` : ''}
       <div id="day-items"></div>
     `;
     app.innerHTML = html;
     document.getElementById('back-btn').onclick = ()=>{ state.view='dashboard'; render(); };
+    const restingKeys = Object.keys(state.uiResting);
+    if(restingKeys.length){
+      const rKey = restingKeys[0];
+      const overlay = document.createElement('div');
+      overlay.className = 'rest-overlay' + (state.uiResting[rKey] <= 10 ? ' blinking' : '');
+      overlay.innerHTML = `
+        <div class="rest-overlay-label">Descanso</div>
+        <div class="rest-overlay-time">${state.uiResting[rKey]}</div>
+        <button class="rest-overlay-cancel" id="rest-cancel-btn">Cancelar</button>
+      `;
+      document.body.appendChild(overlay);
+      document.getElementById('rest-cancel-btn').onclick = ()=>{ cancelRestTimer(rKey); overlay.remove(); };
+    }
 
     const wrap = document.getElementById('day-items');
     info.items.forEach((item, idx)=>{
@@ -977,9 +1090,7 @@ function render(){
             <button class="set-plus" data-key="${key}">+</button>
           </div>
           ${item.descanso ? (
-            resting !== undefined ? `
-              <div class="rest-active">⏱️ Descansando... <strong>${resting}s</strong></div>
-            ` : `
+            resting !== undefined ? '' : `
               <button class="btn-ghost rest-start-btn" data-key="${key}" data-seconds="${firstNumberSecs(item.descanso)}">⏱️ Iniciar descanso (${escapeHtml(item.descanso)})</button>
             `
           ) : ''}
