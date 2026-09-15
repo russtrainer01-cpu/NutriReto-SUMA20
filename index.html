@@ -381,6 +381,20 @@
     font-size:11px;
     margin-top:2px;
   }
+  .rest-active{
+    background:#ff8c1a;
+    color:#2b1400;
+    font-weight:800;
+    text-align:center;
+    border-radius:10px;
+    padding:10px;
+    margin:8px 0;
+    animation:restPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes restPulse{
+    0%,100%{ opacity:1; }
+    50%{ opacity:0.75; }
+  }
   .tip{
     background:#faf8f2;
     border-left:3px solid var(--pink);
@@ -475,18 +489,18 @@ function buildDay(n, tipo, titulo, items){
 }
 function ejFuerza(){
   return [
-    { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso o mancuernas', sinPeso:true, nota:'Pecho arriba, bajá controlada.', video:null },
-    { ejercicio:'Flexiones (rodillas si hace falta)', series:'3 series', reps:'10', peso:'Sin peso', sinPeso:true, video:null },
-    { ejercicio:'Puente de glúteos', series:'3 series', reps:'15', peso:'Sin peso', sinPeso:true, video:'https://www.youtube.com/shorts/Cxp6D7LEqjM' },
-    { ejercicio:'Plancha', series:'3 series', reps:'20-30 seg', peso:'Sin peso', sinPeso:true, video:null }
+    { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso o mancuernas', sinPeso:true, nota:'Pecho arriba, bajá controlada.', video:null, descanso:'45 seg' },
+    { ejercicio:'Flexiones (rodillas si hace falta)', series:'3 series', reps:'10', peso:'Sin peso', sinPeso:true, video:null, descanso:'45 seg' },
+    { ejercicio:'Puente de glúteos', series:'3 series', reps:'15', peso:'Sin peso', sinPeso:true, video:'https://www.youtube.com/shorts/Cxp6D7LEqjM', descanso:'30 seg' },
+    { ejercicio:'Plancha', series:'3 series', reps:'20-30 seg', peso:'Sin peso', sinPeso:true, video:null, descanso:'30 seg' }
   ];
 }
 function ejCardio(){
   return [
-    { ejercicio:'Jumping Jacks', series:'4 rondas', reps:'40 seg', peso:'Sin peso', sinPeso:true, video:null },
-    { ejercicio:'Mountain Climbers', series:'4 rondas', reps:'30 seg', peso:'Sin peso', sinPeso:true, video:'https://www.youtube.com/shorts/tQkpdUWK8KU' },
-    { ejercicio:'Sentadilla con salto', series:'4 rondas', reps:'30 seg', peso:'Sin peso', sinPeso:true, video:null },
-    { ejercicio:'Burpees (suaves)', series:'4 rondas', reps:'20 seg', peso:'Sin peso', sinPeso:true, video:null }
+    { ejercicio:'Jumping Jacks', series:'4 rondas', reps:'40 seg', peso:'Sin peso', sinPeso:true, video:null, descanso:'20 seg' },
+    { ejercicio:'Mountain Climbers', series:'4 rondas', reps:'30 seg', peso:'Sin peso', sinPeso:true, video:'https://www.youtube.com/shorts/tQkpdUWK8KU', descanso:'20 seg' },
+    { ejercicio:'Sentadilla con salto', series:'4 rondas', reps:'30 seg', peso:'Sin peso', sinPeso:true, video:null, descanso:'30 seg' },
+    { ejercicio:'Burpees (suaves)', series:'4 rondas', reps:'20 seg', peso:'Sin peso', sinPeso:true, video:null, descanso:'30 seg' }
   ];
 }
 function ejElongacion(){
@@ -526,7 +540,79 @@ const AMORPROPIO_RETOS = [
   'Agradecele a tu cuerpo por lo que hizo esta semana.'
 ];
 
-let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, sigDrawing:false, sigHasContent:false, sigCtx:null };
+let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, sigDrawing:false, sigHasContent:false, sigCtx:null };
+let restTimerHandles = {};
+let restTimerEndTimes = {};
+let restAudioCtx = null;
+async function ensureRestAudio(){
+  if(!restAudioCtx){
+    try{ restAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; }
+  }
+  if(restAudioCtx.state === 'suspended'){
+    try{ await restAudioCtx.resume(); }catch(e){}
+  }
+  return restAudioCtx;
+}
+function firstNumberSecs(str){
+  const m = String(str).match(/\d+/);
+  return m ? Number(m[0]) : 30;
+}
+function startRestTimer(key, seconds){
+  ensureRestAudio();
+  const current = state.uiSets[key] !== undefined ? state.uiSets[key] : 0;
+  state.uiSets[key] = current + 1;
+  if(restTimerHandles[key]) clearInterval(restTimerHandles[key]);
+  restTimerEndTimes[key] = Date.now() + seconds*1000;
+  state.uiResting[key] = seconds;
+  render();
+  restTimerHandles[key] = setInterval(()=> tickRestTimer(key), 1000);
+}
+function cancelRestTimer(key){
+  if(restTimerHandles[key]) clearInterval(restTimerHandles[key]);
+  delete restTimerHandles[key];
+  delete restTimerEndTimes[key];
+  delete state.uiResting[key];
+  render();
+}
+function tickRestTimer(key){
+  const remaining = Math.max(0, Math.round((restTimerEndTimes[key] - Date.now())/1000));
+  state.uiResting[key] = remaining;
+  if(remaining <= 0){
+    clearInterval(restTimerHandles[key]);
+    delete restTimerHandles[key];
+    delete restTimerEndTimes[key];
+    delete state.uiResting[key];
+    onRestFinished(key);
+  } else {
+    render();
+  }
+}
+async function onRestFinished(key){
+  try{
+    const ctx = await ensureRestAudio();
+    if(ctx){
+      const playTone = (freq, startTime, duration)=>{
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, startTime);
+        gain.gain.linearRampToValueAtTime(0.85, startTime + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(startTime);
+        osc.stop(startTime + duration + 0.05);
+      };
+      const now = ctx.currentTime;
+      playTone(659.25, now, 0.3);
+      playTone(880, now + 0.2, 0.3);
+      playTone(1174.66, now + 0.4, 0.5);
+    }
+  }catch(e){}
+  if(navigator.vibrate) navigator.vibrate([250,100,250]);
+  render();
+}
 function youtubeEmbedUrl(url){
   if(!url) return null;
   let id = null;
@@ -876,6 +962,7 @@ function render(){
           <div class="sub" style="margin:4px 0 0;">✓ Ya registrado hoy — ${lastToday.reps} × ${lastToday.sets}${lastToday.feeling ? ' · ' + lastToday.feeling : ''}</div>
         `;
       } else {
+        const resting = state.uiResting[key];
         card.innerHTML = `
           <div style="font-weight:800; font-size:14px;">${escapeHtml(item.ejercicio)}</div>
           <div class="sub" style="margin:2px 0 10px;">Objetivo: ${escapeHtml(item.series)} × ${escapeHtml(item.reps)} · ${escapeHtml(item.peso)}</div>
@@ -883,21 +970,33 @@ function render(){
             <button class="video-btn" data-videotoggle="${key}">🎥 ${state.uiVideoOpen[key] ? 'Ocultar técnica' : 'Ver técnica'}</button>
             ${state.uiVideoOpen[key] ? `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(item.video))}" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>` : ''}
           ` : ''}
-          ${item.nota ? `<div class="tip">📝 ${escapeHtml(item.nota)}</div>` : ''}
+          ${item.nota ? `<div class="tip">💡 <strong>Consejo técnico:</strong> ${escapeHtml(item.nota)}</div>` : ''}
           <div class="set-counter">
             <button class="set-minus" data-key="${key}">−</button>
             <span>${setsDone}${setsTarget ? ' / ' + setsTarget : ''} series</span>
             <button class="set-plus" data-key="${key}">+</button>
           </div>
+          ${item.descanso ? (
+            resting !== undefined ? `
+              <div class="rest-active">⏱️ Descansando... <strong>${resting}s</strong></div>
+            ` : `
+              <button class="btn-ghost rest-start-btn" data-key="${key}" data-seconds="${firstNumberSecs(item.descanso)}">⏱️ Iniciar descanso (${escapeHtml(item.descanso)})</button>
+            `
+          ) : ''}
           <div class="feeling-row">
             ${FEELINGS.map(f=>`<button class="feeling-btn${selectedFeeling===f?' selected':''}" data-key="${key}" data-feeling="${f}">${f}</button>`).join('')}
           </div>
-          <button class="btn-primary registrar-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}">Registrar</button>
+          <label style="display:block; font-size:11px; font-weight:700; color:var(--text-muted); margin:8px 0 4px;">📝 Nota para tu entrenadora (opcional)</label>
+          <input type="text" id="comment-${key}" value="${escapeHtml(state.uiComment[key] || '')}" placeholder="Ej: me costó, ¿bajo el peso?" />
+          <button class="btn-primary registrar-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}" style="margin-top:8px;">Registrar</button>
         `;
       }
       wrap.appendChild(card);
     });
 
+    wrap.querySelectorAll('.rest-start-btn').forEach(btn=>{
+      btn.onclick = ()=>{ startRestTimer(btn.dataset.key, Number(btn.dataset.seconds)); };
+    });
     wrap.querySelectorAll('[data-videotoggle]').forEach(btn=>{
       btn.onclick = ()=>{
         const k = btn.dataset.videotoggle;
@@ -915,14 +1014,19 @@ function render(){
     wrap.querySelectorAll('.feeling-btn').forEach(btn=>{
       btn.onclick = ()=>{ state.uiFeeling[btn.dataset.key]=btn.dataset.feeling; render(); };
     });
+    wrap.querySelectorAll('[id^=comment-]').forEach(inp=>{
+      inp.oninput = ()=>{ state.uiComment[inp.id.replace('comment-','')] = inp.value; };
+    });
     wrap.querySelectorAll('.registrar-btn').forEach(btn=>{
       btn.onclick = async ()=>{
         const key = btn.dataset.key;
         const entry = { date: todayISO(), ts: new Date().toISOString(), reps: btn.dataset.reps, sets: state.uiSets[key]||0, feeling: state.uiFeeling[key]||'' };
+        if(state.uiComment[key] && state.uiComment[key].trim()) entry.comment = state.uiComment[key].trim();
         if(!data.exercises[key]) data.exercises[key] = [];
         data.exercises[key].push(entry);
         delete state.uiSets[key];
         delete state.uiFeeling[key];
+        delete state.uiComment[key];
         await saveParticipante(state.codigo, state.nombre, data);
         render();
       };
