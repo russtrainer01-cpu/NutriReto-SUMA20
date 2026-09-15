@@ -1071,13 +1071,13 @@ function render(){
       card.className = 'card';
       if(lastToday){
         card.innerHTML = `
-          <div style="font-weight:800; font-size:14px;">${escapeHtml(item.ejercicio)}</div>
+          <div style="font-weight:800; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(item.ejercicio)}</div>
           <div class="sub" style="margin:4px 0 0;">✓ Ya registrado hoy — ${lastToday.reps} × ${lastToday.sets}${lastToday.feeling ? ' · ' + lastToday.feeling : ''}</div>
         `;
       } else {
         const resting = state.uiResting[key];
         card.innerHTML = `
-          <div style="font-weight:800; font-size:14px;">${escapeHtml(item.ejercicio)}</div>
+          <div style="font-weight:800; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(item.ejercicio)}</div>
           <div class="sub" style="margin:2px 0 10px;">Objetivo: ${escapeHtml(item.series)} × ${escapeHtml(item.reps)} · ${escapeHtml(item.peso)}</div>
           ${item.video ? `
             <button class="video-btn" data-videotoggle="${key}">🎥 ${state.uiVideoOpen[key] ? 'Ocultar técnica' : 'Ver técnica'}</button>
