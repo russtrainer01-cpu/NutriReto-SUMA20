@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriReto · SUMA20</title>
+<style>
+  :root{
+    --green:#3f6b3f;
+    --green-dark:#27500a;
+    --pink:#c2186b;
+    --pink-dark:#72243e;
+    --cream:#ffffff;
+    --card:#ffffff;
+    --border:#e5e0d0;
+    --text:#2b2520;
+    --text-muted:#8a8078;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background:var(--cream);
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+  }
+  #app{
+    width:100%;
+    max-width:480px;
+    padding:20px 16px 60px;
+    min-height:100vh;
+  }
+  .hidden{display:none;}
+  .brand-header{
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .brand-kicker{
+    font-size:11px;
+    letter-spacing:3px;
+    color:var(--green);
+    font-weight:700;
+  }
+  .brand-title{
+    font-size:26px;
+    font-weight:800;
+    color:var(--pink);
+    line-height:1.1;
+  }
+  h1{font-size:20px; font-weight:800; margin:6px 0;}
+  h2{font-size:15px; font-weight:800; margin:18px 0 8px;}
+  p.sub{color:var(--text-muted); font-size:13px; margin:4px 0 14px; line-height:1.5;}
+  label{display:block; font-size:12px; font-weight:700; color:var(--text-muted); margin:10px 0 4px;}
+  input[type="text"], input[type="date"], input[type="number"], textarea{
+    width:100%;
+    background:#faf8f2;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:11px 12px;
+    font-size:14px;
+    color:var(--text);
+    font-family:inherit;
+  }
+  .btn-primary{
+    width:100%;
+    background:linear-gradient(90deg, var(--green), var(--pink));
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:13px;
+    font-size:14px;
+    font-weight:800;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  .btn-primary:active{opacity:0.85;}
+  .btn-ghost{
+    width:100%;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:10px;
+    padding:11px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .link-btn{
+    background:none;
+    border:none;
+    color:var(--pink);
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    padding:0;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:12px;
+  }
+  .error{
+    color:#a32d2d;
+    font-size:12px;
+    margin-top:6px;
+  }
+  /* Compromiso */
+  .compromiso-text{
+    font-size:13px;
+    line-height:1.7;
+    color:var(--text);
+    text-align:left;
+    margin-bottom:14px;
+  }
+  #signature-pad{
+    border:2px dashed var(--pink);
+    border-radius:12px;
+    width:100%;
+    height:120px;
+    touch-action:none;
+    background:#fff;
+  }
+  .signature-hint{
+    font-size:11px;
+    color:var(--pink-dark);
+    text-align:center;
+    margin:6px 0 14px;
+  }
+  #confetti-overlay{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:999;
+  }
+  /* Progreso */
+  .progress-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:10px;
+  }
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:8px;
+  }
+  .progress-track{
+    background:#f0ece0;
+    border-radius:20px;
+    height:10px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    background:linear-gradient(90deg, var(--green), var(--pink));
+    height:100%;
+    border-radius:20px;
+    transition:width 0.4s ease;
+  }
+  .community-banner{
+    background:#eaf3de;
+    border-left:4px solid var(--green);
+    border-radius:14px;
+    padding:12px 16px;
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .community-banner .num{font-size:14px; font-weight:800; color:var(--green-dark);}
+  .community-banner .sub2{font-size:11px; color:var(--green);}
+  .frase-dia{
+    background:#fbeaf0;
+    border-left:4px solid var(--pink);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:14px;
+    font-size:13px;
+    font-style:italic;
+    color:var(--pink-dark);
+    line-height:1.5;
+  }
+  .semana-header{
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+    padding:0;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:18px 0 8px;
+    font-size:14px;
+    font-weight:800;
+    color:var(--text);
+  }
+  .badge-actual{
+    background:var(--green);
+    color:#fff;
+    font-size:10px;
+    font-weight:800;
+    padding:3px 10px;
+    border-radius:20px;
+  }
+  .day-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:7px;
+  }
+  .day-chip{
+    border-radius:10px;
+    padding:8px 6px;
+    text-align:center;
+    cursor:pointer;
+    border:none;
+    font-family:inherit;
+  }
+  .day-chip.fuerza{ background:#fbeaf0; border-left:4px solid var(--pink); }
+  .day-chip.cardio{ background:#eaf3de; border-left:4px solid var(--green); }
+  .day-chip.elongacion{ background:#e6f1fb; border-left:4px solid #378add; }
+  .day-chip.amorpropio{ background:#faeeda; border-left:4px solid #ef9f27; }
+  .day-chip.reflexion{ background:#f1eefe; border-left:4px solid #7f77dd; }
+  .day-chip.cierre{ background:linear-gradient(135deg, var(--green), var(--pink)); }
+  .day-chip.cierre .dc-label, .day-chip.cierre .dc-sub{ color:#fff; }
+  .day-chip.done{
+    background:#ececec !important;
+    border-left:4px solid #c2c2c2 !important;
+    opacity:1;
+  }
+  .day-chip.done .dc-label{ text-decoration:line-through; color:#9c9c9c; }
+  .day-chip.today{ outline:2px solid var(--pink); }
+  .dc-label{ font-size:12px; font-weight:800; }
+  .dc-sub{ font-size:10px; color:var(--text-muted); margin-top:2px; }
+  .day-chip.fuerza .dc-sub{ color:var(--pink-dark); }
+  .day-chip.cardio .dc-sub{ color:var(--green-dark); }
+  .sos-btn{
+    width:100%;
+    background:#faeeda;
+    border:2px solid #ef9f27;
+    border-radius:14px;
+    padding:14px 16px;
+    margin-top:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    font-family:inherit;
+    text-align:left;
+  }
+  .sos-title{ font-size:13px; font-weight:800; color:#633806; }
+  .sos-sub{ font-size:11px; color:#854f0b; }
+  .badge-list{
+    display:flex;
+    gap:10px;
+    margin-top:6px;
+  }
+  .badge-item{
+    text-align:center;
+    font-size:9px;
+    color:var(--text-muted);
+  }
+  .badge-item .ic{ font-size:22px; display:block; opacity:0.35; }
+  .badge-item.earned .ic{ opacity:1; }
+  /* Ejercicio */
+  .set-counter{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin:10px 0;
+  }
+  .set-counter button{
+    width:36px; height:36px; border-radius:50%;
+    border:1px solid var(--border);
+    background:#faf8f2;
+    font-size:16px; font-weight:800;
+    cursor:pointer;
+  }
+  .feeling-row{
+    display:flex;
+    gap:8px;
+    margin:10px 0;
+  }
+  .feeling-btn{
+    flex:1;
+    background:#faf8f2;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 0;
+    font-size:18px;
+    cursor:pointer;
+  }
+  .feeling-btn.selected{
+    border-color:var(--pink);
+    background:#fbeaf0;
+  }
+  .tip{
+    background:#faf8f2;
+    border-left:3px solid var(--pink);
+    border-radius:8px;
+    padding:10px 12px;
+    font-size:12px;
+    margin:8px 0;
+    color:var(--text);
+  }
+  .empty{ color:var(--text-muted); font-size:13px; text-align:center; padding:20px 0; }
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+  }
+  .back{
+    background:#faf8f2;
+    border:1px solid var(--border);
+    color:var(--pink-dark);
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    padding:9px 16px;
+    border-radius:10px;
+    margin-bottom:14px;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<canvas id="confetti-overlay" class="hidden"></canvas>
+<script>
+const SUPABASE_URL = 'https://yarqttoduryzhinnxgio.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_IKFhc2x6r1AdB0IS8b4Nlw_TwowDq34';
+
+const ACCESS_CODE = 'RETO';
+
+const FEELINGS = ['😌', '👍', '😮‍💨', '🥵'];
+
+const FRASES_DIA = [
+  { tipo:null, texto:'Mi cuerpo no es un proyecto a terminar, es un hogar que cuido. 🏡' },
+  { tipo:null, texto:'Moverme hoy no es un castigo por lo que comí — es un regalo para mi bienestar. 🎁' },
+  { tipo:null, texto:'No entreno para cambiar quién soy. Entreno para sentirme más yo. 💗' },
+  { tipo:null, texto:'Cada músculo que activo hoy me está agradeciendo. 🙏' },
+  { tipo:null, texto:'Mi valor no se mide en kilos ni en centímetros. 🌸' },
+  { tipo:null, texto:'Hoy elijo moverme con curiosidad, no con exigencia. 🌿' },
+  { tipo:null, texto:'El esfuerzo de hoy es una carta de amor a mi yo de mañana. 💌' },
+  { tipo:null, texto:'Escucho lo que mi cuerpo me pide, no solo lo que mi cabeza me exige. 👂' },
+  { tipo:null, texto:'Disfrutar el proceso también es parte del resultado. ✨' },
+  { tipo:null, texto:'No hay cuerpo equivocado para empezar a cuidarse. 🌷' },
+  { tipo:null, texto:'Hoy no compito con nadie, ni siquiera con quien fui ayer. 🕊️' },
+  { tipo:null, texto:'El movimiento es una forma de decirme "te veo, te cuido". 👀' },
+  { tipo:null, texto:'Mi constancia de hoy vale más que mi intensidad de un solo día. 🔄' },
+  { tipo:null, texto:'Celebro lo que mi cuerpo puede hacer, no solo cómo se ve. 🎉' },
+  { tipo:'descanso', texto:'Un día de descanso bien vivido también es progreso. 🌙' },
+  { tipo:null, texto:'Soy mucho más que un número en la balanza. ⚖️' },
+  { tipo:null, texto:'Hoy practico la amabilidad conmigo, empezando por mi cuerpo. 🤍' },
+  { tipo:null, texto:'Cada día que elijo sumar, me estoy eligiendo a mí. 🌱' },
+  { tipo:null, texto:'No busco un cuerpo distinto, busco una relación distinta con el que tengo. 🪞' },
+  { tipo:null, texto:'El movimiento de hoy no borra nada de ayer — solo suma. ➕' },
+  { tipo:null, texto:'Confío en mi proceso, aunque hoy no lo vea en el espejo. 🌤️' },
+  { tipo:null, texto:'Hacerlo imperfecto también cuenta. 💫' },
+  { tipo:null, texto:'Mi cuerpo me trajo hasta acá. Hoy le devuelvo el gesto. 🚶‍♀️' },
+  { tipo:null, texto:'La disciplina más linda es la que nace del cariño, no del miedo. 🌸' },
+  { tipo:'descanso', texto:'Hoy no me exijo: me acompaño. 🤝' },
+  { tipo:'elongacion', texto:'Cada respiración profunda de hoy también es entrenamiento. 🌬️' },
+  { tipo:null, texto:'Soy capaz de cosas que todavía no descubrí. 🔍' },
+  { tipo:null, texto:'El amor propio también se entrena, un día a la vez. 💗' },
+  { tipo:null, texto:'Hoy le agradezco a mi cuerpo por seguir intentando. 🙏' },
+  { tipo:null, texto:'Llegué hasta el último día. Eso ya dice todo de mí. 🏅' }
+];
+function getFraseForDay(dayNum){
+  const info = dayInfo(dayNum);
+  const isRestDay = info.tipo === 'amorpropio' || info.tipo === 'reflexion' || info.tipo === 'cierre';
+  const isStretchDay = info.tipo === 'elongacion';
+  if(isRestDay){
+    const opciones = FRASES_DIA.filter(f=>f.tipo==='descanso');
+    if(opciones.length) return opciones[dayNum % opciones.length].texto;
+  }
+  if(isStretchDay){
+    const opciones = FRASES_DIA.filter(f=>f.tipo==='elongacion');
+    if(opciones.length) return opciones[dayNum % opciones.length].texto;
+  }
+  const generales = FRASES_DIA.filter(f=>!f.tipo);
+  return generales[(dayNum-1) % generales.length].texto;
+}
+
+// Estructura de 30 días. Contenido de ejemplo (placeholder) para armar juntas después.
+function buildDay(n, tipo, titulo, items){
+  return { day:n, tipo, titulo, items };
+}
+function ejFuerza(){
+  return [
+    { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso o mancuernas', sinPeso:true, nota:'Pecho arriba, bajá controlada.' },
+    { ejercicio:'Flexiones (rodillas si hace falta)', series:'3 series', reps:'10', peso:'Sin peso', sinPeso:true },
+    { ejercicio:'Puente de glúteos', series:'3 series', reps:'15', peso:'Sin peso', sinPeso:true },
+    { ejercicio:'Plancha', series:'3 series', reps:'20-30 seg', peso:'Sin peso', sinPeso:true }
+  ];
+}
+function ejCardio(){
+  return [
+    { ejercicio:'Jumping Jacks', series:'4 rondas', reps:'40 seg', peso:'Sin peso', sinPeso:true },
+    { ejercicio:'Mountain Climbers', series:'4 rondas', reps:'30 seg', peso:'Sin peso', sinPeso:true },
+    { ejercicio:'Sentadilla con salto', series:'4 rondas', reps:'30 seg', peso:'Sin peso', sinPeso:true },
+    { ejercicio:'Burpees (suaves)', series:'4 rondas', reps:'20 seg', peso:'Sin peso', sinPeso:true }
+  ];
+}
+function ejElongacion(){
+  return [
+    { ejercicio:'Elongación de isquiotibiales', series:'2 series', reps:'30 seg por lado', peso:'Sin peso', sinPeso:true },
+    { ejercicio:'Elongación de cuádriceps', series:'2 series', reps:'30 seg por lado', peso:'Sin peso', sinPeso:true },
+    { ejercicio:'Gato-camello (espalda)', series:'2 series', reps:'10 repeticiones', peso:'Sin peso', sinPeso:true },
+    { ejercicio:'Respiración profunda', series:'1 serie', reps:'2 min', peso:'Sin peso', sinPeso:true }
+  ];
+}
+const NUTRIRETO_DAYS = [];
+const semanaTitulos = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
+let dayCounter = 1;
+for(let semana = 0; semana < 4 && dayCounter <= 28; semana++){
+  const pattern = [
+    { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
+    { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
+    { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
+    { tipo:'elongacion', titulo:'Elongación y movilidad', items: ejElongacion },
+    { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
+    { tipo:'amorpropio', titulo:'Reto de amor propio', items: ()=>[] },
+    { tipo:'reflexion', titulo:'Reflexión de la semana', items: ()=>[] }
+  ];
+  pattern.forEach(p=>{
+    NUTRIRETO_DAYS.push(buildDay(dayCounter, p.tipo, p.titulo, p.items()));
+    dayCounter++;
+  });
+}
+// Días 29-30: cierre
+NUTRIRETO_DAYS.push(buildDay(29, 'fuerza', 'Fuerza', ejFuerza()));
+NUTRIRETO_DAYS.push(buildDay(30, 'cierre', '¡Completaste el reto! 🎉', []));
+
+const AMORPROPIO_RETOS = [
+  'Escribite 3 cosas que valorás de tu cuerpo hoy.',
+  'Date un mimo: un baño largo, una siesta, lo que te haga bien.',
+  'Sacate una foto que te haga sentir orgullosa, aunque no la compartas.',
+  'Agradecele a tu cuerpo por lo que hizo esta semana.'
+];
+
+let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, sigDrawing:false, sigHasContent:false, sigCtx:null };
+
+function storageKey(codigo, nombre){ return (codigo.trim() + ':' + nombre.trim()).toLowerCase(); }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : String(s);
+  return d.innerHTML;
+}
+
+async function loadParticipante(codigo, nombre){
+  const id = storageKey(codigo, nombre);
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/nutrireto_participantes?id=eq.${encodeURIComponent(id)}&select=data`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+    });
+    const rows = await res.json();
+    if(rows.length) return normalizeData(rows[0].data);
+  }catch(e){}
+  return normalizeData({});
+}
+function normalizeData(d){
+  if(!d.exercises) d.exercises = {};
+  if(!d.completados) d.completados = {};
+  if(!d.compromisoFirmado) d.compromisoFirmado = false;
+  if(!d.badges) d.badges = [];
+  return d;
+}
+async function saveParticipante(codigo, nombre, data){
+  const id = storageKey(codigo, nombre);
+  try{
+    await fetch(`${SUPABASE_URL}/rest/v1/nutrireto_participantes`, {
+      method:'POST',
+      headers:{ apikey:SUPABASE_KEY, Authorization:`Bearer ${SUPABASE_KEY}`, 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates' },
+      body: JSON.stringify({ id, codigo: codigo.trim().toLowerCase(), nombre: nombre.trim(), data })
+    });
+  }catch(e){}
+}
+async function countTodayActive(codigo){
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/nutrireto_participantes?codigo=eq.${encodeURIComponent(codigo.trim().toLowerCase())}&select=data`, {
+      headers:{ apikey:SUPABASE_KEY, Authorization:`Bearer ${SUPABASE_KEY}` }
+    });
+    const rows = await res.json();
+    const today = todayISO();
+    let count = 0;
+    rows.forEach(r=>{
+      const ex = (r.data && r.data.exercises) || {};
+      const hasToday = Object.keys(ex).some(k => ex[k].some(e=>e.date === today));
+      if(hasToday) count++;
+    });
+    return count;
+  }catch(e){ return 0; }
+}
+
+function dayInfo(dayNum){
+  return NUTRIRETO_DAYS.find(d=>d.day === dayNum);
+}
+function isDayDone(data, dayNum){
+  const d = dayInfo(dayNum);
+  if(!d) return false;
+  if(d.tipo === 'amorpropio' || d.tipo === 'reflexion' || d.tipo === 'cierre'){
+    return !!(data.completados['dia'+dayNum] && data.completados['dia'+dayNum].done);
+  }
+  if(d.items.length === 0) return false;
+  return d.items.every(item=>{
+    const entries = data.exercises[dayNum + ':' + item.ejercicio] || [];
+    return entries.length > 0;
+  });
+}
+function completedCount(data){
+  let n = 0;
+  for(let i=1;i<=30;i++) if(isDayDone(data, i)) n++;
+  return n;
+}
+function currentDayNum(data){
+  for(let i=1;i<=30;i++) if(!isDayDone(data, i)) return i;
+  return 30;
+}
+
+function render(){
+  const app = document.getElementById('app');
+
+  if(state.view === 'login'){
+    app.innerHTML = `
+      <div class="brand-header">
+        <div class="brand-kicker">NUTRIRETO</div>
+        <div class="brand-title">SUMA20</div>
+      </div>
+      <h1 style="text-align:center;">Ingresá al reto</h1>
+      <p class="sub" style="text-align:center;">Con el código de tu edición y tu nombre completo.</p>
+      <div class="card">
+        <label>Código del reto</label>
+        <input type="text" id="in-codigo" placeholder="Ej: SUMA20OCT" />
+        <label>Nombre completo</label>
+        <input type="text" id="in-nombre" placeholder="Ej: Ana Pérez" />
+        <div class="error hidden" id="login-error"></div>
+        <button class="btn-primary" id="login-btn">Entrar →</button>
+      </div>
+    `;
+    document.getElementById('login-btn').onclick = onLogin;
+    return;
+  }
+
+  if(state.view === 'compromiso'){
+    app.innerHTML = `
+      <div class="brand-header">
+        <div class="brand-kicker">NUTRIRETO</div>
+        <div class="brand-title">SUMA20</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:16px; font-weight:800; color:var(--green-dark); margin-bottom:10px;">🌸💚 Mi compromiso 💚🌸</div>
+        <div class="compromiso-text">
+          <em>Hoy empieza algo distinto.</em> 🌱<br/><br/>
+          Durante estos 30 días no buscamos hacerlo perfecto.<br/>
+          Buscamos hacerlo posible.<br/><br/>
+          Habrá días con energía, días con poco tiempo y días en los que simplemente no tengas ganas. Y está bien. Lo importante es que, incluso en esos días, puedas elegirte aunque sea por 20 minutos. 💪<br/><br/>
+          Hoy me comprometo con: 🤝<br/>
+          🌿 Mi cuerpo: a cuidarlo con constancia y sin exigirme de más.<br/>
+          ⏱️ Mis 20 minutos: a regalarme este espacio para moverme, activarme y sentirme mejor.<br/>
+          🔄 Volver a empezar: si un día no pude, no abandono. Simplemente retomo.<br/><br/>
+          No necesito hacerlo perfecto. Solo necesito seguir sumando. ✨<br/><br/>
+          Y no estás sola en esto.<br/>
+          Te acompañamos durante cada paso del camino. 🤍
+        </div>
+        <canvas id="signature-pad"></canvas>
+        <div class="signature-hint">✍️ Firmá acá tu compromiso<br/>"Hoy elijo sumar, aunque sean 20 minutos." 🌸</div>
+        <button class="link-btn" id="clear-sig-btn" style="margin-bottom:10px;">Borrar firma</button>
+        <button class="btn-primary" id="confirm-sig-btn">Confirmar mi compromiso ✨</button>
+        <div class="error hidden" id="sig-error">Firmá arriba antes de confirmar.</div>
+      </div>
+    `;
+    setupSignaturePad();
+    document.getElementById('clear-sig-btn').onclick = clearSignature;
+    document.getElementById('confirm-sig-btn').onclick = onConfirmCompromiso;
+    return;
+  }
+
+  if(state.view === 'dashboard'){
+    const data = state.data;
+    const done = completedCount(data);
+    const pct = Math.round((done/30)*100);
+    const curDay = currentDayNum(data);
+    const frase = getFraseForDay(curDay);
+
+    let html = `
+      <div class="topbar">
+        <div>
+          <div class="brand-kicker">NUTRIRETO</div>
+          <div class="brand-title" style="font-size:18px;">SUMA20</div>
+        </div>
+        <button class="link-btn" id="logout-btn">Salir</button>
+      </div>
+      <p class="sub" style="margin-top:-6px;">Hola, ${escapeHtml(state.nombre)} 👋</p>
+
+      <div class="progress-card">
+        <div class="progress-row">
+          <span style="font-size:12px; font-weight:700;">Tu progreso</span>
+          <span style="font-size:12px; font-weight:800; color:var(--pink);">${done} / 30 días</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%;"></div></div>
+      </div>
+
+      <div id="community-banner"></div>
+
+      <div class="frase-dia">💌 ${escapeHtml(frase)}</div>
+    `;
+
+    let daysHtml = `
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 10px; font-size:10px; color:var(--text-muted);">
+        <span>💪 Fuerza</span><span>🏃 Cardio</span><span>🧘 Elongación</span><span>🌸 Amor propio</span><span>📝 Reflexión</span>
+      </div>
+      <div class="day-grid">`;
+    for(let d=1; d<=30; d++){
+      const info = dayInfo(d);
+      const isDone = isDayDone(data, d);
+      const isToday = d === curDay;
+      const icon = info.tipo === 'fuerza' ? '💪' : info.tipo === 'cardio' ? '🏃' : info.tipo === 'elongacion' ? '🧘' : info.tipo === 'amorpropio' ? '🌸' : info.tipo === 'reflexion' ? '📝' : '🎉';
+      daysHtml += `
+        <button class="day-chip ${info.tipo} ${isDone?'done':''} ${isToday?'today':''}" data-day="${d}">
+          <div class="dc-label">${isDone ? '✓' : icon} ${d}</div>
+        </button>
+      `;
+    }
+    daysHtml += '</div>';
+    html += daysHtml;
+
+    html += `
+      <button class="sos-btn" id="sos-btn">
+        <span style="font-size:22px;">🚨</span>
+        <div>
+          <div class="sos-title">Clase 911</div>
+          <div class="sos-sub">¿Te caíste del ritmo? Volvé acá</div>
+        </div>
+      </button>
+    `;
+
+    app.innerHTML = html;
+
+    document.getElementById('logout-btn').onclick = ()=>{ state.view='login'; state.data=null; render(); };
+    document.querySelectorAll('.day-chip').forEach(chip=>{
+      chip.onclick = ()=>{ state.selectedDay = Number(chip.dataset.day); state.view='day'; render(); };
+    });
+    document.getElementById('sos-btn').onclick = ()=>{ state.view='sos'; render(); };
+
+    countTodayActive(state.codigo).then(n=>{
+      const el = document.getElementById('community-banner');
+      if(el) el.innerHTML = `
+        <div class="community-banner">
+          <span style="font-size:20px;">🔥</span>
+          <div>
+            <div class="num">${n} guerrera${n===1?'':'s'} ya entrenaron hoy</div>
+            <div class="sub2">Sumate vos también</div>
+          </div>
+        </div>
+      `;
+    });
+    return;
+  }
+
+  if(state.view === 'sos'){
+    app.innerHTML = `
+      <button class="back" id="back-btn">&larr; Volver</button>
+      <div class="brand-header">
+        <div class="brand-kicker">NUTRIRETO</div>
+        <div class="brand-title">SUMA20</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:36px; margin-bottom:6px;">🚨</div>
+        <h1 style="text-align:center;">Clase 911</h1>
+        <p class="sub">Una clase premium de 20 minutos, guiada por tu entrenadora, para retomar el ritmo. Un tropiezo no significa abandonar.</p>
+        <div class="tip">🎥 Acá va el video de tu Clase 911 (lo cargamos cuando lo tengas grabado).</div>
+      </div>
+    `;
+    document.getElementById('back-btn').onclick = ()=>{ state.view='dashboard'; render(); };
+    return;
+  }
+
+  if(state.view === 'day'){
+    const d = state.selectedDay;
+    const info = dayInfo(d);
+    const data = state.data;
+
+    if(info.tipo === 'amorpropio' || info.tipo === 'reflexion' || info.tipo === 'cierre'){
+      const reto = info.tipo === 'amorpropio' ? AMORPROPIO_RETOS[d % AMORPROPIO_RETOS.length] : null;
+      const isDone = isDayDone(data, d);
+      app.innerHTML = `
+        <button class="back" id="back-btn">&larr; Volver</button>
+        <div class="brand-header">
+          <div class="brand-kicker">NUTRIRETO</div>
+          <div class="brand-title">SUMA20</div>
+        </div>
+        <h1 style="text-align:center;">Día ${d} — ${escapeHtml(info.titulo)}</h1>
+        <div class="card" style="text-align:center;">
+          ${reto ? `<div class="tip" style="text-align:left;">🌸 ${escapeHtml(reto)}</div>` : `<p class="sub">Espacio libre — usalo para descansar y prepararte para lo que viene.</p>`}
+          <button class="btn-primary" id="mark-done-btn" ${isDone?'disabled':''}>${isDone ? '✓ Ya lo marcaste' : 'Marcar como hecho ✓'}</button>
+        </div>
+      `;
+      document.getElementById('back-btn').onclick = ()=>{ state.view='dashboard'; render(); };
+      if(!isDone){
+        document.getElementById('mark-done-btn').onclick = async ()=>{
+          data.completados['dia'+d] = { done:true, date:todayISO() };
+          await saveParticipante(state.codigo, state.nombre, data);
+          state.view = 'dashboard';
+          render();
+        };
+      }
+      return;
+    }
+
+    let html = `
+      <button class="back" id="back-btn">&larr; Volver</button>
+      <div class="brand-header">
+        <div class="brand-kicker">NUTRIRETO</div>
+        <div class="brand-title">SUMA20</div>
+      </div>
+      <h1 style="text-align:center;">Día ${d} — ${escapeHtml(info.titulo)}</h1>
+      <div id="day-items"></div>
+    `;
+    app.innerHTML = html;
+    document.getElementById('back-btn').onclick = ()=>{ state.view='dashboard'; render(); };
+
+    const wrap = document.getElementById('day-items');
+    info.items.forEach((item, idx)=>{
+      const key = d + ':' + item.ejercicio;
+      const entries = data.exercises[key] || [];
+      const lastToday = entries.find(e=>e.date === todayISO());
+      const setsTarget = (item.series.match(/\d+/) || [null])[0];
+      const setsDone = state.uiSets[key] !== undefined ? state.uiSets[key] : 0;
+      const selectedFeeling = state.uiFeeling[key];
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      if(lastToday){
+        card.innerHTML = `
+          <div style="font-weight:800; font-size:14px;">${escapeHtml(item.ejercicio)}</div>
+          <div class="sub" style="margin:4px 0 0;">✓ Ya registrado hoy — ${lastToday.reps} × ${lastToday.sets}${lastToday.feeling ? ' · ' + lastToday.feeling : ''}</div>
+        `;
+      } else {
+        card.innerHTML = `
+          <div style="font-weight:800; font-size:14px;">${escapeHtml(item.ejercicio)}</div>
+          <div class="sub" style="margin:2px 0 10px;">Objetivo: ${escapeHtml(item.series)} × ${escapeHtml(item.reps)} · ${escapeHtml(item.peso)}</div>
+          ${item.nota ? `<div class="tip">📝 ${escapeHtml(item.nota)}</div>` : ''}
+          <div class="set-counter">
+            <button class="set-minus" data-key="${key}">−</button>
+            <span>${setsDone}${setsTarget ? ' / ' + setsTarget : ''} series</span>
+            <button class="set-plus" data-key="${key}">+</button>
+          </div>
+          <div class="feeling-row">
+            ${FEELINGS.map(f=>`<button class="feeling-btn${selectedFeeling===f?' selected':''}" data-key="${key}" data-feeling="${f}">${f}</button>`).join('')}
+          </div>
+          <button class="btn-primary registrar-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}">Registrar</button>
+        `;
+      }
+      wrap.appendChild(card);
+    });
+
+    wrap.querySelectorAll('.set-plus').forEach(btn=>{
+      btn.onclick = ()=>{ const k=btn.dataset.key; state.uiSets[k]=(state.uiSets[k]||0)+1; render(); };
+    });
+    wrap.querySelectorAll('.set-minus').forEach(btn=>{
+      btn.onclick = ()=>{ const k=btn.dataset.key; state.uiSets[k]=Math.max(0,(state.uiSets[k]||0)-1); render(); };
+    });
+    wrap.querySelectorAll('.feeling-btn').forEach(btn=>{
+      btn.onclick = ()=>{ state.uiFeeling[btn.dataset.key]=btn.dataset.feeling; render(); };
+    });
+    wrap.querySelectorAll('.registrar-btn').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const key = btn.dataset.key;
+        const entry = { date: todayISO(), ts: new Date().toISOString(), reps: btn.dataset.reps, sets: state.uiSets[key]||0, feeling: state.uiFeeling[key]||'' };
+        if(!data.exercises[key]) data.exercises[key] = [];
+        data.exercises[key].push(entry);
+        delete state.uiSets[key];
+        delete state.uiFeeling[key];
+        await saveParticipante(state.codigo, state.nombre, data);
+        render();
+      };
+    });
+    return;
+  }
+}
+
+async function onLogin(){
+  const codigo = document.getElementById('in-codigo').value.trim();
+  const nombre = document.getElementById('in-nombre').value.trim();
+  const err = document.getElementById('login-error');
+  if(!codigo || !nombre){
+    err.textContent = 'Completá el código y tu nombre.';
+    err.classList.remove('hidden');
+    return;
+  }
+  if(codigo.toUpperCase() !== ACCESS_CODE.toUpperCase()){
+    err.textContent = 'Código incorrecto. Revisá con tu entrenadora.';
+    err.classList.remove('hidden');
+    return;
+  }
+  err.classList.add('hidden');
+  state.codigo = codigo;
+  state.nombre = nombre;
+  state.data = await loadParticipante(codigo, nombre);
+  state.view = state.data.compromisoFirmado ? 'dashboard' : 'compromiso';
+  render();
+}
+
+function setupSignaturePad(){
+  const canvas = document.getElementById('signature-pad');
+  const ratio = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * ratio;
+  canvas.height = canvas.offsetHeight * ratio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(ratio, ratio);
+  ctx.strokeStyle = '#c2186b';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  state.sigCtx = ctx;
+  state.sigHasContent = false;
+
+  function pos(e){
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+  function start(e){ e.preventDefault(); state.sigDrawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }
+  function move(e){
+    if(!state.sigDrawing) return;
+    e.preventDefault();
+    const p = pos(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    state.sigHasContent = true;
+  }
+  function end(){ state.sigDrawing = false; }
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, {passive:false});
+  canvas.addEventListener('touchmove', move, {passive:false});
+  canvas.addEventListener('touchend', end);
+}
+function clearSignature(){
+  const canvas = document.getElementById('signature-pad');
+  const ctx = state.sigCtx;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  state.sigHasContent = false;
+}
+async function onConfirmCompromiso(){
+  if(!state.sigHasContent){
+    document.getElementById('sig-error').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('sig-error').classList.add('hidden');
+  state.data.compromisoFirmado = true;
+  await saveParticipante(state.codigo, state.nombre, state.data);
+  fireConfetti();
+  setTimeout(()=>{ state.view = 'dashboard'; render(); }, 900);
+}
+
+function fireConfetti(){
+  const canvas = document.getElementById('confetti-overlay');
+  canvas.classList.remove('hidden');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const colors = ['#3f6b3f','#c2186b','#ef9f27','#f3f0e6'];
+  const particles = [];
+  for(let i=0;i<60;i++){
+    particles.push({
+      x: canvas.width/2, y: canvas.height/2,
+      vx: (Math.random()-0.5)*14,
+      vy: (Math.random()-0.9)*14,
+      size: 4+Math.random()*4,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      life: 60
+    });
+  }
+  let frame = 0;
+  function tick(){
+    frame++;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      p.x += p.vx; p.y += p.vy; p.vy += 0.4; p.life--;
+      ctx.globalAlpha = Math.max(p.life/60, 0);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+    });
+    if(frame < 60) requestAnimationFrame(tick);
+    else canvas.classList.add('hidden');
+  }
+  tick();
+}
+
+render();
+</script>
+</body>
+</html>
