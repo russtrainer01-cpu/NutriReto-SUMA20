@@ -328,6 +328,59 @@
     height:100%;
     border:none;
   }
+  .sos-player{
+    position:relative;
+    width:100%;
+    padding-top:56.25%;
+    border-radius:14px;
+    overflow:hidden;
+    background:linear-gradient(135deg, var(--green) 0%, #2c4a2c 45%, var(--pink-dark) 100%);
+    margin-top:14px;
+  }
+  .sos-player-badge{
+    position:absolute;
+    top:10px; left:10px;
+    background:rgba(0,0,0,0.45);
+    color:#fff;
+    font-size:10px;
+    font-weight:800;
+    padding:4px 9px;
+    border-radius:20px;
+    letter-spacing:0.03em;
+  }
+  .sos-play-btn{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:60px; height:60px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.95);
+    border:none;
+    color:var(--pink-dark);
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(0,0,0,0.35);
+  }
+  .sos-player-info{
+    position:absolute;
+    bottom:0; left:0; right:0;
+    background:linear-gradient(0deg, rgba(0,0,0,0.6), transparent);
+    padding:24px 14px 10px;
+    text-align:left;
+  }
+  .sos-player-title{
+    color:#fff;
+    font-weight:800;
+    font-size:13px;
+  }
+  .sos-player-sub{
+    color:rgba(255,255,255,0.85);
+    font-size:11px;
+    margin-top:2px;
+  }
   .tip{
     background:#faf8f2;
     border-left:3px solid var(--pink);
@@ -742,10 +795,23 @@ function render(){
         <div style="font-size:36px; margin-bottom:6px;">🚨</div>
         <h1 style="text-align:center;">Clase 911</h1>
         <p class="sub">Una clase premium de 20 minutos, guiada por tu entrenadora, para retomar el ritmo. Un tropiezo no significa abandonar.</p>
-        <div class="tip">🎥 Acá va el video de tu Clase 911 (lo cargamos cuando lo tengas grabado).</div>
+        <div class="sos-player" id="sos-player">
+          <div class="sos-player-badge">🔴 EN VIVO</div>
+          <button class="sos-play-btn" id="sos-play-btn">▶</button>
+          <div class="sos-player-info">
+            <div class="sos-player-title">Clase 911 · Reenganche total</div>
+            <div class="sos-player-sub">20:00 · Con tu entrenadora</div>
+          </div>
+        </div>
       </div>
     `;
     document.getElementById('back-btn').onclick = ()=>{ state.view='dashboard'; render(); };
+    document.getElementById('sos-play-btn').onclick = ()=>{
+      const player = document.getElementById('sos-player');
+      const btn = document.getElementById('sos-play-btn');
+      player.classList.toggle('playing');
+      btn.textContent = player.classList.contains('playing') ? '❚❚' : '▶';
+    };
     return;
   }
 
