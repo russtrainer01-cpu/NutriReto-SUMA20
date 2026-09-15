@@ -443,6 +443,33 @@ const AMORPROPIO_RETOS = [
 ];
 
 let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, sigDrawing:false, sigHasContent:false, sigCtx:null };
+let magicAudioCtx = null;
+async function playMagicSound(){
+  try{
+    if(!magicAudioCtx){
+      magicAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if(magicAudioCtx.state === 'suspended'){
+      await magicAudioCtx.resume();
+    }
+    const ctx = magicAudioCtx;
+    const notes = [783.99, 987.77, 1174.66, 1567.98]; // G5, B5, D6, G6 — arpegio brillante
+    notes.forEach((freq, i)=>{
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      const start = ctx.currentTime + i * 0.07;
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(0.18, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.4);
+    });
+  }catch(e){}
+}
 
 function storageKey(codigo, nombre){ return (codigo.trim() + ':' + nombre.trim()).toLowerCase(); }
 function todayISO(){ return new Date().toISOString().slice(0,10); }
@@ -643,7 +670,7 @@ function render(){
 
     document.getElementById('logout-btn').onclick = ()=>{ state.view='login'; state.data=null; render(); };
     document.querySelectorAll('.day-chip').forEach(chip=>{
-      chip.onclick = ()=>{ state.selectedDay = Number(chip.dataset.day); state.view='day'; render(); };
+      chip.onclick = ()=>{ playMagicSound(); state.selectedDay = Number(chip.dataset.day); state.view='day'; render(); };
     });
     document.getElementById('sos-btn').onclick = ()=>{ state.view='sos'; render(); };
 
