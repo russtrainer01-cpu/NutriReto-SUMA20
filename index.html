@@ -703,6 +703,7 @@ async function onRestFinished(key){
     }
   }catch(e){}
   if(navigator.vibrate) navigator.vibrate([250,100,250]);
+  document.querySelectorAll('.rest-overlay').forEach(el=> el.remove());
   state.uiRestAlert = { key, message: getRestMessage() };
   render();
   setTimeout(()=>{
