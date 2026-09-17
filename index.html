@@ -746,10 +746,10 @@ NUTRIRETO_DAYS.push(buildDay(29, 'fuerza', 'Fuerza', ejFuerza()));
 NUTRIRETO_DAYS.push(buildDay(30, 'cierre', '¡Completaste el reto! 🎉', []));
 
 const AMORPROPIO_RETOS = [
-  'Escribite 3 cosas que valorás de tu cuerpo hoy.',
+  'Escríbete 3 cosas que valoras de tu cuerpo hoy.',
   'Date un mimo: un baño largo, una siesta, lo que te haga bien.',
-  'Sacate una foto que te haga sentir orgullosa, aunque no la compartas.',
-  'Agradecele a tu cuerpo por lo que hizo esta semana.'
+  'Tómate una foto que te haga sentir orgullosa, aunque no la compartas.',
+  'Agradécele a tu cuerpo por lo que hizo esta semana.'
 ];
 
 let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, uiRestAlert:null, sigDrawing:false, sigHasContent:false, sigCtx:null, adminData:null, adminSelected:null };
@@ -801,11 +801,11 @@ function tickRestTimer(key){
   }
 }
 const REST_MESSAGES = [
-  '¡Dale {nombre}, vos podés! 💪 Arrancá la siguiente serie',
+  '¡Vamos {nombre}, tú puedes! 💪 Empieza la siguiente serie',
   '¡Vamos {nombre}! 🔥 Es hora de la próxima serie',
   '{nombre}, ya descansaste — ¡a por la siguiente! ✨',
-  '¡Arriba {nombre}! 🌟 Seguí sumando',
-  '{nombre}, cada serie te acerca más 💗 ¡Dale!'
+  '¡Arriba {nombre}! 🌟 Sigue sumando',
+  '{nombre}, cada serie te acerca más 💗 ¡Vamos!'
 ];
 function getRestMessage(){
   const msg = REST_MESSAGES[Math.floor(Math.random()*REST_MESSAGES.length)];
@@ -1173,7 +1173,7 @@ function render(){
         <span style="font-size:22px;">📸</span>
         <div>
           <div class="sos-title" style="color:#173404;">Fotos de progreso</div>
-          <div class="sos-sub" style="color:#3b6d11;">Privadas — solo vos las ves</div>
+          <div class="sos-sub" style="color:#3b6d11;">Privadas — solo tú las ves</div>
         </div>
       </button>
     `;
@@ -1194,7 +1194,7 @@ function render(){
           <span style="font-size:20px;">🔥</span>
           <div>
             <div class="num">${n} guerrera${n===1?'':'s'} ya entrenaron hoy</div>
-            <div class="sub2">Sumate vos también</div>
+            <div class="sub2">Súmate tú también</div>
           </div>
         </div>
       `;
@@ -1241,7 +1241,7 @@ function render(){
       <div class="card" style="text-align:center;">
         <div style="font-size:32px; margin-bottom:4px;">📸</div>
         <h1 style="text-align:center;">Tus fotos de progreso</h1>
-        <p class="sub">Son privadas — solo vos las ves. Si querés, podés compartir alguna con tu entrenadora para que vea tu evolución — no es obligatorio, vos decidís cuáles.</p>
+        <p class="sub">Son privadas — solo tú las ves. Si quieres, puedes compartir alguna con tu entrenadora para que vea tu evolución — no es obligatorio, tú decides cuáles.</p>
       </div>
       <div class="photos-grid" id="photos-grid"></div>
       ${photos[1] && photos[4] ? `
