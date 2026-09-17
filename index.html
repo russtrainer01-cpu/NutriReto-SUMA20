@@ -935,6 +935,7 @@ function normalizeData(d){
   if(!d.compromisoFirmado) d.compromisoFirmado = false;
   if(!d.badges) d.badges = [];
   if(!d.photos) d.photos = {};
+  if(!d.photosShared) d.photosShared = {};
   return d;
 }
 function compressImage(file, maxSize){
@@ -1240,7 +1241,7 @@ function render(){
       <div class="card" style="text-align:center;">
         <div style="font-size:32px; margin-bottom:4px;">📸</div>
         <h1 style="text-align:center;">Tus fotos de progreso</h1>
-        <p class="sub">Son privadas — solo vos las ves. Sacate una cada semana para comparar tu evolución al final del reto.</p>
+        <p class="sub">Son privadas — solo vos las ves. Si querés, podés compartir alguna con tu entrenadora para que vea tu evolución — no es obligatorio, vos decidís cuáles.</p>
       </div>
       <div class="photos-grid" id="photos-grid"></div>
       ${photos[1] && photos[4] ? `
@@ -1253,14 +1254,20 @@ function render(){
     `;
     document.getElementById('back-btn').onclick = ()=>{ state.view='dashboard'; render(); };
     const grid = document.getElementById('photos-grid');
+    const shared = state.data.photosShared || {};
     [1,2,3,4].forEach(week=>{
       const cell = document.createElement('div');
       cell.className = 'photo-cell';
       if(photos[week]){
+        const isShared = !!shared[week];
         cell.innerHTML = `
           <img src="${photos[week]}" data-viewphoto="${week}" />
           <div class="sub" style="text-align:center; margin-top:4px;">Semana ${week}</div>
           <button class="link-btn photo-replace-btn" data-week="${week}" style="font-size:11px;">Reemplazar</button>
+          <label style="display:flex; align-items:center; gap:6px; margin-top:8px; font-size:10px; color:var(--text-muted); text-align:left;">
+            <input type="checkbox" class="photo-share-check" data-week="${week}" ${isShared ? 'checked' : ''} style="margin:0;" />
+            ¿Compartir con Russ?
+          </label>
         `;
       } else {
         cell.innerHTML = `
@@ -1272,6 +1279,12 @@ function render(){
         `;
       }
       grid.appendChild(cell);
+    });
+    grid.querySelectorAll('.photo-share-check').forEach(chk=>{
+      chk.onchange = async ()=>{
+        state.data.photosShared[chk.dataset.week] = chk.checked;
+        await saveParticipante(state.codigo, state.nombre, state.data);
+      };
     });
     grid.querySelectorAll('.photo-input').forEach(input=>{
       input.onchange = async (e)=>{
@@ -1464,6 +1477,7 @@ function render(){
     const p = (state.adminData||[]).find(x=>x.id === state.adminSelected);
     if(!p){ state.view='admin-panel'; render(); return; }
     const completed = completedCount(p.data);
+    const sharedPhotos = Object.keys(p.data.photosShared || {}).filter(w=> p.data.photosShared[w] && p.data.photos && p.data.photos[w]);
     app.innerHTML = `
       <button class="back" id="back-btn">&larr; Volver</button>
       <div class="brand-header">
@@ -1471,9 +1485,22 @@ function render(){
         <div class="brand-title" style="font-size:20px;">${escapeHtml(p.nombre)}</div>
       </div>
       <p class="sub" style="text-align:center;">${completed}/30 días · Compromiso: ${p.data.compromisoFirmado ? '✅ firmado' : '❌ sin firmar'}</p>
+      ${sharedPhotos.length ? `
+        <div class="admin-section-title">📸 Fotos compartidas con vos</div>
+        <div class="photos-grid" id="admin-shared-photos"></div>
+      ` : ''}
       <div id="admin-detail-days"></div>
     `;
     document.getElementById('back-btn').onclick = ()=>{ state.view='admin-panel'; render(); };
+    if(sharedPhotos.length){
+      const photosC = document.getElementById('admin-shared-photos');
+      sharedPhotos.sort((a,b)=>a-b).forEach(week=>{
+        const cell = document.createElement('div');
+        cell.className = 'photo-cell';
+        cell.innerHTML = `<img src="${p.data.photos[week]}" /><div class="sub" style="text-align:center; margin-top:4px;">Semana ${week}</div>`;
+        photosC.appendChild(cell);
+      });
+    }
     const wrap = document.getElementById('admin-detail-days');
     for(let d=1; d<=30; d++){
       const info = dayInfo(d);
