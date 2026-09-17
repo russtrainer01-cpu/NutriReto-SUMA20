@@ -752,7 +752,7 @@ const AMORPROPIO_RETOS = [
   'Agradécele a tu cuerpo por lo que hizo esta semana.'
 ];
 
-let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, uiRestAlert:null, sigDrawing:false, sigHasContent:false, sigCtx:null, adminData:null, adminSelected:null };
+let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, uiRestAlert:null, sigDrawing:false, sigHasContent:false, sigCtx:null, adminData:null, adminSelected:null, historial:[] };
 let restTimerHandles = {};
 let restTimerEndTimes = {};
 let restAudioCtx = null;
@@ -991,8 +991,19 @@ async function loadAdminData(){
       headers:{ apikey:SUPABASE_KEY, Authorization:`Bearer ${SUPABASE_KEY}` }
     });
     const rows = await res.json();
-    state.adminData = rows.map(r=>({ id:r.id, codigo:r.codigo, nombre:r.nombre, data: normalizeData(r.data || {}) }));
-  }catch(e){ state.adminData = []; }
+    state.adminData = rows.filter(r=>r.id !== '_historial').map(r=>({ id:r.id, codigo:r.codigo, nombre:r.nombre, data: normalizeData(r.data || {}) }));
+    const histRow = rows.find(r=>r.id === '_historial');
+    state.historial = (histRow && histRow.data && histRow.data.entries) || [];
+  }catch(e){ state.adminData = []; state.historial = []; }
+}
+async function saveHistorial(entries){
+  try{
+    await fetch(`${SUPABASE_URL}/rest/v1/nutrireto_participantes`, {
+      method:'POST',
+      headers:{ apikey:SUPABASE_KEY, Authorization:`Bearer ${SUPABASE_KEY}`, 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates' },
+      body: JSON.stringify({ id:'_historial', codigo:'_admin', nombre:'_historial', data:{ entries } })
+    });
+  }catch(e){}
 }
 function lastActivityDate(data){
   let last = null;
@@ -1421,10 +1432,50 @@ function render(){
         <div id="admin-sinfirmar"></div>
       ` : ''}
 
+      <div class="admin-section-title">📖 Historial de alumnas confirmadas (${(state.historial||[]).length})</div>
+      <div id="admin-historial"></div>
+      <button class="btn-ghost" id="historial-add-btn" style="width:100%; margin-bottom:10px;">+ Agregar alumna al historial</button>
+      <div id="historial-form" class="hidden card">
+        <label>Nombre</label>
+        <input type="text" id="hist-nombre" placeholder="Ej: Yanzivi Berrios" />
+        <label>Edad</label>
+        <input type="text" id="hist-edad" placeholder="Ej: 25" />
+        <label>Duración de entrenamiento preferida</label>
+        <input type="text" id="hist-duracion" placeholder="Ej: 45 min" />
+        <label>Notas / restricciones</label>
+        <input type="text" id="hist-notas" placeholder="Ej: Evitar peso muerto (protrusión discal)" />
+        <button class="btn-primary" id="hist-save-btn" style="margin-top:8px;">Guardar</button>
+      </div>
+
       <div class="admin-section-title">📋 Todas las participantes</div>
       <div id="admin-lista"></div>
     `;
     document.getElementById('admin-exit-btn').onclick = ()=>{ state.view='login'; state.adminData=null; render(); };
+    document.getElementById('historial-add-btn').onclick = ()=>{
+      document.getElementById('historial-form').classList.toggle('hidden');
+    };
+    document.getElementById('hist-save-btn').onclick = async ()=>{
+      const nombre = document.getElementById('hist-nombre').value.trim();
+      const edad = document.getElementById('hist-edad').value.trim();
+      const duracion = document.getElementById('hist-duracion').value.trim();
+      const notas = document.getElementById('hist-notas').value.trim();
+      if(!nombre) return;
+      state.historial = state.historial || [];
+      state.historial.push({ nombre, edad, duracion, notas, fecha: todayISO() });
+      await saveHistorial(state.historial);
+      render();
+    };
+    const histC = document.getElementById('admin-historial');
+    (state.historial||[]).forEach((h, hi)=>{
+      const box = document.createElement('div');
+      box.className = 'admin-row';
+      box.innerHTML = `
+        <div class="admin-row-name">${escapeHtml(h.nombre)}${h.edad ? ' · ' + escapeHtml(h.edad) + ' años' : ''}</div>
+        <div class="admin-row-sub">${h.duracion ? 'Entrena ' + escapeHtml(h.duracion) : ''}</div>
+        ${h.notas ? `<div class="admin-comment-box">⚠️ ${escapeHtml(h.notas)}</div>` : ''}
+      `;
+      histC.appendChild(box);
+    });
 
     function renderParticipantRow(container, p, opts){
       const pct = Math.round((p.completed/30)*100);
