@@ -505,6 +505,71 @@
     background:linear-gradient(90deg, var(--green), var(--pink));
     height:100%;
   }
+  .share-card{
+    background:linear-gradient(160deg, #eaf3de 0%, #fbeaf0 100%);
+    border-radius:24px;
+    padding:32px 24px;
+    text-align:center;
+    border:1px solid var(--border);
+    max-width:320px;
+    margin:10px auto 0;
+  }
+  .share-card-kicker{
+    font-size:10px;
+    letter-spacing:3px;
+    color:var(--green);
+    font-weight:700;
+  }
+  .share-card-title{
+    font-size:18px;
+    font-weight:800;
+    color:var(--pink);
+    margin-bottom:24px;
+  }
+  .share-card-sub{
+    font-size:13px;
+    color:#5c564c;
+  }
+  .share-card-day{
+    font-size:52px;
+    font-weight:800;
+    color:#2b2520;
+    line-height:1;
+  }
+  .share-card-of{
+    font-size:13px;
+    color:#5c564c;
+    margin-bottom:20px;
+  }
+  .share-card-progress-track{
+    background:#fff;
+    border-radius:20px;
+    height:12px;
+    overflow:hidden;
+    margin-bottom:10px;
+  }
+  .share-card-progress-fill{
+    background:linear-gradient(90deg, var(--green), var(--pink));
+    height:100%;
+    border-radius:20px;
+  }
+  .share-card-hito{
+    font-size:12px;
+    font-weight:700;
+    color:var(--green);
+    margin-bottom:16px;
+  }
+  .share-card-quote{
+    font-size:12px;
+    color:#5c564c;
+    font-style:italic;
+    line-height:1.5;
+    margin-bottom:20px;
+  }
+  .share-card-tags{
+    font-size:10px;
+    color:#9a9488;
+  }
   .admin-comment-box{
     background:#fff;
     border-left:3px solid var(--pink);
@@ -1063,6 +1128,34 @@ function render(){
     return;
   }
 
+  if(state.view === 'day-complete'){
+    const d = state.selectedDay;
+    const done = completedCount(state.data);
+    const pct = Math.round((done/30)*100);
+    const frase = getFraseForDay(d);
+    const hitos = [];
+    if(done === 7) hitos.push('🏅 Primera semana completa');
+    if(done === 15) hitos.push('🎉 Mitad del camino');
+    if(done === 30) hitos.push('👑 ¡Reto completo!');
+    app.innerHTML = `
+      <div class="share-card">
+        <div class="share-card-kicker">NUTRIRETO</div>
+        <div class="share-card-title">SUMA20</div>
+        <div class="share-card-sub">Completé mi</div>
+        <div class="share-card-day">Día ${d}</div>
+        <div class="share-card-of">de 30 💪</div>
+        <div class="share-card-progress-track"><div class="share-card-progress-fill" style="width:${pct}%;"></div></div>
+        ${hitos.length ? `<div class="share-card-hito">${escapeHtml(hitos[0])}</div>` : ''}
+        <div class="share-card-quote">"${escapeHtml(frase.replace(/[\u{1F300}-\u{1FAFF}]/gu,'').trim())}"</div>
+        <div class="share-card-tags">#NutriReto #SUMA20 #NoMeSuelto</div>
+      </div>
+      <p class="sub" style="text-align:center; margin-top:14px;">📸 Capturá la pantalla y subila a tu historia</p>
+      <button class="btn-primary" id="complete-continue-btn" style="margin-top:10px;">Seguir →</button>
+    `;
+    document.getElementById('complete-continue-btn').onclick = ()=>{ state.view='dashboard'; render(); };
+    return;
+  }
+
   if(state.view === 'sos'){
     app.innerHTML = `
       <button class="back" id="back-btn">&larr; Volver</button>
@@ -1275,7 +1368,7 @@ function render(){
         document.getElementById('mark-done-btn').onclick = async ()=>{
           data.completados['dia'+d] = { done:true, date:todayISO() };
           await saveParticipante(state.codigo, state.nombre, data);
-          state.view = 'dashboard';
+          state.view = 'day-complete';
           render();
         };
       }
@@ -1389,6 +1482,7 @@ function render(){
         delete state.uiFeeling[key];
         delete state.uiComment[key];
         await saveParticipante(state.codigo, state.nombre, data);
+        if(isDayDone(data, d)){ state.view = 'day-complete'; }
         render();
       };
     });
