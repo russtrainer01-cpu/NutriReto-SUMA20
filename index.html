@@ -40,7 +40,7 @@
     font-size:11px;
     letter-spacing:3px;
     color:var(--green);
-    font-weight:600;
+    font-weight:500;
   }
   .brand-title{
     font-size:26px;
@@ -51,7 +51,7 @@
   h1{font-size:20px; font-weight:700; margin:6px 0;}
   h2{font-size:15px; font-weight:700; margin:18px 0 8px;}
   p.sub{color:var(--text-muted); font-size:13px; margin:4px 0 14px; line-height:1.5;}
-  label{display:block; font-size:12px; font-weight:600; color:var(--text-muted); margin:10px 0 4px;}
+  label{display:block; font-size:12px; font-weight:500; color:var(--text-muted); margin:10px 0 4px;}
   input[type="text"], input[type="date"], input[type="number"], textarea{
     width:100%;
     background:#faf8f2;
@@ -83,7 +83,7 @@
     border-radius:10px;
     padding:11px;
     font-size:13px;
-    font-weight:600;
+    font-weight:500;
     cursor:pointer;
   }
   .link-btn{
@@ -91,7 +91,7 @@
     border:none;
     color:var(--pink);
     font-size:13px;
-    font-weight:600;
+    font-weight:500;
     cursor:pointer;
     padding:0;
   }
@@ -162,8 +162,9 @@
     transition:width 0.4s ease;
   }
   .community-banner{
-    background:#eaf3de;
-    border-left:4px solid var(--green);
+    background:#fff;
+    border:1px solid var(--border);
+    border-left:3px solid var(--green);
     border-radius:14px;
     padding:12px 16px;
     margin-bottom:14px;
@@ -174,8 +175,9 @@
   .community-banner .num{font-size:14px; font-weight:700; color:var(--green-dark);}
   .community-banner .sub2{font-size:11px; color:var(--green);}
   .frase-dia{
-    background:#fbeaf0;
-    border-left:4px solid var(--pink);
+    background:#fff;
+    border:1px solid var(--border);
+    border-left:3px solid var(--pink);
     border-radius:14px;
     padding:14px 16px;
     margin-bottom:14px;
@@ -219,11 +221,11 @@
     border:none;
     font-family:inherit;
   }
-  .day-chip.fuerza{ background:#fbeaf0; border-left:4px solid var(--pink); }
-  .day-chip.cardio{ background:#eaf3de; border-left:4px solid var(--green); }
-  .day-chip.elongacion{ background:#e6f1fb; border-left:4px solid #378add; }
-  .day-chip.amorpropio{ background:#faeeda; border-left:4px solid #ef9f27; }
-  .day-chip.reflexion{ background:#f1eefe; border-left:4px solid #7f77dd; }
+  .day-chip.fuerza{ background:#fff; border:1px solid var(--border); border-left:3px solid var(--pink); }
+  .day-chip.cardio{ background:#fff; border:1px solid var(--border); border-left:3px solid var(--green); }
+  .day-chip.elongacion{ background:#fff; border:1px solid var(--border); border-left:3px solid #378add; }
+  .day-chip.amorpropio{ background:#fff; border:1px solid var(--border); border-left:3px solid #ef9f27; }
+  .day-chip.reflexion{ background:#fff; border:1px solid var(--border); border-left:3px solid #7f77dd; }
   .day-chip.cierre{ background:linear-gradient(135deg, var(--green), var(--pink)); }
   .day-chip.cierre .dc-label, .day-chip.cierre .dc-sub{ color:#fff; }
   .day-chip.done{
@@ -304,7 +306,7 @@
     background:#fff;
     border:1px solid var(--pink);
     color:var(--pink);
-    font-weight:600;
+    font-weight:500;
     font-size:13px;
     padding:8px 14px;
     border-radius:20px;
@@ -469,7 +471,7 @@
   }
   .admin-stat-label{
     font-size:10px;
-    font-weight:600;
+    font-weight:500;
     color:var(--text-muted);
     margin-top:2px;
   }
@@ -518,7 +520,7 @@
     font-size:10px;
     letter-spacing:3px;
     color:var(--green);
-    font-weight:600;
+    font-weight:500;
   }
   .share-card-title{
     font-size:18px;
@@ -555,7 +557,7 @@
   }
   .share-card-hito{
     font-size:12px;
-    font-weight:600;
+    font-weight:500;
     color:var(--green);
     margin-bottom:16px;
   }
@@ -643,7 +645,7 @@
     border:1px solid var(--border);
     color:var(--pink-dark);
     font-size:14px;
-    font-weight:600;
+    font-weight:500;
     cursor:pointer;
     padding:9px 16px;
     border-radius:10px;
@@ -1142,7 +1144,7 @@ function render(){
 
       <div class="progress-card">
         <div class="progress-row">
-          <span style="font-size:12px; font-weight:600;">Tu progreso</span>
+          <span style="font-size:12px; font-weight:500;">Tu progreso</span>
           <span style="font-size:12px; font-weight:700; color:var(--pink);">${done} / 30 días</span>
         </div>
         <div class="progress-track"><div class="progress-fill" style="width:${pct}%;"></div></div>
@@ -1284,7 +1286,7 @@ function render(){
         cell.innerHTML = `
           <label class="photo-add-btn">
             <span style="font-size:24px;">＋</span>
-            <span style="font-size:11px; font-weight:600;">Semana ${week}</span>
+            <span style="font-size:11px; font-weight:500;">Semana ${week}</span>
             <input type="file" accept="image/*" capture="environment" class="photo-input" data-week="${week}" style="display:none;" />
           </label>
         `;
@@ -1672,7 +1674,7 @@ function render(){
           <div class="feeling-row">
             ${FEELINGS.map(f=>`<button class="feeling-btn${selectedFeeling===f?' selected':''}" data-key="${key}" data-feeling="${f}">${f}</button>`).join('')}
           </div>
-          <label style="display:block; font-size:11px; font-weight:600; color:var(--text-muted); margin:8px 0 4px;">📝 Nota para tu entrenadora (opcional)</label>
+          <label style="display:block; font-size:11px; font-weight:500; color:var(--text-muted); margin:8px 0 4px;">📝 Nota para tu entrenadora (opcional)</label>
           <input type="text" id="comment-${key}" value="${escapeHtml(state.uiComment[key] || '')}" placeholder="Ej: me costó, ¿bajo el peso?" />
           <button class="btn-primary registrar-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}" style="margin-top:8px;">Registrar</button>
         `;
