@@ -186,6 +186,19 @@
     color:var(--pink-dark);
     line-height:1.5;
   }
+  .frase-motivacional{
+    background:#f6faf2;
+    border:1px solid var(--border);
+    border-left:3px solid var(--green);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:14px;
+    font-size:13px;
+    font-style:italic;
+    color:#2d4a1a;
+    line-height:1.5;
+    text-align:center;
+  }
   .semana-header{
     background:none;
     border:none;
@@ -1218,7 +1231,7 @@ function render(){
 
       <div id="community-banner"></div>
 
-      <div class="frase-dia">💌 ${escapeHtml(frase)}</div>
+      <div class="frase-motivacional">💌 ${escapeHtml(frase)}</div>
     `;
 
     let daysHtml = `
@@ -1683,7 +1696,7 @@ function render(){
       </div>
       <h1 style="text-align:center;">Día ${d} — ${escapeHtml(info.titulo)}</h1>
       ${info.mensaje ? `<div class="frase-dia">${escapeHtml(info.mensaje).replace(/\n/g,'<br/>')}</div>` : ''}
-      <div class="frase-dia">💌 ${escapeHtml(getFraseForDay(d))}</div>
+      <div class="frase-motivacional">💌 ${escapeHtml(getFraseForDay(d))}</div>
       ${state.uiRestAlert ? `<div class="rest-alert-banner">${escapeHtml(state.uiRestAlert.message)}</div>` : ''}
       <div id="day-items"></div>
     `;
