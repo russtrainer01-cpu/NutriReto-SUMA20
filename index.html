@@ -747,10 +747,15 @@ NUTRIRETO_DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
   { ejercicio:'Gato-camello (cierre de movilidad)', series:'1 serie', reps:'10', peso:'Sin peso', sinPeso:true, nota:'Movimiento lento, sincronizado con la respiración.', video:null }
 ], 'No necesitás entrenar al máximo para empezar a construir el hábito.\nHoy vamos a trabajar todo el cuerpo, aprender los movimientos y encontrar tu propio ritmo. 🤍'));
 
-let dayCounter = 2;
+// Día 2: Cardio con dos opciones (gym o casa)
+NUTRIRETO_DAYS.push(buildDay(2, 'cardio', 'Cardio', [
+  { seccion:'🚶 Opción 1', ejercicio:'Caminata a ritmo medio', series:'-', reps:'25 min', peso:'Sin peso', tipo:'checklist', nota:'Recomendado en ayunas, con un vaso de agua antes — así el cuerpo usa la grasa como combustible. Enviá una foto del temporizador (reloj o celular) al grupo cuando termines.', video:null },
+  { seccion:'🏃 Opción 2', ejercicio:'Subir y bajar escaleras', series:'-', reps:'15 min', peso:'Sin peso', tipo:'checklist', video:null }
+], 'Elegí UNA de las dos opciones de cardio de hoy, la que más te acomode.'));
+
+let dayCounter = 3;
 for(let semana = 0; semana < 4 && dayCounter <= 28; semana++){
   const pattern = semana === 0 ? [
-    { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'elongacion', titulo:'Elongación y movilidad', items: ejElongacion },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
@@ -1694,6 +1699,31 @@ function render(){
       const key = d + ':' + item.ejercicio;
       const entries = data.exercises[key] || [];
       const lastToday = entries.find(e=>e.date === todayISO());
+
+      if(item.tipo === 'checklist'){
+        const card = document.createElement('div');
+        card.className = 'card';
+        if(lastToday){
+          card.innerHTML = `
+            <div style="font-weight:700; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(item.ejercicio)}</div>
+            <div class="sub" style="margin:4px 0 0;">✓ Hecho hoy</div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div style="font-weight:700; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(item.ejercicio)}</div>
+            <div class="sub" style="margin:2px 0 10px;">${escapeHtml(item.reps)}</div>
+            ${item.video ? `
+              <button class="video-btn" data-videotoggle="${key}">🎥 ${state.uiVideoOpen[key] ? 'Ocultar técnica' : 'Ver técnica'}</button>
+              ${state.uiVideoOpen[key] ? `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(item.video))}" allow="encrypted-media"></iframe></div>` : ''}
+            ` : ''}
+            ${item.nota ? `<div class="tip">💡 ${escapeHtml(item.nota)}</div>` : ''}
+            <button class="btn-primary checklist-done-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}" style="margin-top:8px;">✓ Marcar como hecho</button>
+          `;
+        }
+        wrap.appendChild(card);
+        return;
+      }
+
       const setsTarget = (item.series.match(/\d+/) || [null])[0];
       const setsDone = state.uiSets[key] !== undefined ? state.uiSets[key] : 0;
       const selectedFeeling = state.uiFeeling[key];
@@ -1758,6 +1788,17 @@ function render(){
     });
     wrap.querySelectorAll('[id^=comment-]').forEach(inp=>{
       inp.oninput = ()=>{ state.uiComment[inp.id.replace('comment-','')] = inp.value; };
+    });
+    wrap.querySelectorAll('.checklist-done-btn').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const key = btn.dataset.key;
+        const entry = { date: todayISO(), ts: new Date().toISOString(), reps: btn.dataset.reps, sets: 1, feeling: '' };
+        if(!data.exercises[key]) data.exercises[key] = [];
+        data.exercises[key].push(entry);
+        await saveParticipante(state.codigo, state.nombre, data);
+        if(isDayDone(data, d)){ state.view = 'day-complete'; }
+        render();
+      };
     });
     wrap.querySelectorAll('.registrar-btn').forEach(btn=>{
       btn.onclick = async ()=>{
