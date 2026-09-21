@@ -771,8 +771,32 @@ function firstNumberSecs(str){
   const m = String(str).match(/\d+/);
   return m ? Number(m[0]) : 30;
 }
+let silentOscillators = {};
+function startSilentKeepAlive(key){
+  ensureRestAudio().then(ctx=>{
+    if(!ctx) return;
+    try{
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 20;
+      gain.gain.value = 0.0005;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      silentOscillators[key] = osc;
+    }catch(e){}
+  });
+}
+function stopSilentKeepAlive(key){
+  if(silentOscillators[key]){
+    try{ silentOscillators[key].stop(); }catch(e){}
+    delete silentOscillators[key];
+  }
+}
 function startRestTimer(key, seconds){
   ensureRestAudio();
+  startSilentKeepAlive(key);
   const current = state.uiSets[key] !== undefined ? state.uiSets[key] : 0;
   state.uiSets[key] = current + 1;
   if(restTimerHandles[key]) clearInterval(restTimerHandles[key]);
@@ -786,6 +810,7 @@ function cancelRestTimer(key){
   delete restTimerHandles[key];
   delete restTimerEndTimes[key];
   delete state.uiResting[key];
+  stopSilentKeepAlive(key);
   render();
 }
 function tickRestTimer(key){
@@ -833,6 +858,7 @@ function playTickSoundNr(){
   }catch(e){}
 }
 async function onRestFinished(key){
+  stopSilentKeepAlive(key);
   try{
     const ctx = await ensureRestAudio();
     if(ctx){
