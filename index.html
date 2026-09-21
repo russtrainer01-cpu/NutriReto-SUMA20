@@ -393,6 +393,13 @@
     margin:8px 0;
     animation:restPulse 1.4s ease-in-out infinite;
   }
+  .rest-start-btn{
+    background:linear-gradient(90deg, var(--green), var(--pink)) !important;
+    color:#fff !important;
+    border:none !important;
+    font-weight:700;
+    animation:restPulse 1.4s ease-in-out infinite;
+  }
   @keyframes restPulse{
     0%,100%{ opacity:1; }
     50%{ opacity:0.75; }
@@ -730,14 +737,14 @@ const semanaTitulos = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
 
 // Día 1: bienvenida, contenido propio (Modelo Casa)
 NUTRIRETO_DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
-  { seccion:'🔥 Entrada en calor', ejercicio:'Jumping Jacks (con o sin salto, a elegir)', series:'2 rondas', reps:'15', peso:'Sin peso', sinPeso:true, video:null },
-  { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Podés apoyarte en una silla si lo necesitás.', video:null, descanso:'45 seg' },
-  { ejercicio:'Flexiones en pared o mesa', series:'3 series', reps:'10', peso:'Sin peso', sinPeso:true, video:null, descanso:'45 seg' },
-  { ejercicio:'Puente de glúteos', series:'3 series', reps:'15', peso:'Sin peso', sinPeso:true, video:null, descanso:'30 seg' },
-  { ejercicio:'Bird Dog', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Mirá al piso durante todo el movimiento, para cuidar la cervical.', video:null, descanso:'30 seg' },
-  { ejercicio:'Zancada estática', series:'2 series', reps:'10 por lado', peso:'Sin peso', sinPeso:true, nota:'Con apoyo de silla si hace falta.', video:null, descanso:'45 seg' },
-  { ejercicio:'Plancha', series:'3 series', reps:'20-30 seg', peso:'Sin peso', sinPeso:true, video:null, descanso:'30 seg' },
-  { ejercicio:'Gato-camello (cierre de movilidad)', series:'1 serie', reps:'10', peso:'Sin peso', sinPeso:true, video:null }
+  { seccion:'🔥 Entrada en calor', ejercicio:'Jumping Jacks (con o sin salto, a elegir)', series:'2 rondas', reps:'15', peso:'Sin peso', sinPeso:true, nota:'Aterrizá suave, con las rodillas con leve flexión.', video:'https://www.youtube.com/shorts/bT2iY8IjEU0' },
+  { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Podés apoyarte en una silla si lo necesitás.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI', descanso:'45 seg' },
+  { ejercicio:'Flexiones en pared o mesa', series:'3 series', reps:'10', peso:'Sin peso', sinPeso:true, nota:'Cuerpo alineado en línea recta, sin hundir la cadera. Cuanto más horizontal, más fácil.', video:'https://www.youtube.com/shorts/YN5pE2JmzHM', descanso:'45 seg' },
+  { ejercicio:'Puente de glúteos', series:'3 series', reps:'15', peso:'Sin peso', sinPeso:true, nota:'Apretá bien los glúteos arriba, sin arquear la zona lumbar.', video:'https://www.youtube.com/shorts/Cxp6D7LEqjM', descanso:'30 seg' },
+  { ejercicio:'Bird Dog', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Mirá al piso durante todo el movimiento, para cuidar la cervical.', video:'https://www.youtube.com/shorts/BAqsW014YAI', descanso:'30 seg' },
+  { ejercicio:'Zancada estática', series:'2 series', reps:'10 por lado', peso:'Sin peso', sinPeso:true, nota:'Con apoyo de silla si hace falta.', video:'https://www.youtube.com/shorts/K69_pVU11qs', descanso:'45 seg' },
+  { ejercicio:'Plancha', series:'3 series', reps:'20-30 seg', peso:'Sin peso', sinPeso:true, nota:'Antebrazos debajo de los hombros, cuerpo en línea recta desde la cabeza hasta los talones.', video:'https://www.youtube.com/shorts/MczN_Wu94Hc', descanso:'30 seg' },
+  { ejercicio:'Gato-camello (cierre de movilidad)', series:'1 serie', reps:'10', peso:'Sin peso', sinPeso:true, nota:'Movimiento lento, sincronizado con la respiración.', video:null }
 ], 'No necesitás entrenar al máximo para empezar a construir el hábito.\nHoy vamos a trabajar todo el cuerpo, aprender los movimientos y encontrar tu propio ritmo. 🤍'));
 
 let dayCounter = 2;
