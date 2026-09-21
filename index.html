@@ -713,8 +713,8 @@ function getFraseForDay(dayNum){
 }
 
 // Estructura de 30 días. Contenido de ejemplo (placeholder) para armar juntas después.
-function buildDay(n, tipo, titulo, items){
-  return { day:n, tipo, titulo, items };
+function buildDay(n, tipo, titulo, items, mensaje){
+  return { day:n, tipo, titulo, items, mensaje: mensaje || null };
 }
 function ejFuerza(){
   return [];
@@ -727,9 +727,29 @@ function ejElongacion(){
 }
 const NUTRIRETO_DAYS = [];
 const semanaTitulos = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
-let dayCounter = 1;
+
+// Día 1: bienvenida, contenido propio (Modelo Casa)
+NUTRIRETO_DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
+  { seccion:'🔥 Entrada en calor', ejercicio:'Jumping Jacks (con o sin salto, a elegir)', series:'2 rondas', reps:'15', peso:'Sin peso', sinPeso:true, video:null },
+  { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Podés apoyarte en una silla si lo necesitás.', video:null, descanso:'45 seg' },
+  { ejercicio:'Flexiones en pared o mesa', series:'3 series', reps:'10', peso:'Sin peso', sinPeso:true, video:null, descanso:'45 seg' },
+  { ejercicio:'Puente de glúteos', series:'3 series', reps:'15', peso:'Sin peso', sinPeso:true, video:null, descanso:'30 seg' },
+  { ejercicio:'Bird Dog', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Mirá al piso durante todo el movimiento, para cuidar la cervical.', video:null, descanso:'30 seg' },
+  { ejercicio:'Zancada estática', series:'2 series', reps:'10 por lado', peso:'Sin peso', sinPeso:true, nota:'Con apoyo de silla si hace falta.', video:null, descanso:'45 seg' },
+  { ejercicio:'Plancha', series:'3 series', reps:'20-30 seg', peso:'Sin peso', sinPeso:true, video:null, descanso:'30 seg' },
+  { ejercicio:'Gato-camello (cierre de movilidad)', series:'1 serie', reps:'10', peso:'Sin peso', sinPeso:true, video:null }
+], 'No necesitás entrenar al máximo para empezar a construir el hábito.\nHoy vamos a trabajar todo el cuerpo, aprender los movimientos y encontrar tu propio ritmo. 🤍'));
+
+let dayCounter = 2;
 for(let semana = 0; semana < 4 && dayCounter <= 28; semana++){
-  const pattern = [
+  const pattern = semana === 0 ? [
+    { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
+    { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
+    { tipo:'elongacion', titulo:'Elongación y movilidad', items: ejElongacion },
+    { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
+    { tipo:'amorpropio', titulo:'Reto de amor propio', items: ()=>[] },
+    { tipo:'reflexion', titulo:'Reflexión de la semana', items: ()=>[] }
+  ] : [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
@@ -1642,6 +1662,7 @@ function render(){
         <div class="brand-title">SUMA20</div>
       </div>
       <h1 style="text-align:center;">Día ${d} — ${escapeHtml(info.titulo)}</h1>
+      ${info.mensaje ? `<div class="frase-dia">${escapeHtml(info.mensaje).replace(/\n/g,'<br/>')}</div>` : ''}
       ${state.uiRestAlert ? `<div class="rest-alert-banner">${escapeHtml(state.uiRestAlert.message)}</div>` : ''}
       <div id="day-items"></div>
     `;
