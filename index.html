@@ -701,18 +701,26 @@ const FRASES_DIA = [
   { tipo:null, texto:'Soy capaz de cosas que todavía no descubrí. 🔍' },
   { tipo:null, texto:'El amor propio también se entrena, un día a la vez. 💗' },
   { tipo:null, texto:'Hoy le agradezco a mi cuerpo por seguir intentando. 🙏' },
-  { tipo:null, texto:'Llegué hasta el último día. Eso ya dice todo de mí. 🏅' }
+  { tipo:null, texto:'Llegué hasta el último día. Eso ya dice todo de mí. 🏅' },
+  { tipo:'cardio', texto:'Cada paso cuenta. 👣' },
+  { tipo:'cardio', texto:'Mi corazón se fortalece con cada latido de hoy. ❤️‍🔥' },
+  { tipo:'cardio', texto:'No corro de mi cuerpo, corro CON mi cuerpo. 🏃‍♀️' }
 ];
 function getFraseForDay(dayNum){
   const info = dayInfo(dayNum);
   const isRestDay = info.tipo === 'amorpropio' || info.tipo === 'reflexion' || info.tipo === 'cierre';
   const isStretchDay = info.tipo === 'elongacion';
+  const isCardioDay = info.tipo === 'cardio';
   if(isRestDay){
     const opciones = FRASES_DIA.filter(f=>f.tipo==='descanso');
     if(opciones.length) return opciones[dayNum % opciones.length].texto;
   }
   if(isStretchDay){
     const opciones = FRASES_DIA.filter(f=>f.tipo==='elongacion');
+    if(opciones.length) return opciones[dayNum % opciones.length].texto;
+  }
+  if(isCardioDay){
+    const opciones = FRASES_DIA.filter(f=>f.tipo==='cardio');
     if(opciones.length) return opciones[dayNum % opciones.length].texto;
   }
   const generales = FRASES_DIA.filter(f=>!f.tipo);
@@ -1675,6 +1683,7 @@ function render(){
       </div>
       <h1 style="text-align:center;">Día ${d} — ${escapeHtml(info.titulo)}</h1>
       ${info.mensaje ? `<div class="frase-dia">${escapeHtml(info.mensaje).replace(/\n/g,'<br/>')}</div>` : ''}
+      <div class="frase-dia">💌 ${escapeHtml(getFraseForDay(d))}</div>
       ${state.uiRestAlert ? `<div class="rest-alert-banner">${escapeHtml(state.uiRestAlert.message)}</div>` : ''}
       <div id="day-items"></div>
     `;
