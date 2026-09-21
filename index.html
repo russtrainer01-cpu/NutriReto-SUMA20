@@ -749,7 +749,7 @@ NUTRIRETO_DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
 
 // Día 2: Cardio con dos opciones (gym o casa)
 NUTRIRETO_DAYS.push(buildDay(2, 'cardio', 'Cardio', [
-  { seccion:'🚶 Opción 1', ejercicio:'Caminata a ritmo medio', series:'-', reps:'25 min', peso:'Sin peso', tipo:'checklist', nota:'Recomendado en ayunas, con un vaso de agua antes — así el cuerpo usa la grasa como combustible. Enviá una foto del temporizador (reloj o celular) al grupo cuando termines.', video:null },
+  { seccion:'🚶 Opción 1', ejercicio:'Caminata a ritmo medio', series:'-', reps:'25 min', peso:'Sin peso', tipo:'checklist', nota:'Recomendado en ayunas, con un vaso de agua antes — así el cuerpo usa la grasa como combustible.', recordatorio:'📸 ¡Recordá enviar la foto del temporizador al grupo!', video:null },
   { seccion:'🏃 Opción 2', ejercicio:'Subir y bajar escaleras', series:'-', reps:'15 min', peso:'Sin peso', tipo:'checklist', video:null }
 ], 'Elegí UNA de las dos opciones de cardio de hoy, la que más te acomode.'));
 
@@ -1706,7 +1706,7 @@ function render(){
         if(lastToday){
           card.innerHTML = `
             <div style="font-weight:700; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(item.ejercicio)}</div>
-            <div class="sub" style="margin:4px 0 0;">✓ Hecho hoy</div>
+            <div class="sub" style="margin:4px 0 0; color:var(--green); font-weight:700;">☑ Lo completé</div>
           `;
         } else {
           card.innerHTML = `
@@ -1717,7 +1717,7 @@ function render(){
               ${state.uiVideoOpen[key] ? `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(item.video))}" allow="encrypted-media"></iframe></div>` : ''}
             ` : ''}
             ${item.nota ? `<div class="tip">💡 ${escapeHtml(item.nota)}</div>` : ''}
-            <button class="btn-primary checklist-done-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}" style="margin-top:8px;">✓ Marcar como hecho</button>
+            <button class="btn-ghost checklist-done-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}" data-recordatorio="${escapeHtml(item.recordatorio || '')}" style="margin-top:8px; text-align:left;">☐ &nbsp;Lo completé</button>
           `;
         }
         wrap.appendChild(card);
@@ -1796,7 +1796,16 @@ function render(){
         if(!data.exercises[key]) data.exercises[key] = [];
         data.exercises[key].push(entry);
         await saveParticipante(state.codigo, state.nombre, data);
-        if(isDayDone(data, d)){ state.view = 'day-complete'; }
+        if(isDayDone(data, d)){ state.view = 'day-complete'; render(); return; }
+        if(btn.dataset.recordatorio){
+          state.uiRestAlert = { key: 'reminder-' + key, message: btn.dataset.recordatorio };
+          setTimeout(()=>{
+            if(state.uiRestAlert && state.uiRestAlert.key === 'reminder-' + key){
+              state.uiRestAlert = null;
+              render();
+            }
+          }, 6000);
+        }
         render();
       };
     });
