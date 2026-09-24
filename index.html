@@ -802,7 +802,16 @@ function buildDaysForModelo(modelo){
       { seccion:'🚶 Opción 1', ejercicio:'Caminata a ritmo medio', series:'-', reps:'25 min', peso:'Sin peso', tipo:'checklist', nota:'Recomendado en ayunas, con un vaso de agua antes — así el cuerpo usa la grasa como combustible.', recordatorio:'📸 ¡Recordá enviar la foto del temporizador al grupo!', video:null },
       { seccion:'🏃 Opción 2', ejercicio:'Subir y bajar escaleras', series:'-', reps:'15 min', peso:'Sin peso', tipo:'checklist', video:null }
     ], 'Elegí UNA de las dos opciones de cardio de hoy, la que más te acomode.'));
-    DAYS.push(buildDay(3, 'fuerza', 'Fuerza', ejFuerza()));
+    DAYS.push(buildDay(3, 'fuerza', 'Circuito Full Body', [
+      { tipo:'circuito', titulo:'Circuito', rondas:3, ejercicios:[
+        { ejercicio:'Burpees (con o sin salto, a elegir)', reps:'6', peso:'Sin peso', video:'https://www.youtube.com/shorts/EkK3oVBA__Q', video2:'https://www.youtube.com/shorts/ki3RoA1Umxw', video2label:'Ver variante sin salto' },
+        { ejercicio:'Plancha con toque de hombros', reps:'8 a 10 por brazo', peso:'Sin peso', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
+        { ejercicio:'Prone Y', reps:'12', peso:'Sin peso', video:'https://www.youtube.com/shorts/IBi9fDd3_ck' },
+        { ejercicio:'Pull over acostado', reps:'12', peso:'Un paquete de arroz o algo que tengas en casa para hacer peso', nota:'Si no tenés mancuerna, un paquete de arroz (o algo parecido) funciona perfecto.', video:'https://youtube.com/shorts/DTbDAWC1wPs?si=fz6kC6Uz8ICYjK24' },
+        { ejercicio:'Remo unilateral con peso', reps:'10 por brazo', peso:'Lo que tengas en casa', video:'https://www.youtube.com/shorts/qTOaWaCxB8U' },
+        { ejercicio:'Mountain Climbers', reps:'20 seg', peso:'Sin peso', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' }
+      ] }
+    ], '3 rondas · 15 seg de descanso entre cada ejercicio · 1 min de descanso entre rondas.'));
     DAYS.push(buildDay(4, 'cardio', 'Movimiento diario', [
       { ejercicio:'6000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', nota:'Los podés sumar en tu día a día, o salir a caminar.', video:null }
     ]));
@@ -838,7 +847,7 @@ const AMORPROPIO_RETOS = [
   'Agradécele a tu cuerpo por lo que hizo esta semana.'
 ];
 
-let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, uiRestAlert:null, sigDrawing:false, sigHasContent:false, sigCtx:null, adminData:null, adminSelected:null, historial:[] };
+let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, uiRestAlert:null, uiCircuit:{}, sigDrawing:false, sigHasContent:false, sigCtx:null, adminData:null, adminSelected:null, historial:[] };
 let restTimerHandles = {};
 let restTimerEndTimes = {};
 let restAudioCtx = null;
@@ -878,11 +887,22 @@ function stopSilentKeepAlive(key){
     delete silentOscillators[key];
   }
 }
+let restFinishedCallbacks = {};
 function startRestTimer(key, seconds){
   ensureRestAudio();
   startSilentKeepAlive(key);
   const current = state.uiSets[key] !== undefined ? state.uiSets[key] : 0;
   state.uiSets[key] = current + 1;
+  if(restTimerHandles[key]) clearInterval(restTimerHandles[key]);
+  restTimerEndTimes[key] = Date.now() + seconds*1000;
+  state.uiResting[key] = seconds;
+  render();
+  restTimerHandles[key] = setInterval(()=> tickRestTimer(key), 1000);
+}
+function startCircuitRest(key, seconds, callback){
+  restFinishedCallbacks[key] = callback;
+  ensureRestAudio();
+  startSilentKeepAlive(key);
   if(restTimerHandles[key]) clearInterval(restTimerHandles[key]);
   restTimerEndTimes[key] = Date.now() + seconds*1000;
   state.uiResting[key] = seconds;
@@ -974,6 +994,12 @@ async function onRestFinished(key){
   }catch(e){}
   if(navigator.vibrate) navigator.vibrate([250,100,250]);
   document.querySelectorAll('.rest-overlay').forEach(el=> el.remove());
+  if(restFinishedCallbacks[key]){
+    const cb = restFinishedCallbacks[key];
+    delete restFinishedCallbacks[key];
+    cb();
+    return;
+  }
   state.uiRestAlert = { key, message: getRestMessage() };
   render();
   setTimeout(()=>{
@@ -1165,7 +1191,11 @@ function isDayDone(data, dayNum){
     return !!(data.completados['dia'+dayNum] && data.completados['dia'+dayNum].done);
   }
   if(d.items.length === 0) return false;
-  return d.items.every(item=>{
+  return d.items.every((item, idx)=>{
+    if(item.tipo === 'circuito'){
+      const doneKey = dayNum + ':circuito' + idx + ':completo';
+      return (data.exercises[doneKey] || []).length > 0;
+    }
     const entries = data.exercises[dayNum + ':' + item.ejercicio] || [];
     return entries.length > 0;
   });
@@ -1780,6 +1810,51 @@ function render(){
 
     const wrap = document.getElementById('day-items');
     info.items.forEach((item, idx)=>{
+      if(item.tipo === 'circuito'){
+        const circuitKey = d + ':circuito' + idx;
+        if(!state.uiCircuit[circuitKey]) state.uiCircuit[circuitKey] = { round: 1, exIdx: 0 };
+        const cState = state.uiCircuit[circuitKey];
+        const doneKey = d + ':circuito' + idx + ':completo';
+        const circuitDoneToday = (data.exercises[doneKey] || []).some(e=>e.date === todayISO());
+        const card = document.createElement('div');
+        card.className = 'card';
+        if(circuitDoneToday){
+          card.innerHTML = `
+            <div style="font-weight:700; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(item.titulo || 'Circuito')}</div>
+            <div class="sub" style="margin:4px 0 0; color:var(--green); font-weight:700;">☑ Circuito completo</div>
+          `;
+          wrap.appendChild(card);
+          return;
+        }
+        const resting = state.uiResting[circuitKey];
+        const currentEx = item.ejercicios[cState.exIdx];
+        const exKey = circuitKey + ':' + currentEx.ejercicio;
+        if(resting !== undefined){
+          const isRoundRest = cState.exIdx >= item.ejercicios.length - 1;
+          card.innerHTML = `
+            <div class="sub" style="font-weight:700; margin-bottom:6px;">Ronda ${cState.round} de ${item.rondas}</div>
+            <div class="rest-active">⏱️ ${isRoundRest ? 'Descanso entre rondas' : 'Descanso'}... <strong>${resting}s</strong></div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="sub" style="font-weight:700; margin-bottom:4px;">Ronda ${cState.round} de ${item.rondas} · Ejercicio ${cState.exIdx+1} de ${item.ejercicios.length}</div>
+            <div style="font-weight:700; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(currentEx.ejercicio)}</div>
+            <div class="sub" style="margin:2px 0 10px;">${escapeHtml(currentEx.reps)}${currentEx.peso ? ' · ' + escapeHtml(currentEx.peso) : ''}</div>
+            ${currentEx.video ? `
+              <button class="video-btn" data-videotoggle="${exKey}">🎥 ${state.uiVideoOpen[exKey] ? 'Ocultar técnica' : 'Ver técnica'}</button>
+              ${state.uiVideoOpen[exKey] ? `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(currentEx.video))}" allow="encrypted-media"></iframe></div>` : ''}
+            ` : ''}
+            ${currentEx.video2 ? `
+              <button class="video-btn" data-videotoggle="${exKey}-2">🎥 ${state.uiVideoOpen[exKey+'-2'] ? 'Ocultar variante' : (currentEx.video2label || 'Ver otra variante')}</button>
+              ${state.uiVideoOpen[exKey+'-2'] ? `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(currentEx.video2))}" allow="encrypted-media"></iframe></div>` : ''}
+            ` : ''}
+            ${currentEx.nota ? `<div class="tip">💡 ${escapeHtml(currentEx.nota)}</div>` : ''}
+            <button class="btn-primary circuit-register-btn" data-circuitkey="${circuitKey}" data-donekey="${doneKey}" data-dayidx="${idx}" style="margin-top:8px;">✓ Registrar y descansar</button>
+          `;
+        }
+        wrap.appendChild(card);
+        return;
+      }
       const key = d + ':' + item.ejercicio;
       const entries = data.exercises[key] || [];
       const lastToday = entries.find(e=>e.date === todayISO());
@@ -1872,6 +1947,43 @@ function render(){
     });
     wrap.querySelectorAll('[id^=comment-]').forEach(inp=>{
       inp.oninput = ()=>{ state.uiComment[inp.id.replace('comment-','')] = inp.value; };
+    });
+    wrap.querySelectorAll('.circuit-register-btn').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const circuitKey = btn.dataset.circuitkey;
+        const dayIdx = Number(btn.dataset.dayidx);
+        const item = info.items[dayIdx];
+        const cState = state.uiCircuit[circuitKey];
+        const currentEx = item.ejercicios[cState.exIdx];
+        const exEntryKey = circuitKey + ':' + currentEx.ejercicio;
+        const entry = { date: todayISO(), ts: new Date().toISOString(), reps: currentEx.reps, ronda: cState.round };
+        if(!data.exercises[exEntryKey]) data.exercises[exEntryKey] = [];
+        data.exercises[exEntryKey].push(entry);
+        await saveParticipante(state.codigo, state.nombre, data);
+
+        const isLastExInRound = cState.exIdx >= item.ejercicios.length - 1;
+        const isLastRound = cState.round >= item.rondas;
+
+        if(isLastExInRound && isLastRound){
+          const doneKey = btn.dataset.donekey;
+          if(!data.exercises[doneKey]) data.exercises[doneKey] = [];
+          data.exercises[doneKey].push({ date: todayISO(), ts: new Date().toISOString() });
+          await saveParticipante(state.codigo, state.nombre, data);
+          if(isDayDone(data, d)){ state.view = 'day-complete'; render(); return; }
+          render();
+        } else if(isLastExInRound){
+          startCircuitRest(circuitKey, 60, ()=>{
+            cState.round++;
+            cState.exIdx = 0;
+            render();
+          });
+        } else {
+          startCircuitRest(circuitKey, 15, ()=>{
+            cState.exIdx++;
+            render();
+          });
+        }
+      };
     });
     wrap.querySelectorAll('.checklist-done-btn').forEach(btn=>{
       btn.onclick = async ()=>{
