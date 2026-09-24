@@ -818,7 +818,42 @@ function buildDaysForModelo(modelo){
     DAYS.push(buildDay(5, 'fuerza', 'Fuerza', ejFuerza()));
   }
 
-  let dayCounter = 6;
+  const dia6 = buildDay(6, 'amorpropio', 'Mírate con amor', [],
+    '¿Cuántas veces te miraste al espejo buscando lo que no te gusta?\n' +
+    'Hoy quiero invitarte a hacer algo diferente.\n' +
+    'Mírate.\n' +
+    'De verdad mírate.\n' +
+    'No para encontrar qué cambiar, qué esconder o qué mejorar.\n' +
+    'Mírate para reconocer a la persona que está ahí.\n' +
+    'Ese cuerpo que quizás tantas veces criticas también te permitió llegar hasta acá. Te sostuvo, te acompañó, se adaptó a ti y atravesó días buenos y días difíciles.\n' +
+    'Y tú eres mucho más que una medida, un peso, una forma o una imagen en el espejo.\n' +
+    'Quizás hoy todavía no puedas decir "amo todo de mí", y está bien.\n' +
+    'Empieza por algo más sencillo:\n' +
+    '"Estoy aprendiendo a quererme."\n' +
+    'Porque el amor propio no siempre empieza sintiéndote conforme con tu cuerpo.\n' +
+    'A veces empieza simplemente dejando de hablarte mal.\n' +
+    'Hoy, cuando te mires al espejo, recuerda:\n' +
+    'no estás frente a un cuerpo que tienes que arreglar.\n' +
+    'Estás frente a una persona que merece ser mirada con amor.'
+  );
+  dia6.instrucciones = '🤍 DÍA DE AMOR PROPIO\n' +
+    'Hoy no venimos a cambiar nuestro cuerpo. Venimos a aprender a mirarlo.\n\n' +
+    '1. Prepara el espacio\n' +
+    'Busca un lugar tranquilo, ponte frente a un espejo y deja el celular a un lado.\n\n' +
+    '2. Mírate a los ojos\n' +
+    'Durante 1 minuto, sostén tu propia mirada.\n' +
+    'Sin corregirte. Sin esconderte. Sin buscar tus "defectos".\n' +
+    'Solo mírate.\n\n' +
+    '3. Ahora escribe:';
+  dia6.prompts = [
+    { emoji:'✨', label:'3 cosas de tu cuerpo que te gustan o agradeces' },
+    { emoji:'🤍', label:'3 cualidades que te gustan de ti' },
+    { emoji:'🌱', label:'1 cosa que hayas aprendido a valorar de ti con el tiempo' },
+    { emoji:'🫶', label:'1 cosa que hoy necesitas decirte y quizás hace mucho no te dices' }
+  ];
+  DAYS.push(dia6);
+
+  let dayCounter = 7;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
@@ -1754,8 +1789,9 @@ function render(){
     const data = state.data;
 
     if(info.tipo === 'amorpropio' || info.tipo === 'reflexion' || info.tipo === 'cierre'){
-      const reto = info.tipo === 'amorpropio' ? AMORPROPIO_RETOS[d % AMORPROPIO_RETOS.length] : null;
+      const reto = (info.tipo === 'amorpropio' && !info.mensaje) ? AMORPROPIO_RETOS[d % AMORPROPIO_RETOS.length] : null;
       const isDone = isDayDone(data, d);
+      const savedRespuestas = (data.completados['dia'+d] && data.completados['dia'+d].respuestas) || {};
       app.innerHTML = `
         <button class="back" id="back-btn">&larr; Volver</button>
         <div class="brand-header">
@@ -1763,15 +1799,24 @@ function render(){
           <div class="brand-title">SUMA20</div>
         </div>
         <h1 style="text-align:center;">Día ${d} — ${escapeHtml(info.titulo)}</h1>
-        <div class="card" style="text-align:center;">
-          ${reto ? `<div class="tip" style="text-align:left;">🌸 ${escapeHtml(reto)}</div>` : `<p class="sub">Espacio libre — usalo para descansar y prepararte para lo que viene.</p>`}
-          <button class="btn-primary" id="mark-done-btn" ${isDone?'disabled':''}>${isDone ? '✓ Ya lo marcaste' : 'Marcar como hecho ✓'}</button>
+        <div class="card" style="text-align:left;">
+          ${info.mensaje ? `<p class="sub" style="white-space:pre-line; line-height:1.7;">${escapeHtml(info.mensaje)}</p>` : ''}
+          ${info.instrucciones ? `<div class="tip" style="white-space:pre-line;">${escapeHtml(info.instrucciones)}</div>` : ''}
+          ${reto ? `<div class="tip">🌸 ${escapeHtml(reto)}</div>` : ''}
+          ${!info.mensaje && !info.instrucciones && !reto ? `<p class="sub">Espacio libre — usalo para descansar y prepararte para lo que viene.</p>` : ''}
+          ${(info.prompts||[]).map((p,pi)=>`
+            <label style="display:block; font-size:13px; font-weight:700; margin:14px 0 4px;">${p.emoji} ${escapeHtml(p.label)}</label>
+            <textarea class="prompt-input" data-pi="${pi}" rows="2" style="width:100%; border:1px solid var(--border); border-radius:8px; padding:8px; font-family:inherit; font-size:13px;" ${isDone?'disabled':''}>${escapeHtml(savedRespuestas[pi] || '')}</textarea>
+          `).join('')}
+          <button class="btn-primary" id="mark-done-btn" style="margin-top:14px;" ${isDone?'disabled':''}>${isDone ? '✓ Ya lo marcaste' : 'Marcar como hecho ✓'}</button>
         </div>
       `;
       document.getElementById('back-btn').onclick = ()=>{ state.view='dashboard'; render(); };
       if(!isDone){
         document.getElementById('mark-done-btn').onclick = async ()=>{
-          data.completados['dia'+d] = { done:true, date:todayISO() };
+          const respuestas = {};
+          document.querySelectorAll('.prompt-input').forEach(ta=>{ respuestas[ta.dataset.pi] = ta.value; });
+          data.completados['dia'+d] = { done:true, date:todayISO(), respuestas };
           await saveParticipante(state.codigo, state.nombre, data);
           state.view = 'day-complete';
           render();
