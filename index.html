@@ -753,52 +753,83 @@ function ejCardio(){
 function ejElongacion(){
   return [];
 }
-const NUTRIRETO_DAYS = [];
-const semanaTitulos = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
+function buildDaysForModelo(modelo){
+  const DAYS = [];
+  if(modelo === 'gym'){
+    DAYS.push(buildDay(1, 'fuerza', 'Full Body + Cardio', [
+      { seccion:'❤️ Cinta', ejercicio:'Caminata rápida (trote si podés)', series:'-', reps:'15 min', peso:'Sin inclinación', tipo:'checklist', nota:'Si podés trotar, mejor — pero si no, no pasa nada, caminar rápido también suma.', video:null },
+      { seccion:'🍑 Piernas y glúteos', ejercicio:'Abducción con máquina', series:'2 series', reps:'15', peso:'Máquina', descanso:'45 seg', video:null },
+      { ejercicio:'Sentadilla en Smith', series:'3 series', reps:'15', peso:'Poco peso', descanso:'1 min', video:null },
+      { ejercicio:'Puente de glúteos con mancuerna', series:'3 series', reps:'15', peso:'Mancuerna', nota:'Movimiento lento y controlado.', descanso:'45 seg', video:null },
+      { ejercicio:'Clamshell con mancuerna y banda', series:'3 series', reps:'8', peso:'Mancuerna + banda', descanso:'45 seg', video:null },
+      { seccion:'❤️ Cierre cardio', ejercicio:'Cinta (elevación 6, ritmo 4.5-5)', series:'-', reps:'10 min', peso:'Elevación 6', tipo:'checklist', video:null }
+    ], 'No necesitás entrenar al máximo para empezar a construir el hábito.\nHoy vamos a trabajar todo el cuerpo, aprender los movimientos y encontrar tu propio ritmo. 🤍'));
+    DAYS.push(buildDay(2, 'cardio', 'Cardio', [
+      { ejercicio:'Trote (podés caminar para descansar)', series:'-', reps:'25 min', peso:'Aire libre o cinta', tipo:'checklist', recordatorio:'📸 ¡Recordá enviar la foto del temporizador al grupo!', video:null }
+    ], 'Elegí donde te sea más cómodo trotar hoy — al aire libre o en la cinta.'));
+    DAYS.push(buildDay(3, 'fuerza', 'Full Body', [
+      { ejercicio:'Burpees (con o sin salto, a elegir)', series:'-', reps:'6', peso:'Sin peso', descanso:'-', video:null },
+      { ejercicio:'Plancha con toque de hombros', series:'-', reps:'8 a 10 por brazo', peso:'Sin peso', descanso:'-', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
+      { seccion:'🤲 Hombros', ejercicio:'Press militar con mancuernas de pie', series:'3 series', reps:'10', peso:'Mancuernas', descanso:'1 min', video:null },
+      { ejercicio:'Elevaciones laterales', series:'3 series', reps:'12', peso:'Mancuernas', descanso:'45 seg', video:null },
+      { seccion:'🏋️ Espalda', ejercicio:'Remo con máquina', series:'4 series', reps:'10', peso:'Máquina', descanso:'1 min', video:null },
+      { ejercicio:'Superman', series:'2 series', reps:'12', peso:'Sin peso', descanso:'30 seg', video:null },
+      { seccion:'🧱 Abs', ejercicio:'Crunch con peso', series:'3 series', reps:'12', peso:'Disco', descanso:'30 seg', video:null },
+      { ejercicio:'Abs bicicleta', series:'3 series', reps:'10', peso:'Sin peso', descanso:'30 seg', video:null }
+    ]));
+    DAYS.push(buildDay(4, 'cardio', 'Movimiento diario', [
+      { ejercicio:'7000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', nota:'Los podés sumar en tu día a día fuera del gym, o ir a caminar a la cinta — como te acomode.', video:null }
+    ]));
+    DAYS.push(buildDay(5, 'fuerza', 'Piernas y movilidad', [
+      { ejercicio:'Caminata cangrejo con banda', series:'3 series', reps:'12 por lado', peso:'Banda', descanso:'45 seg', video:null },
+      { ejercicio:'Búlgaras', series:'3 series', reps:'10', peso:'Sin peso', descanso:'1 min', video:null },
+      { ejercicio:'Peso muerto con barra', series:'3 series', reps:'12', peso:'Barra', descanso:'1 min', video:null },
+      { ejercicio:'Subida al cajón o step', series:'4 series', reps:'15', peso:'Sin peso', descanso:'45 seg', video:null },
+      { ejercicio:'Patada con tobillera', series:'4 series', reps:'12 por pierna', peso:'Tobillera', descanso:'45 seg', video:null }
+    ]));
+  } else {
+    DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
+      { seccion:'🔥 Entrada en calor', ejercicio:'Jumping Jacks (con o sin salto, a elegir)', series:'2 rondas', reps:'15', peso:'Sin peso', sinPeso:true, nota:'Aterrizá suave, con las rodillas con leve flexión.', video:'https://www.youtube.com/shorts/bT2iY8IjEU0' },
+      { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Podés apoyarte en una silla si lo necesitás.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI', descanso:'45 seg' },
+      { ejercicio:'Flexiones en pared o mesa', series:'3 series', reps:'10', peso:'Sin peso', sinPeso:true, nota:'Cuerpo alineado en línea recta, sin hundir la cadera. Cuanto más horizontal, más fácil.', video:'https://www.youtube.com/shorts/YN5pE2JmzHM', descanso:'45 seg' },
+      { ejercicio:'Puente de glúteos', series:'3 series', reps:'15', peso:'Sin peso', sinPeso:true, nota:'Apretá bien los glúteos arriba, sin arquear la zona lumbar.', video:'https://www.youtube.com/shorts/Cxp6D7LEqjM', descanso:'30 seg' },
+      { ejercicio:'Bird Dog', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Mirá al piso durante todo el movimiento, para cuidar la cervical.', video:'https://www.youtube.com/shorts/BAqsW014YAI', descanso:'30 seg' },
+      { ejercicio:'Zancada estática', series:'2 series', reps:'10 por lado', peso:'Sin peso', sinPeso:true, nota:'Con apoyo de silla si hace falta.', video:'https://www.youtube.com/shorts/K69_pVU11qs', descanso:'45 seg' },
+      { ejercicio:'Plancha', series:'3 series', reps:'20-30 seg', peso:'Sin peso', sinPeso:true, nota:'Antebrazos debajo de los hombros, cuerpo en línea recta desde la cabeza hasta los talones.', video:'https://www.youtube.com/shorts/MczN_Wu94Hc', descanso:'30 seg' },
+      { ejercicio:'Gato-camello (cierre de movilidad)', series:'1 serie', reps:'10', peso:'Sin peso', sinPeso:true, nota:'Movimiento lento, sincronizado con la respiración.', video:null }
+    ], 'No necesitás entrenar al máximo para empezar a construir el hábito.\nHoy vamos a trabajar todo el cuerpo, aprender los movimientos y encontrar tu propio ritmo. 🤍'));
+    DAYS.push(buildDay(2, 'cardio', 'Cardio', [
+      { seccion:'🚶 Opción 1', ejercicio:'Caminata a ritmo medio', series:'-', reps:'25 min', peso:'Sin peso', tipo:'checklist', nota:'Recomendado en ayunas, con un vaso de agua antes — así el cuerpo usa la grasa como combustible.', recordatorio:'📸 ¡Recordá enviar la foto del temporizador al grupo!', video:null },
+      { seccion:'🏃 Opción 2', ejercicio:'Subir y bajar escaleras', series:'-', reps:'15 min', peso:'Sin peso', tipo:'checklist', video:null }
+    ], 'Elegí UNA de las dos opciones de cardio de hoy, la que más te acomode.'));
+    DAYS.push(buildDay(3, 'fuerza', 'Fuerza', ejFuerza()));
+    DAYS.push(buildDay(4, 'cardio', 'Movimiento diario', [
+      { ejercicio:'6000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', nota:'Los podés sumar en tu día a día, o salir a caminar.', video:null }
+    ]));
+    DAYS.push(buildDay(5, 'fuerza', 'Fuerza', ejFuerza()));
+  }
 
-// Día 1: bienvenida, contenido propio (Modelo Casa)
-NUTRIRETO_DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
-  { seccion:'🔥 Entrada en calor', ejercicio:'Jumping Jacks (con o sin salto, a elegir)', series:'2 rondas', reps:'15', peso:'Sin peso', sinPeso:true, nota:'Aterrizá suave, con las rodillas con leve flexión.', video:'https://www.youtube.com/shorts/bT2iY8IjEU0' },
-  { ejercicio:'Sentadilla', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Podés apoyarte en una silla si lo necesitás.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI', descanso:'45 seg' },
-  { ejercicio:'Flexiones en pared o mesa', series:'3 series', reps:'10', peso:'Sin peso', sinPeso:true, nota:'Cuerpo alineado en línea recta, sin hundir la cadera. Cuanto más horizontal, más fácil.', video:'https://www.youtube.com/shorts/YN5pE2JmzHM', descanso:'45 seg' },
-  { ejercicio:'Puente de glúteos', series:'3 series', reps:'15', peso:'Sin peso', sinPeso:true, nota:'Apretá bien los glúteos arriba, sin arquear la zona lumbar.', video:'https://www.youtube.com/shorts/Cxp6D7LEqjM', descanso:'30 seg' },
-  { ejercicio:'Bird Dog', series:'3 series', reps:'12', peso:'Sin peso', sinPeso:true, nota:'Mirá al piso durante todo el movimiento, para cuidar la cervical.', video:'https://www.youtube.com/shorts/BAqsW014YAI', descanso:'30 seg' },
-  { ejercicio:'Zancada estática', series:'2 series', reps:'10 por lado', peso:'Sin peso', sinPeso:true, nota:'Con apoyo de silla si hace falta.', video:'https://www.youtube.com/shorts/K69_pVU11qs', descanso:'45 seg' },
-  { ejercicio:'Plancha', series:'3 series', reps:'20-30 seg', peso:'Sin peso', sinPeso:true, nota:'Antebrazos debajo de los hombros, cuerpo en línea recta desde la cabeza hasta los talones.', video:'https://www.youtube.com/shorts/MczN_Wu94Hc', descanso:'30 seg' },
-  { ejercicio:'Gato-camello (cierre de movilidad)', series:'1 serie', reps:'10', peso:'Sin peso', sinPeso:true, nota:'Movimiento lento, sincronizado con la respiración.', video:null }
-], 'No necesitás entrenar al máximo para empezar a construir el hábito.\nHoy vamos a trabajar todo el cuerpo, aprender los movimientos y encontrar tu propio ritmo. 🤍'));
-
-// Día 2: Cardio con dos opciones (gym o casa)
-NUTRIRETO_DAYS.push(buildDay(2, 'cardio', 'Cardio', [
-  { seccion:'🚶 Opción 1', ejercicio:'Caminata a ritmo medio', series:'-', reps:'25 min', peso:'Sin peso', tipo:'checklist', nota:'Recomendado en ayunas, con un vaso de agua antes — así el cuerpo usa la grasa como combustible.', recordatorio:'📸 ¡Recordá enviar la foto del temporizador al grupo!', video:null },
-  { seccion:'🏃 Opción 2', ejercicio:'Subir y bajar escaleras', series:'-', reps:'15 min', peso:'Sin peso', tipo:'checklist', video:null }
-], 'Elegí UNA de las dos opciones de cardio de hoy, la que más te acomode.'));
-
-let dayCounter = 3;
-for(let semana = 0; semana < 4 && dayCounter <= 28; semana++){
-  const pattern = semana === 0 ? [
+  let dayCounter = 6;
+  const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
-    { tipo:'elongacion', titulo:'Elongación y movilidad', items: ejElongacion },
-    { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
-    { tipo:'amorpropio', titulo:'Reto de amor propio', items: ()=>[] },
-    { tipo:'reflexion', titulo:'Reflexión de la semana', items: ()=>[] }
-  ] : [
-    { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
-    { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
-    { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
-    { tipo:'elongacion', titulo:'Elongación y movilidad', items: ejElongacion },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
     { tipo:'amorpropio', titulo:'Reto de amor propio', items: ()=>[] },
     { tipo:'reflexion', titulo:'Reflexión de la semana', items: ()=>[] }
   ];
-  pattern.forEach(p=>{
-    NUTRIRETO_DAYS.push(buildDay(dayCounter, p.tipo, p.titulo, p.items()));
+  let patternIdx = 0;
+  while(dayCounter <= 28){
+    const p = pattern[patternIdx % pattern.length];
+    DAYS.push(buildDay(dayCounter, p.tipo, p.titulo, p.items()));
     dayCounter++;
-  });
+    patternIdx++;
+  }
+  DAYS.push(buildDay(29, 'fuerza', 'Fuerza', ejFuerza()));
+  DAYS.push(buildDay(30, 'cierre', '¡Completaste el reto! 🎉', []));
+  return DAYS;
 }
-// Días 29-30: cierre
-NUTRIRETO_DAYS.push(buildDay(29, 'fuerza', 'Fuerza', ejFuerza()));
-NUTRIRETO_DAYS.push(buildDay(30, 'cierre', '¡Completaste el reto! 🎉', []));
+const NUTRIRETO_DAYS_CASA = buildDaysForModelo('casa');
+const NUTRIRETO_DAYS_GYM = buildDaysForModelo('gym');
+const semanaTitulos = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
 
 const AMORPROPIO_RETOS = [
   'Escríbete 3 cosas que valoras de tu cuerpo hoy.',
@@ -1017,6 +1048,7 @@ function normalizeData(d){
   if(!d.badges) d.badges = [];
   if(!d.photos) d.photos = {};
   if(!d.photosShared) d.photosShared = {};
+  if(d.modelo === undefined) d.modelo = null;
   return d;
 }
 function compressImage(file, maxSize){
@@ -1121,11 +1153,13 @@ async function markCommentSeen(participantId, exerciseKey, ts){
   }catch(e){}
 }
 
-function dayInfo(dayNum){
-  return NUTRIRETO_DAYS.find(d=>d.day === dayNum);
+function dayInfo(dayNum, modelo){
+  const m = modelo || (state.data && state.data.modelo) || 'casa';
+  const arr = m === 'gym' ? NUTRIRETO_DAYS_GYM : NUTRIRETO_DAYS_CASA;
+  return arr.find(d=>d.day === dayNum);
 }
 function isDayDone(data, dayNum){
-  const d = dayInfo(dayNum);
+  const d = dayInfo(dayNum, data.modelo);
   if(!d) return false;
   if(d.tipo === 'amorpropio' || d.tipo === 'reflexion' || d.tipo === 'cierre'){
     return !!(data.completados['dia'+dayNum] && data.completados['dia'+dayNum].done);
@@ -1170,6 +1204,34 @@ function render(){
     return;
   }
 
+  if(state.view === 'elegir-modelo'){
+    app.innerHTML = `
+      <div class="brand-header">
+        <div class="brand-kicker">NUTRIRETO</div>
+        <div class="brand-title">SUMA20</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:32px; margin-bottom:4px;">🏋️</div>
+        <h1 style="text-align:center;">¿Dónde vas a entrenar?</h1>
+        <p class="sub">Así te mostramos los ejercicios que le corresponden a tu día a día. Esta elección queda fija — si te confundís, avisale a tu entrenadora.</p>
+        <button class="btn-primary" id="modelo-casa-btn" style="margin-top:10px;">🏠 En casa</button>
+        <button class="btn-primary" id="modelo-gym-btn" style="margin-top:10px;">🏋️ En el gym</button>
+      </div>
+    `;
+    document.getElementById('modelo-casa-btn').onclick = async ()=>{
+      state.data.modelo = 'casa';
+      await saveParticipante(state.codigo, state.nombre, state.data);
+      state.view = 'dashboard';
+      render();
+    };
+    document.getElementById('modelo-gym-btn').onclick = async ()=>{
+      state.data.modelo = 'gym';
+      await saveParticipante(state.codigo, state.nombre, state.data);
+      state.view = 'dashboard';
+      render();
+    };
+    return;
+  }
   if(state.view === 'compromiso'){
     app.innerHTML = `
       <div class="brand-header">
@@ -1635,7 +1697,7 @@ function render(){
     }
     const wrap = document.getElementById('admin-detail-days');
     for(let d=1; d<=30; d++){
-      const info = dayInfo(d);
+      const info = dayInfo(d, p.data.modelo);
       if(!info) continue;
       const done = isDayDone(p.data, d);
       const box = document.createElement('div');
@@ -1877,7 +1939,7 @@ async function onLogin(){
   state.codigo = codigo;
   state.nombre = nombre;
   state.data = await loadParticipante(codigo, nombre);
-  state.view = state.data.compromisoFirmado ? 'dashboard' : 'compromiso';
+  state.view = !state.data.compromisoFirmado ? 'compromiso' : (state.data.modelo ? 'dashboard' : 'elegir-modelo');
   render();
 }
 
@@ -1933,7 +1995,10 @@ async function onConfirmCompromiso(){
   state.data.compromisoFirmado = true;
   await saveParticipante(state.codigo, state.nombre, state.data);
   fireConfetti();
-  setTimeout(()=>{ state.view = 'dashboard'; render(); }, 900);
+  setTimeout(()=>{
+    state.view = state.data.modelo ? 'dashboard' : 'elegir-modelo';
+    render();
+  }, 900);
 }
 
 function fireConfetti(){
