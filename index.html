@@ -199,6 +199,55 @@
     line-height:1.5;
     text-align:center;
   }
+  .nutri-progress-wrap{
+    position:fixed;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:440px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    background:var(--bg);
+    padding:12px 20px 10px;
+    z-index:50;
+    box-shadow:0 2px 8px rgba(43,37,33,0.1);
+  }
+  .nutri-progress-label{
+    font-size:12px;
+    font-weight:800;
+    color:var(--text-muted);
+    letter-spacing:0.03em;
+  }
+  .nutri-progress-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .nutri-progress-track{
+    position:relative;
+    flex:1;
+    height:20px;
+    border-radius:10px;
+    overflow:hidden;
+    background:linear-gradient(90deg, #d64545, #e0a52c, #4caf6d);
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .nutri-progress-mask{
+    position:absolute;
+    top:0; right:0; bottom:0;
+    background:var(--bg);
+    transition:width 0.4s ease;
+  }
+  .nutri-progress-pct{
+    font-size:15px;
+    font-weight:800;
+    color:var(--text);
+    min-width:40px;
+    text-align:right;
+  }
   .semana-header{
     background:none;
     border:none;
@@ -1225,6 +1274,25 @@ function dayInfo(dayNum, modelo){
   const arr = m === 'gym' ? NUTRIRETO_DAYS_GYM : NUTRIRETO_DAYS_CASA;
   return arr.find(d=>d.day === dayNum);
 }
+function computeDayProgressPct(data, dayNum, items){
+  if(!items.length) return 0;
+  const isItemDone = (item, idx)=>{
+    if(item.tipo === 'circuito'){
+      const doneKey = dayNum + ':circuito' + idx + ':completo';
+      return (data.exercises[doneKey] || []).length > 0;
+    }
+    const entries = data.exercises[dayNum + ':' + item.ejercicio] || [];
+    return entries.length > 0;
+  };
+  const regulares = items.filter(it=> !it.esOpcion);
+  const opciones = items.filter(it=> it.esOpcion);
+  const total = regulares.length + (opciones.length ? 1 : 0);
+  if(!total) return 0;
+  let done = 0;
+  regulares.forEach((item)=>{ if(isItemDone(item, items.indexOf(item))) done++; });
+  if(opciones.length && opciones.some((item)=> isItemDone(item, items.indexOf(item)))) done++;
+  return Math.round((done/total)*100);
+}
 function isDayDone(data, dayNum){
   const d = dayInfo(dayNum, data.modelo);
   if(!d) return false;
@@ -1826,6 +1894,14 @@ function render(){
     }
 
     let html = `
+      <div class="nutri-progress-wrap">
+        <div class="nutri-progress-label">🏋️ Rutina de hoy</div>
+        <div class="nutri-progress-row">
+          <div class="nutri-progress-track"><div class="nutri-progress-mask" style="width:${100-computeDayProgressPct(data, d, info.items)}%;"></div></div>
+          <span class="nutri-progress-pct">${computeDayProgressPct(data, d, info.items)}%</span>
+        </div>
+      </div>
+      <div style="height:56px;"></div>
       <button class="back" id="back-btn">&larr; Volver</button>
       <div class="brand-header">
         <div class="brand-kicker">NUTRIRETO</div>
