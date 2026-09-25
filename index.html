@@ -918,7 +918,34 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia6);
 
-  let dayCounter = 7;
+  const dia7 = buildDay(7, 'fuerza', 'Squat & Lunges Challenge', [
+    { tipo:'circuito', titulo:'Squat & Lunges Challenge', rondas:1, descansoEntre:20, ejercicios:[
+      { ejercicio:'Sentadilla', reps:'40 seg', peso:'Sin peso' },
+      { ejercicio:'Zancada atrás derecha', reps:'40 seg', peso:'Sin peso' },
+      { ejercicio:'Zancada atrás izquierda', reps:'40 seg', peso:'Sin peso' },
+      { ejercicio:'Sentadilla con pausa abajo', reps:'40 seg', peso:'Sin peso', nota:'Sostené 1-2 seg abajo antes de subir.' },
+      { ejercicio:'Zancada alternada', reps:'40 seg', peso:'Sin peso' },
+      { ejercicio:'Sentadilla + 2 pulsitos', reps:'40 seg', peso:'Sin peso', nota:'Bajás, y arriba de la posición baja hacés 2 pulsos cortos antes de subir del todo.' },
+      { ejercicio:'Zancada atrás alternada', reps:'40 seg', peso:'Sin peso' },
+      { ejercicio:'Sentadilla → zancada atrás', reps:'40 seg', peso:'Sin peso', nota:'Combiná los dos movimientos, alternando.' },
+      { ejercicio:'Sentadilla', reps:'40 seg', peso:'Sin peso' }
+    ] }
+  ], '🍑 Squat & Lunges Challenge\n⏱️ ~10 minutos · Formato: 40 seg de trabajo + 20 seg de descanso, una sola vuelta por las 9 estaciones.');
+  dia7.instrucciones = '🏆 ¿Qué logré esta semana?\n\n' +
+    'Repasá todo lo que hiciste desde el Día 1 hasta hoy:\n\n' +
+    '💪 Trabajaste fuerza en piernas, glúteos, espalda, hombros y core — eso fortalece tus huesos, tus articulaciones y tu postura.\n' +
+    '❤️ Sumaste cardio — mejora tu corazón, tu energía diaria y tu capacidad pulmonar.\n' +
+    '🧘 Hiciste movilidad en cada sesión — cuida tus articulaciones y te ayuda a moverte con más libertad.\n' +
+    '🚶 Sumaste pasos en tu día a día — cada paso cuenta para tu salud metabólica.\n' +
+    '🤍 Te miraste con amor el Día 6 — el amor propio es tan parte del proceso como el ejercicio.\n' +
+    '🍑 Y hoy cerraste la semana con un reto de piernas y glúteos — tu cuerpo ya es más fuerte que el lunes.\n\n' +
+    'Nada de esto es poco. Reconocelo.';
+  dia7.prompts = [
+    { emoji:'✍️', label:'¿Qué lograste esta semana? Contame qué hiciste y en qué sentís que ayudó a tu cuerpo.' }
+  ];
+  DAYS.push(dia7);
+
+  let dayCounter = 8;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
@@ -1920,9 +1947,32 @@ function render(){
       <div class="frase-motivacional">💌 ${escapeHtml(getFraseForDay(d))}</div>
       ${state.uiRestAlert ? `<div class="rest-alert-banner">${escapeHtml(state.uiRestAlert.message)}</div>` : ''}
       <div id="day-items"></div>
+      ${(info.instrucciones || (info.prompts||[]).length) ? `
+        <div class="card" style="text-align:left; margin-top:18px;">
+          ${info.instrucciones ? `<div style="white-space:pre-line; line-height:1.7; font-size:14px;">${escapeHtml(info.instrucciones)}</div>` : ''}
+          ${(info.prompts||[]).map((p,pi)=>`
+            <label style="display:block; font-size:13px; font-weight:700; margin:14px 0 4px;">${p.emoji} ${escapeHtml(p.label)}</label>
+            <textarea class="week-prompt-input" data-pi="${pi}" rows="3" style="width:100%; border:1px solid var(--border); border-radius:8px; padding:8px; font-family:inherit; font-size:13px;" ${(data.completados['dia'+d] && data.completados['dia'+d].respuestas) ? 'disabled' : ''}>${escapeHtml((data.completados['dia'+d] && data.completados['dia'+d].respuestas && data.completados['dia'+d].respuestas[pi]) || '')}</textarea>
+          `).join('')}
+          ${(info.prompts||[]).length ? `
+            <button class="btn-primary" id="save-week-reflection-btn" style="margin-top:10px;" ${(data.completados['dia'+d] && data.completados['dia'+d].respuestas) ? 'disabled' : ''}>${(data.completados['dia'+d] && data.completados['dia'+d].respuestas) ? '✓ Ya guardaste tu reflexión' : 'Guardar mi reflexión ✨'}</button>
+          ` : ''}
+        </div>
+      ` : ''}
     `;
     app.innerHTML = html;
     document.getElementById('back-btn').onclick = ()=>{ state.view='dashboard'; render(); };
+    const saveWeekBtn = document.getElementById('save-week-reflection-btn');
+    if(saveWeekBtn && !saveWeekBtn.disabled){
+      saveWeekBtn.onclick = async ()=>{
+        const respuestas = {};
+        document.querySelectorAll('.week-prompt-input').forEach(ta=>{ respuestas[ta.dataset.pi] = ta.value; });
+        if(!data.completados['dia'+d]) data.completados['dia'+d] = {};
+        data.completados['dia'+d].respuestas = respuestas;
+        await saveParticipante(state.codigo, state.nombre, data);
+        render();
+      };
+    }
     const restingKeys = Object.keys(state.uiResting);
     if(restingKeys.length){
       const rKey = restingKeys[0];
@@ -1949,7 +1999,7 @@ function render(){
           const summaryCard = document.createElement('div');
           summaryCard.className = 'card';
           summaryCard.innerHTML = `
-            <div style="font-weight:700; font-size:15px; margin-bottom:8px;">📋 Resumen del circuito (${item.rondas} rondas)</div>
+            <div style="font-weight:700; font-size:15px; margin-bottom:8px;">📋 Resumen del circuito (${item.rondas} ${item.rondas===1?'ronda':'rondas'})</div>
             ${item.ejercicios.map((ex,i)=>`
               <div style="display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid var(--border);">
                 <span style="font-size:13px; font-weight:600;">${i+1}. ${escapeHtml(ex.ejercicio)}</span>
@@ -2115,13 +2165,13 @@ function render(){
           if(isDayDone(data, d)){ state.view = 'day-complete'; render(); return; }
           render();
         } else if(isLastExInRound){
-          startCircuitRest(circuitKey, 60, ()=>{
+          startCircuitRest(circuitKey, item.descansoRondas || 60, ()=>{
             cState.round++;
             cState.exIdx = 0;
             render();
           });
         } else {
-          startCircuitRest(circuitKey, 15, ()=>{
+          startCircuitRest(circuitKey, item.descansoEntre || 15, ()=>{
             cState.exIdx++;
             render();
           });
