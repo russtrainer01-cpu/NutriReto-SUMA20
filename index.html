@@ -840,6 +840,15 @@ function buildDaysForModelo(modelo){
       { ejercicio:'Subida al cajón o step', series:'4 series', reps:'15', peso:'Sin peso', descanso:'45 seg', nota:'Empujá con el talón del pie de arriba, sin impulsarte con el de abajo.', video:'https://www.youtube.com/shorts/Ey2H3-zmzSk' },
       { ejercicio:'Patada con tobillera', series:'4 series', reps:'12 por pierna', peso:'Tobillera', descanso:'45 seg', nota:'Movimiento controlado, sin balancear la cadera.', video:'https://www.youtube.com/shorts/du6Va1m4MVE' }
     ]));
+    DAYS.push(buildDay(8, 'fuerza', 'Glúteos + Cardio', [
+      { ejercicio:'Cuerda (en casa o en el gym)', series:'8 rondas', reps:'15-20 saltos', peso:'Sin peso', descanso:'20 seg', nota:'⚠️ Seguridad: aterrizá en la punta de los pies (mediopié), nunca en el talón. Rodillas con leve flexión para amortiguar el impacto. Hacelo en una superficie plana y sin obstáculos alrededor. El giro de la cuerda sale de la muñeca, no del hombro — codos pegados al cuerpo, sin trabarlos.', video:null },
+      { ejercicio:'Zancadas caminadas con peso', series:'3 series', reps:'12', peso:'Mancuernas', descanso:'45 seg', video:'https://youtube.com/shorts/mGPqSadIIlc?si=ZaW0l2-D7p2sVKhW' },
+      { ejercicio:'Sentadilla en Smith', series:'4 series', reps:'12', peso:'Smith', descanso:'45 seg', video:'https://www.youtube.com/shorts/rQw8GUzpj1I' },
+      { ejercicio:'Hip Thrust con mancuerna', series:'4 series', reps:'12', peso:'Mancuerna', descanso:'45 seg', nota:'Tempo lento: 3 seg para bajar, 2 seg para subir. Apretá el glúteo durante todo el movimiento, no solo arriba.', video:'https://www.youtube.com/shorts/wYT_Ru0yGD0' },
+      { ejercicio:'Clamshell', series:'3 series', reps:'12', peso:'Sin peso o banda', descanso:'45 seg', video:'https://youtube.com/shorts/z_OzBEkwtkE?si=3tJjZpq2UgFDXfqQ' },
+      { seccion:'🏁 Finalizador', ejercicio:'Búlgaras con peso', series:'1 serie', reps:'10', peso:'Con peso', descanso:'-', nota:'Serie única, al fallo técnico — bajá bien profundo en cada repetición.', video:'https://youtube.com/shorts/9OwbhU43pBw?si=UeqeAo1nh2TRNEEm' },
+      { seccion:'🧘 Cierre', ejercicio:'Estiramiento y movilidad', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' }
+    ]));
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -945,7 +954,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = 8;
+  let dayCounter = modelo === 'gym' ? 9 : 8;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
