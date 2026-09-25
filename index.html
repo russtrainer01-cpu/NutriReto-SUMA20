@@ -872,7 +872,15 @@ function buildDaysForModelo(modelo){
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
       { ejercicio:'6000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', nota:'Los puedes sumar en tu día a día o salir a caminar — como prefieras!! Y lo llevas monitoreado en tu reloj o en el celu, si no sabes cómo, preguntame!!', video:null }
     ]));
-    DAYS.push(buildDay(5, 'fuerza', 'Fuerza', ejFuerza()));
+    DAYS.push(buildDay(5, 'fuerza', 'Piernas y Cardio', [
+      { seccion:'🧘 Movilidad', ejercicio:'Calentamiento tren inferior', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://youtube.com/shorts/VHkqEiJvtHQ' },
+      { seccion:'⭐ Opcional', ejercicio:'Saltar la cuerda (o simular sin cuerda)', series:'5 rondas', reps:'20 saltos', peso:'Sin peso', descanso:'30 seg', nota:'Si no tenés cuerda, simulá el salto igual — el movimiento y el ritmo cardíaco cuentan lo mismo.', video:null },
+      { ejercicio:'Caminata cangrejo', series:'3 series', reps:'12 por lado', peso:'Sin peso', descanso:'30 seg', video:'https://youtube.com/shorts/PZc3YuorNWc?si=m5p0tkbMqvHN3Ip6' },
+      { ejercicio:'Sentadilla con peso', series:'4 series', reps:'10', peso:'Mancuernas', descanso:'30 seg', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
+      { ejercicio:'Hip Thrust sin peso (para principiantes)', series:'3 series', reps:'15', peso:'Sin peso', descanso:'30 seg', video:'https://www.youtube.com/shorts/Cxp6D7LEqjM' },
+      { ejercicio:'Jumping Jacks (con o sin salto)', series:'2 series', reps:'15', peso:'Sin peso', descanso:'30 seg', video:'https://www.youtube.com/shorts/bT2iY8IjEU0' },
+      { seccion:'🏁 Cierre', ejercicio:'Subida al cajón (escalón o lo que tengas) con peso', series:'3 series', reps:'15 por lado', peso:'Con peso', descanso:'30 seg', video:null }
+    ]));
   }
 
   const dia6 = buildDay(6, 'amorpropio', 'Mírate con amor', [],
