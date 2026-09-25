@@ -805,8 +805,8 @@ function buildDaysForModelo(modelo){
     ], 'No necesitás entrenar al máximo para empezar a construir el hábito.\nHoy vamos a trabajar todo el cuerpo, aprender los movimientos y encontrar tu propio ritmo. 🤍'));
     DAYS.push(buildDay(2, 'cardio', 'Cardio', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
-      { seccion:'🚶 Opción 1', ejercicio:'Caminata a ritmo medio', series:'-', reps:'25 min', peso:'Sin peso', tipo:'checklist', nota:'Recomendado en ayunas, con un vaso de agua antes — así el cuerpo usa la grasa como combustible.', recordatorio:'📸 ¡Recordá enviar la foto del temporizador al grupo!', video:null },
-      { seccion:'🏃 Opción 2', ejercicio:'Subir y bajar escaleras', series:'-', reps:'15 min', peso:'Sin peso', tipo:'checklist', nota:'Ritmo sostenido, apoyando todo el pie en cada escalón.', video:null }
+      { seccion:'🚶 Opción 1', ejercicio:'Caminata a ritmo medio', series:'-', reps:'25 min', peso:'Sin peso', tipo:'checklist', esOpcion:true, nota:'Recomendado en ayunas, con un vaso de agua antes — así el cuerpo usa la grasa como combustible.', recordatorio:'📸 ¡Recordá enviar la foto del temporizador al grupo!', video:null },
+      { seccion:'🏃 Opción 2', ejercicio:'Subir y bajar escaleras', series:'-', reps:'15 min', peso:'Sin peso', tipo:'checklist', esOpcion:true, nota:'Ritmo sostenido, apoyando todo el pie en cada escalón.', video:null }
     ], 'Elegí UNA de las dos opciones de cardio de hoy, la que más te acomode.'));
     DAYS.push(buildDay(3, 'fuerza', 'Circuito Full Body', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -1234,14 +1234,19 @@ function isDayDone(data, dayNum){
     return !!(data.completados['dia'+dayNum] && data.completados['dia'+dayNum].done);
   }
   if(d.items.length === 0) return false;
-  return d.items.every((item, idx)=>{
+  const opciones = d.items.filter(it=> it.esOpcion);
+  const regulares = d.items.filter(it=> !it.esOpcion);
+  const isItemDone = (item, idx)=>{
     if(item.tipo === 'circuito'){
       const doneKey = dayNum + ':circuito' + idx + ':completo';
       return (data.exercises[doneKey] || []).length > 0;
     }
     const entries = data.exercises[dayNum + ':' + item.ejercicio] || [];
     return entries.length > 0;
-  });
+  };
+  const regularesOk = regulares.every((item)=> isItemDone(item, d.items.indexOf(item)));
+  const opcionesOk = opciones.length === 0 || opciones.some((item)=> isItemDone(item, d.items.indexOf(item)));
+  return regularesOk && opcionesOk;
 }
 function completedCount(data){
   let n = 0;
