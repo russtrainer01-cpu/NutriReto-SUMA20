@@ -689,7 +689,7 @@ const FRASES_DIA = [
   { tipo:null, texto:'Moverme hoy no es un castigo por lo que comí — es un regalo para mi bienestar. 🎁' },
   { tipo:null, texto:'No entreno para cambiar quién soy. Entreno para sentirme más yo. 💗' },
   { tipo:null, texto:'Cada músculo que activo hoy me está agradeciendo. 🙏' },
-  { tipo:null, texto:'Mi valor no se mide en kilos ni en centímetros. 🌸' },
+  { tipo:null, texto:'Mi valor no se mide en kilos ni en centímetros. 🤍' },
   { tipo:null, texto:'Hoy elijo moverme con curiosidad, no con exigencia. 🌿' },
   { tipo:null, texto:'El esfuerzo de hoy es una carta de amor a mi yo de mañana. 💌' },
   { tipo:null, texto:'Escucho lo que mi cuerpo me pide, no solo lo que mi cabeza me exige. 👂' },
@@ -708,7 +708,7 @@ const FRASES_DIA = [
   { tipo:null, texto:'Confío en mi proceso, aunque hoy no lo vea en el espejo. 🌤️' },
   { tipo:null, texto:'Hacerlo imperfecto también cuenta. 💫' },
   { tipo:null, texto:'Mi cuerpo me trajo hasta acá. Hoy le devuelvo el gesto. 🚶‍♀️' },
-  { tipo:null, texto:'La disciplina más linda es la que nace del cariño, no del miedo. 🌸' },
+  { tipo:null, texto:'La disciplina más linda es la que nace del cariño, no del miedo. 🤍' },
   { tipo:'descanso', texto:'Hoy no me exijo: me acompaño. 🤝' },
   { tipo:'elongacion', texto:'Cada respiración profunda de hoy también es entrenamiento. 🌬️' },
   { tipo:null, texto:'Soy capaz de cosas que todavía no descubrí. 🔍' },
@@ -886,7 +886,7 @@ const semanaTitulos = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
 const AMORPROPIO_RETOS = [
   'Escríbete 3 cosas que valoras de tu cuerpo hoy.',
   'Date un mimo: un baño largo, una siesta, lo que te haga bien.',
-  'Tómate una foto que te haga sentir orgullosa, aunque no la compartas.',
+  'Tómate una foto que te haga sentir orgulloso/a, aunque no la compartas.',
   'Agradécele a tu cuerpo por lo que hizo esta semana.'
 ];
 
@@ -898,9 +898,7 @@ async function ensureRestAudio(){
   if(!restAudioCtx){
     try{ restAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; }
   }
-  if(restAudioCtx.state === 'suspended'){
-    try{ await restAudioCtx.resume(); }catch(e){}
-  }
+  try{ await restAudioCtx.resume(); }catch(e){}
   return restAudioCtx;
 }
 function firstNumberSecs(str){
@@ -1317,7 +1315,7 @@ function render(){
         <div class="brand-title">SUMA20</div>
       </div>
       <div class="card" style="text-align:center;">
-        <div style="font-size:16px; font-weight:700; color:var(--green-dark); margin-bottom:10px;">🌸💚 Mi compromiso 💚🌸</div>
+        <div style="font-size:16px; font-weight:700; color:var(--green-dark); margin-bottom:10px;">🤍💚 Mi compromiso 💚🤍</div>
         <div class="compromiso-text">
           <em>Hoy empieza algo distinto.</em> 🌱<br/><br/>
           Durante estos 30 días no buscamos hacerlo perfecto.<br/>
@@ -1328,11 +1326,11 @@ function render(){
           ⏱️ Mis 20 minutos: a regalarme este espacio para moverme, activarme y sentirme mejor.<br/>
           🔄 Volver a empezar: si un día no pude, no abandono. Simplemente retomo.<br/><br/>
           No necesito hacerlo perfecto. Solo necesito seguir sumando. ✨<br/><br/>
-          Y no estás sola en esto.<br/>
+          Y no estás solo/a en esto.<br/>
           Te acompañamos durante cada paso del camino. 🤍
         </div>
         <canvas id="signature-pad"></canvas>
-        <div class="signature-hint">✍️ Firmá acá tu compromiso<br/>"Hoy elijo sumar, aunque sean 20 minutos." 🌸</div>
+        <div class="signature-hint">✍️ Firmá acá tu compromiso<br/>"Hoy elijo sumar, aunque sean 20 minutos." 🤍</div>
         <button class="link-btn" id="clear-sig-btn" style="margin-bottom:10px;">Borrar firma</button>
         <button class="btn-primary" id="confirm-sig-btn">Confirmar mi compromiso ✨</button>
         <div class="error hidden" id="sig-error">Firmá arriba antes de confirmar.</div>
@@ -1376,14 +1374,14 @@ function render(){
 
     let daysHtml = `
       <div style="display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 10px; font-size:10px; color:var(--text-muted);">
-        <span>💪 Fuerza</span><span>🏃 Cardio</span><span>🧘 Elongación</span><span>🌸 Amor propio</span><span>📝 Reflexión</span>
+        <span>💪 Fuerza</span><span>🏃 Cardio</span><span>🧘 Elongación</span><span>🤍 Amor propio</span><span>📝 Reflexión</span>
       </div>
       <div class="day-grid">`;
     for(let d=1; d<=30; d++){
       const info = dayInfo(d);
       const isDone = isDayDone(data, d);
       const isToday = d === curDay;
-      const icon = info.tipo === 'fuerza' ? '💪' : info.tipo === 'cardio' ? '🏃' : info.tipo === 'elongacion' ? '🧘' : info.tipo === 'amorpropio' ? '🌸' : info.tipo === 'reflexion' ? '📝' : '🎉';
+      const icon = info.tipo === 'fuerza' ? '💪' : info.tipo === 'cardio' ? '🏃' : info.tipo === 'elongacion' ? '🧘' : info.tipo === 'amorpropio' ? '🤍' : info.tipo === 'reflexion' ? '📝' : '🎉';
       daysHtml += `
         <button class="day-chip ${info.tipo} ${isDone?'done':''} ${isToday?'today':''}" data-day="${d}">
           <div class="dc-label">${isDone ? '✓' : icon} ${d}</div>
@@ -1425,7 +1423,7 @@ function render(){
         <div class="community-banner">
           <span style="font-size:20px;">🔥</span>
           <div>
-            <div class="num">${n} guerrera${n===1?'':'s'} ya entrenaron hoy</div>
+            <div class="num">${n} ya entrenaron hoy 🔥</div>
             <div class="sub2">Súmate tú también</div>
           </div>
         </div>
@@ -1566,23 +1564,12 @@ function render(){
         <div style="font-size:36px; margin-bottom:6px;">🚨</div>
         <h1 style="text-align:center;">Clase 911</h1>
         <p class="sub">Una clase premium de 20 minutos, guiada por tu entrenadora, para retomar el ritmo. Un tropiezo no significa abandonar.</p>
-        <div class="sos-player" id="sos-player">
-          <div class="sos-player-badge">🔴 EN VIVO</div>
-          <button class="sos-play-btn" id="sos-play-btn">▶</button>
-          <div class="sos-player-info">
-            <div class="sos-player-title">Clase 911 · Reenganche total</div>
-            <div class="sos-player-sub">20:00 · Con tu entrenadora</div>
-          </div>
+        <div class="video-embed-wrap" style="margin-top:14px;">
+          <iframe src="https://drive.google.com/file/d/1HKTkBBl1pv3iX7V-_vdOz2YGzI2f--27/preview" allow="autoplay"></iframe>
         </div>
       </div>
     `;
     document.getElementById('back-btn').onclick = ()=>{ state.view='dashboard'; render(); };
-    document.getElementById('sos-play-btn').onclick = ()=>{
-      const player = document.getElementById('sos-player');
-      const btn = document.getElementById('sos-play-btn');
-      player.classList.toggle('playing');
-      btn.textContent = player.classList.contains('playing') ? '❚❚' : '▶';
-    };
     return;
   }
 
@@ -1815,7 +1802,7 @@ function render(){
         <div class="card" style="text-align:left;">
           ${info.mensaje ? `<p class="sub" style="white-space:pre-line; line-height:1.7;">${escapeHtml(info.mensaje)}</p>` : ''}
           ${info.instrucciones ? `<div class="tip" style="white-space:pre-line;">${escapeHtml(info.instrucciones)}</div>` : ''}
-          ${reto ? `<div class="tip">🌸 ${escapeHtml(reto)}</div>` : ''}
+          ${reto ? `<div class="tip">🤍 ${escapeHtml(reto)}</div>` : ''}
           ${!info.mensaje && !info.instrucciones && !reto ? `<p class="sub">Espacio libre — usalo para descansar y prepararte para lo que viene.</p>` : ''}
           ${(info.prompts||[]).map((p,pi)=>`
             <label style="display:block; font-size:13px; font-weight:700; margin:14px 0 4px;">${p.emoji} ${escapeHtml(p.label)}</label>
@@ -1977,7 +1964,7 @@ function render(){
           </div>
           <label style="display:block; font-size:11px; font-weight:500; color:var(--text-muted); margin:8px 0 4px;">📝 Nota para tu entrenadora (opcional)</label>
           <input type="text" id="comment-${key}" value="${escapeHtml(state.uiComment[key] || '')}" placeholder="Ej: me costó, ¿bajo el peso?" />
-          <button class="btn-primary registrar-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}" style="margin-top:8px;">Registrar</button>
+          <button class="btn-primary registrar-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}" data-target="${setsTarget || ''}" style="margin-top:8px;">Registrar</button>
         `;
       }
       wrap.appendChild(card);
@@ -2066,7 +2053,10 @@ function render(){
     wrap.querySelectorAll('.registrar-btn').forEach(btn=>{
       btn.onclick = async ()=>{
         const key = btn.dataset.key;
-        const entry = { date: todayISO(), ts: new Date().toISOString(), reps: btn.dataset.reps, sets: state.uiSets[key]||0, feeling: state.uiFeeling[key]||'' };
+        const target = Number(btn.dataset.target) || 0;
+        const trackedSets = state.uiSets[key] || 0;
+        const finalSets = target ? Math.max(trackedSets, target) : trackedSets;
+        const entry = { date: todayISO(), ts: new Date().toISOString(), reps: btn.dataset.reps, sets: finalSets, feeling: state.uiFeeling[key]||'' };
         if(state.uiComment[key] && state.uiComment[key].trim()) entry.comment = state.uiComment[key].trim();
         if(!data.exercises[key]) data.exercises[key] = [];
         data.exercises[key].push(entry);
