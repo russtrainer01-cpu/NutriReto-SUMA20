@@ -849,6 +849,9 @@ function buildDaysForModelo(modelo){
       { seccion:'🏁 Finalizador', ejercicio:'Búlgaras con peso', series:'1 serie', reps:'10', peso:'Con peso', descanso:'-', nota:'Serie única, al fallo técnico — bajá bien profundo en cada repetición.', video:'https://youtube.com/shorts/9OwbhU43pBw?si=UeqeAo1nh2TRNEEm' },
       { seccion:'🧘 Cierre', ejercicio:'Estiramiento y movilidad', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' }
     ]));
+    DAYS.push(buildDay(9, 'cardio', 'Cardio en intervalos', [
+      { ejercicio:'Trote con cambios de ritmo', series:'-', reps:'30 min total', peso:'Caminadora o aire libre', tipo:'checklist', nota:'Estructura 5x5x5x5x5x5 (6 bloques de 5 min):\n1) 5 min a buen ritmo\n2) 5 min caminando rápido\n3) 5 min trotando\n4) 5 min caminando\n5) 5 min a buen ritmo\n6) 5 min caminando rápido\n\nEste tipo de cardio en intervalos tiene varios beneficios frente al trote parejo de siempre: quemás más calorías en el mismo tiempo, tu corazón se hace más eficiente al pasar por distintas intensidades, se hace más ameno (no es aburrido todo el tiempo igual), y tu cuerpo sigue quemando energía extra incluso después de terminar, por el esfuerzo de los tramos más intensos.', video:null }
+    ], '❤️ Hoy variamos el ritmo — no es "trotar y ya", es un entrenamiento cardiovascular completo.'));
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -954,7 +957,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 9 : 8;
+  let dayCounter = modelo === 'gym' ? 10 : 8;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
