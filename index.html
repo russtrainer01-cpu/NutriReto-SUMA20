@@ -947,7 +947,14 @@ function buildDaysForModelo(modelo){
       { ejercicio:'Sentadilla con peso', series:'4 series', reps:'10', peso:'Mancuernas', descanso:'30 seg', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
       { ejercicio:'Hip Thrust sin peso (para principiantes)', series:'3 series', reps:'15', peso:'Sin peso', descanso:'30 seg', video:'https://www.youtube.com/shorts/Cxp6D7LEqjM' },
       { ejercicio:'Jumping Jacks (con o sin salto)', series:'2 series', reps:'15', peso:'Sin peso', descanso:'30 seg', video:'https://www.youtube.com/shorts/bT2iY8IjEU0' },
-      { seccion:'🏁 Cierre', ejercicio:'Subida a la silla (escalón o lo que tengas) con peso', series:'3 series', reps:'15 por lado', peso:'Con peso', descanso:'30 seg', nota:'⚠️ Seguridad primero: pegá la silla contra la pared para que no se resbale ni se mueva. Usá una silla firme y estable — nada con ruedas ni que tambalee. Pisá firme, con todo el pie apoyado arriba antes de subir el cuerpo. Movimiento lento y controlado, sin apurarte. Mirá al frente, no hacia abajo. Si es tu primera vez, empezá sin peso hasta agarrarle confianza al movimiento.', video:'https://www.youtube.com/shorts/HQHorzj4G7A' }
+      { seccion:'🏁 Cierre', ejercicio:'Subida a la silla (escalón o lo que tengas) con peso', series:'3 series', reps:'15 por lado', peso:'Con peso', descanso:'30 seg', nota:'⚠️ Seguridad primero: pega la silla contra la pared para que no se resbale ni se mueva. Usa una silla firme y estable — nada con ruedas ni que tambalee. Pisa firme, con todo el pie apoyado arriba antes de subir el cuerpo. Movimiento lento y controlado, sin apurarte. Mira al frente, no hacia abajo. Si es tu primera vez, empieza sin peso hasta agarrarle confianza al movimiento.', video:'https://www.youtube.com/shorts/HQHorzj4G7A' }
+    ]));
+    DAYS.push(buildDay(8, 'fuerza', 'Full Body en honor al Día 8', [
+      { ejercicio:'Jumping Jacks (sin salto, rápidos)', series:'8 rondas', reps:'20', peso:'Sin peso', descanso:'20 seg', nota:'Rápidos pero controlados — el ritmo lo pone la velocidad de brazos y piernas, no el salto.', video:'https://www.youtube.com/shorts/bT2iY8IjEU0' },
+      { ejercicio:'Zancadas caminadas (muy lentas y controladas)', series:'3 series', reps:'12 por pierna', peso:'Con o sin peso', descanso:'45 seg', video:'https://youtube.com/shorts/mGPqSadIIlc?si=ZaW0l2-D7p2sVKhW' },
+      { ejercicio:'Sentadilla con peso (lenta y controlada)', series:'4 series', reps:'10', peso:'Con peso', descanso:'45 seg', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
+      { ejercicio:'Mountain Climber elevado en silla', series:'5 rondas', reps:'30 seg on / 30 seg off', peso:'Sin peso', descanso:'-', nota:'Apoyá las manos en el asiento de una silla firme (en vez del piso) para bajar la intensidad sobre las muñecas y los hombros.', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' },
+      { seccion:'🎉 Inaugurando', ejercicio:'Búlgaras con apoyo', series:'1 serie', reps:'12', peso:'Con apoyo', descanso:'-', nota:'Primera vez que las hacemos — usa una silla o pared para apoyarte y sostener el equilibrio.', video:'https://youtube.com/shorts/9OwbhU43pBw?si=UeqeAo1nh2TRNEEm' }
     ]));
   }
 
@@ -1013,7 +1020,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 15 : 8;
+  let dayCounter = modelo === 'gym' ? 15 : 9;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
