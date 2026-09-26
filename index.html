@@ -852,6 +852,15 @@ function buildDaysForModelo(modelo){
     DAYS.push(buildDay(9, 'cardio', 'Cardio en intervalos', [
       { ejercicio:'Trote con cambios de ritmo', series:'-', reps:'30 min total', peso:'Caminadora o aire libre', tipo:'checklist', nota:'Estructura 5x5x5x5x5x5 (6 bloques de 5 min):\n1) 5 min a buen ritmo\n2) 5 min caminando rápido\n3) 5 min trotando\n4) 5 min caminando\n5) 5 min a buen ritmo\n6) 5 min caminando rápido\n\nEste tipo de cardio en intervalos tiene varios beneficios frente al trote parejo de siempre: quemás más calorías en el mismo tiempo, tu corazón se hace más eficiente al pasar por distintas intensidades, se hace más ameno (no es aburrido todo el tiempo igual), y tu cuerpo sigue quemando energía extra incluso después de terminar, por el esfuerzo de los tramos más intensos.', video:null }
     ], '❤️ Hoy variamos el ritmo — no es "trotar y ya", es un entrenamiento cardiovascular completo.'));
+    DAYS.push(buildDay(10, 'fuerza', 'Full Body', [
+      { ejercicio:'Flexión de piernas', series:'3 series', reps:'6', peso:'Máquina', descanso:'45 seg', video:'https://www.youtube.com/shorts/RRwcoQwgWww' },
+      { seccion:'🏋️ Espalda', ejercicio:'Remo en plancha con mancuernas', series:'3 series', reps:'8', peso:'Mancuernas', descanso:'45 seg', video:null },
+      { ejercicio:'Sentadilla + press con mancuernas', series:'3 series', reps:'10', peso:'Mancuernas', descanso:'1 min', nota:'Subí los brazos con cuidado, y al bajar apoyá las mancuernas sobre los hombros antes de la siguiente sentadilla.', video:'https://www.youtube.com/shorts/pi4QlK7rIME' },
+      { seccion:'🤲 Hombros', ejercicio:'Elevaciones laterales', series:'4 series', reps:'10', peso:'Mancuernas', descanso:'30 seg', video:'https://www.youtube.com/shorts/zEANAIh1l9g' },
+      { seccion:'🏋️ Espalda', ejercicio:'Remo en máquina', series:'4 series', reps:'12', peso:'Máquina', descanso:'45 seg', video:'https://www.youtube.com/shorts/I3Wi6GK0QMk' },
+      { seccion:'🧱 Abs', ejercicio:'Abs bici', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', video:null },
+      { ejercicio:'Abs ranita', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', video:'https://www.youtube.com/shorts/k0Dp2cXRjM8' }
+    ]));
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -957,7 +966,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 10 : 8;
+  let dayCounter = modelo === 'gym' ? 11 : 8;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
