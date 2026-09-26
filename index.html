@@ -872,6 +872,20 @@ function buildDaysForModelo(modelo){
       { ejercicio:'Subida al cajón con peso', series:'3 series', reps:'10', peso:'Con peso', descanso:'45 seg', video:'https://www.youtube.com/shorts/Ey2H3-zmzSk' },
       { ejercicio:'Patada de glúteos con polea o tobilleras', series:'3 series', reps:'15', peso:'Polea o tobilleras', descanso:'45 seg', nota:'Elegí la variante que tengas disponible.', video:'https://www.youtube.com/shorts/BLZZt-qFu0M', video2:'https://www.youtube.com/shorts/du6Va1m4MVE', video2label:'Ver variante con tobilleras' }
     ]));
+    const dia13 = buildDay(13, 'amorpropio', 'Hacer las paces', [],
+      '🌷 Hoy vamos a hacer las paces con nuestra historia — con lo lindo, y también con lo que todavía nos cuesta aceptar.'
+    );
+    dia13.instrucciones = '🤍 Parte 1 — 15 cosas que agradezco\n' +
+      'Escribí 15 cosas buenas de tu vida hoy. No tienen que ser enormes: una persona que amás, tu cuerpo, poder entrenar, un logro, una amistad, algo pequeño que te alegró el día. Todo cuenta.\n\n' +
+      '🪞 Parte 2 — 10 cosas que no agradezco... pero elijo aceptar\n' +
+      'Pensá en 10 situaciones que todavía te cuesta aceptar. No hace falta agradecer que algo malo haya pasado — podés agradecer lo que aprendiste de eso.\n' +
+      'Ejemplo: "No agradezco haberme equivocado, pero agradezco todo lo que ese error me enseñó."\n\n' +
+      'Hacer las paces no es decir que todo estuvo bien. Es dejar de pelear con lo que ya es parte de tu historia.';
+    dia13.prompts = [
+      { emoji:'🤍', label:'Tus 15 cosas que agradecés hoy' },
+      { emoji:'🪞', label:'Tus 10 cosas que no agradecés... pero elegís aceptar' }
+    ];
+    DAYS.push(dia13);
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -977,7 +991,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 13 : 8;
+  let dayCounter = modelo === 'gym' ? 14 : 8;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
@@ -1941,7 +1955,7 @@ function render(){
           ${!info.mensaje && !info.instrucciones && !reto ? `<p class="sub">Espacio libre — usalo para descansar y prepararte para lo que viene.</p>` : ''}
           ${(info.prompts||[]).map((p,pi)=>`
             <label style="display:block; font-size:13px; font-weight:700; margin:14px 0 4px;">${p.emoji} ${escapeHtml(p.label)}</label>
-            <textarea class="prompt-input" data-pi="${pi}" rows="2" style="width:100%; border:1px solid var(--border); border-radius:8px; padding:8px; font-family:inherit; font-size:13px;" ${isDone?'disabled':''}>${escapeHtml(savedRespuestas[pi] || '')}</textarea>
+            <textarea class="prompt-input" data-pi="${pi}" rows="6" style="width:100%; border:1px solid var(--border); border-radius:8px; padding:8px; font-family:inherit; font-size:13px;" ${isDone?'disabled':''}>${escapeHtml(savedRespuestas[pi] || '')}</textarea>
           `).join('')}
           <button class="btn-primary" id="mark-done-btn" style="margin-top:14px;" ${isDone?'disabled':''}>${isDone ? '✓ Ya lo marcaste' : 'Marcar como hecho ✓'}</button>
         </div>
