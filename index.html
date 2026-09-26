@@ -953,9 +953,19 @@ function buildDaysForModelo(modelo){
       { ejercicio:'Jumping Jacks (sin salto, rápidos)', series:'8 rondas', reps:'20', peso:'Sin peso', descanso:'20 seg', nota:'Rápidos pero controlados — el ritmo lo pone la velocidad de brazos y piernas, no el salto.', video:'https://www.youtube.com/shorts/bT2iY8IjEU0' },
       { ejercicio:'Zancadas caminadas (muy lentas y controladas)', series:'3 series', reps:'12 por pierna', peso:'Con o sin peso', descanso:'45 seg', video:'https://youtube.com/shorts/mGPqSadIIlc?si=ZaW0l2-D7p2sVKhW' },
       { ejercicio:'Sentadilla con peso (lenta y controlada)', series:'4 series', reps:'10', peso:'Con peso', descanso:'45 seg', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
-      { ejercicio:'Mountain Climber elevado en silla', series:'5 rondas', reps:'30 seg on / 30 seg off', peso:'Sin peso', descanso:'-', nota:'Apoyá las manos en el asiento de una silla firme (en vez del piso) para bajar la intensidad sobre las muñecas y los hombros.', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' },
+      { ejercicio:'Mountain Climber elevado en silla', series:'5 rondas', reps:'30 seg on / 30 seg off', peso:'Sin peso', descanso:'-', nota:'Apoya las manos en el asiento de una silla firme (en vez del piso) para bajar la intensidad sobre las muñecas y los hombros.', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' },
       { seccion:'🎉 Inaugurando', ejercicio:'Búlgaras con apoyo', series:'1 serie', reps:'12', peso:'Con apoyo', descanso:'-', nota:'Primera vez que las hacemos — usa una silla o pared para apoyarte y sostener el equilibrio.', video:'https://youtube.com/shorts/9OwbhU43pBw?si=UeqeAo1nh2TRNEEm' }
     ]));
+    DAYS.push(buildDay(9, 'cardio', 'Cardio en intervalos', [
+      { tipo:'circuito', titulo:'Caminata o trote suave con cambios de ritmo', rondas:1, descansoEntre:300, timerFinal:true, btnLabel:'▶ Empezar este ritmo', ejercicios:[
+        { ejercicio:'Buen ritmo', reps:'5 min' },
+        { ejercicio:'Caminando rápido', reps:'5 min' },
+        { ejercicio:'Trotando suave', reps:'5 min' },
+        { ejercicio:'Caminando', reps:'5 min' },
+        { ejercicio:'Buen ritmo (otra vez)', reps:'5 min' },
+        { ejercicio:'Caminando rápido (último bloque)', reps:'5 min' }
+      ] }
+    ], '❤️ Hoy variamos el ritmo — 6 bloques de 5 min cada uno, con cronómetro. Cuando termine cada bloque, va a avisarte con un sonido y pasa solo al siguiente.\n\nEste tipo de cardio en intervalos tiene varios beneficios frente al trote parejo de siempre: quemas más calorías en el mismo tiempo, tu corazón se hace más eficiente al pasar por distintas intensidades, se hace más ameno, y tu cuerpo sigue quemando energía extra incluso después de terminar.'));
   }
 
   const dia6 = buildDay(6, 'amorpropio', 'Mírate con amor', [],
@@ -1020,7 +1030,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 15 : 9;
+  let dayCounter = modelo === 'gym' ? 15 : 10;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
