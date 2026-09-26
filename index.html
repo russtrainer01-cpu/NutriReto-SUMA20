@@ -884,6 +884,17 @@ function buildDaysForModelo(modelo){
       '📓 Hacé este ejercicio en tu cuaderno — es privado, no hace falta que lo escribas acá.\n' +
       '💬 Si querés compartir algo con el grupo, sos libre de hacerlo — así incentivás a las demás.';
     DAYS.push(dia13);
+    const dia14 = buildDay(14, 'elongacion', 'Estiramiento y Movilidad', [
+      { ejercicio:'Rutina de estiramientos', series:'-', reps:'Rutina completa', peso:'Sin peso', tipo:'checklist', nota:'Tomate tu tiempo, respirá profundo en cada posición, sin forzar.', video:'https://www.youtube.com/watch?v=K_8PuY5m1LI' }
+    ], '🧘 Hoy el cuerpo pide otra cosa — estirar y darle movilidad, no cargar más.');
+    dia14.instrucciones = '🏆 ¿Qué logré esta semana?\n\n' +
+      'Esta semana subiste el nivel: más peso, movimientos más exigentes, cardio en intervalos y hasta entrenamientos en ayunas por la mañana. Tu cuerpo respondió a un estímulo más grande que la Semana 1 — eso es progreso real.\n\n' +
+      '💪 Sumaste más carga en piernas y glúteos (Sentadilla Smith, Hip Thrust con tempo lento).\n' +
+      '❤️ Te animaste al cardio en intervalos y a entrenar en ayunas por la mañana.\n' +
+      '🎯 Metiste movimientos más técnicos (sentadilla + press, combos de zancada).\n' +
+      '🤍 Y le hiciste espacio a tu historia con el ejercicio de hacer las paces.\n\n' +
+      'Esta semana le exigiste más a tu cuerpo que la anterior. Eso no es poco — reconocelo.';
+    DAYS.push(dia14);
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -989,7 +1000,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 14 : 8;
+  let dayCounter = modelo === 'gym' ? 15 : 8;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
