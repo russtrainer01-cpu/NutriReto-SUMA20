@@ -850,8 +850,15 @@ function buildDaysForModelo(modelo){
       { seccion:'🧘 Cierre', ejercicio:'Estiramiento y movilidad', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' }
     ]));
     DAYS.push(buildDay(9, 'cardio', 'Cardio en intervalos', [
-      { ejercicio:'Trote con cambios de ritmo', series:'-', reps:'30 min total', peso:'Caminadora o aire libre', tipo:'checklist', nota:'Estructura 5x5x5x5x5x5 (6 bloques de 5 min):\n1) 5 min a buen ritmo\n2) 5 min caminando rápido\n3) 5 min trotando\n4) 5 min caminando\n5) 5 min a buen ritmo\n6) 5 min caminando rápido\n\nEste tipo de cardio en intervalos tiene varios beneficios frente al trote parejo de siempre: quemás más calorías en el mismo tiempo, tu corazón se hace más eficiente al pasar por distintas intensidades, se hace más ameno (no es aburrido todo el tiempo igual), y tu cuerpo sigue quemando energía extra incluso después de terminar, por el esfuerzo de los tramos más intensos.', video:null }
-    ], '❤️ Hoy variamos el ritmo — no es "trotar y ya", es un entrenamiento cardiovascular completo.'));
+      { tipo:'circuito', titulo:'Trote con cambios de ritmo', rondas:1, descansoEntre:300, timerFinal:true, btnLabel:'▶ Empezar este ritmo', ejercicios:[
+        { ejercicio:'Buen ritmo', reps:'5 min' },
+        { ejercicio:'Caminando rápido', reps:'5 min' },
+        { ejercicio:'Trotando', reps:'5 min' },
+        { ejercicio:'Caminando', reps:'5 min' },
+        { ejercicio:'Buen ritmo (otra vez)', reps:'5 min' },
+        { ejercicio:'Caminando rápido (último bloque)', reps:'5 min' }
+      ] }
+    ], '❤️ Hoy variamos el ritmo — 6 bloques de 5 min cada uno, con cronómetro. Cuando termine cada bloque, va a avisarte con un sonido y pasa solo al siguiente.\n\nEste tipo de cardio en intervalos tiene varios beneficios frente al trote parejo de siempre: quemás más calorías en el mismo tiempo, tu corazón se hace más eficiente al pasar por distintas intensidades, se hace más ameno, y tu cuerpo sigue quemando energía extra incluso después de terminar.'));
     DAYS.push(buildDay(10, 'fuerza', 'Full Body', [
       { ejercicio:'Flexión de piernas', series:'3 series', reps:'6', peso:'Máquina', descanso:'45 seg', video:'https://www.youtube.com/shorts/RRwcoQwgWww' },
       { seccion:'🏋️ Espalda', ejercicio:'Remo en plancha con mancuernas', series:'3 series', reps:'8', peso:'Mancuernas', descanso:'45 seg', video:'https://www.youtube.com/shorts/yRCB7i9jxTI' },
@@ -1234,6 +1241,16 @@ function escapeHtml(s){
   const d = document.createElement('div');
   d.textContent = s == null ? '' : String(s);
   return d.innerHTML;
+}
+function renderSectionedText(text){
+  const parts = String(text).split('\n\n').filter(p=>p.trim());
+  const colors = ['var(--pink)', 'var(--green)', '#7f77dd', '#ef9f27'];
+  const bgs = ['#fdf1f6', '#f2f8ee', '#f5f3fc', '#fef6e9'];
+  return parts.map((p,i)=>`
+    <div style="background:${bgs[i%bgs.length]}; border:1px solid var(--border); border-left:4px solid ${colors[i%colors.length]}; border-radius:12px; padding:14px 16px; margin-bottom:10px; font-size:14px; line-height:1.7; color:var(--text);">
+      ${escapeHtml(p).replace(/\n/g,'<br/>')}
+    </div>
+  `).join('');
 }
 
 async function loadParticipante(codigo, nombre){
@@ -1959,7 +1976,7 @@ function render(){
         <h1 style="text-align:center;">Día ${d} — ${escapeHtml(info.titulo)}</h1>
         <div class="card" style="text-align:left;">
           ${info.mensaje ? `<p class="sub" style="white-space:pre-line; line-height:1.7;">${escapeHtml(info.mensaje)}</p>` : ''}
-          ${info.instrucciones ? `<div class="tip" style="white-space:pre-line;">${escapeHtml(info.instrucciones)}</div>` : ''}
+          ${info.instrucciones ? renderSectionedText(info.instrucciones) : ''}
           ${reto ? `<div class="tip">🤍 ${escapeHtml(reto)}</div>` : ''}
           ${!info.mensaje && !info.instrucciones && !reto ? `<p class="sub">Espacio libre — usalo para descansar y prepararte para lo que viene.</p>` : ''}
           ${(info.prompts||[]).map((p,pi)=>`
@@ -1998,13 +2015,13 @@ function render(){
         <div class="brand-title">SUMA20</div>
       </div>
       <h1 style="text-align:center;">Día ${d} — ${escapeHtml(info.titulo)}</h1>
-      ${info.mensaje ? `<div class="frase-dia">${escapeHtml(info.mensaje).replace(/\n/g,'<br/>')}</div>` : ''}
+      ${info.mensaje ? renderSectionedText(info.mensaje) : ''}
       <div class="frase-motivacional">💌 ${escapeHtml(getFraseForDay(d))}</div>
       ${state.uiRestAlert ? `<div class="rest-alert-banner">${escapeHtml(state.uiRestAlert.message)}</div>` : ''}
       <div id="day-items"></div>
       ${(info.instrucciones || (info.prompts||[]).length) ? `
         <div class="card" style="text-align:left; margin-top:18px;">
-          ${info.instrucciones ? `<div style="white-space:pre-line; line-height:1.7; font-size:14px;">${escapeHtml(info.instrucciones)}</div>` : ''}
+          ${info.instrucciones ? renderSectionedText(info.instrucciones) : ''}
           ${(info.prompts||[]).map((p,pi)=>`
             <label style="display:block; font-size:13px; font-weight:700; margin:14px 0 4px;">${p.emoji} ${escapeHtml(p.label)}</label>
             <textarea class="week-prompt-input" data-pi="${pi}" rows="3" style="width:100%; border:1px solid var(--border); border-radius:8px; padding:8px; font-family:inherit; font-size:13px;" ${(data.completados['dia'+d] && data.completados['dia'+d].respuestas) ? 'disabled' : ''}>${escapeHtml((data.completados['dia'+d] && data.completados['dia'+d].respuestas && data.completados['dia'+d].respuestas[pi]) || '')}</textarea>
@@ -2097,7 +2114,7 @@ function render(){
               ${state.uiVideoOpen[exKey+'-2'] ? `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(currentEx.video2))}" allow="encrypted-media"></iframe></div>` : ''}
             ` : ''}
             ${currentEx.nota ? `<div class="tip">💡 ${escapeHtml(currentEx.nota)}</div>` : ''}
-            <button class="btn-primary circuit-register-btn" data-circuitkey="${circuitKey}" data-donekey="${doneKey}" data-dayidx="${idx}" style="margin-top:8px;">✓ Registrar y descansar</button>
+            <button class="btn-primary circuit-register-btn" data-circuitkey="${circuitKey}" data-donekey="${doneKey}" data-dayidx="${idx}" style="margin-top:8px;">${item.btnLabel || '✓ Registrar y descansar'}</button>
           `;
         }
         wrap.appendChild(card);
@@ -2123,7 +2140,7 @@ function render(){
               <button class="video-btn" data-videotoggle="${key}">🎥 ${state.uiVideoOpen[key] ? 'Ocultar técnica' : 'Ver técnica'}</button>
               ${state.uiVideoOpen[key] ? `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(item.video))}" allow="encrypted-media"></iframe></div>` : ''}
             ` : ''}
-            ${item.nota ? `<div class="tip">💡 ${escapeHtml(item.nota)}</div>` : ''}
+            ${item.nota ? `<div class="tip">💡 ${escapeHtml(item.nota).replace(/\n/g,"<br/>")}</div>` : ''}
             <button class="btn-ghost checklist-done-btn" data-key="${key}" data-exercise="${escapeHtml(item.ejercicio)}" data-reps="${escapeHtml(item.reps)}" data-recordatorio="${escapeHtml(item.recordatorio || '')}" style="margin-top:8px; text-align:left;">☐ &nbsp;Lo completé</button>
           `;
         }
@@ -2151,7 +2168,7 @@ function render(){
             <button class="video-btn" data-videotoggle="${key}">🎥 ${state.uiVideoOpen[key] ? 'Ocultar técnica' : 'Ver técnica'}</button>
             ${state.uiVideoOpen[key] ? `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(item.video))}" allow="encrypted-media"></iframe></div>` : ''}
           ` : ''}
-          ${item.nota ? `<div class="tip">💡 <strong>Consejo técnico:</strong> ${escapeHtml(item.nota)}</div>` : ''}
+          ${item.nota ? `<div class="tip">💡 <strong>Consejo técnico:</strong> ${escapeHtml(item.nota).replace(/\n/g,"<br/>")}</div>` : ''}
           <div class="set-counter">
             <button class="set-minus" data-key="${key}">−</button>
             <span>${setsDone}${setsTarget ? ' / ' + setsTarget : ''} series</span>
@@ -2213,12 +2230,19 @@ function render(){
         const isLastRound = cState.round >= item.rondas;
 
         if(isLastExInRound && isLastRound){
-          const doneKey = btn.dataset.donekey;
-          if(!data.exercises[doneKey]) data.exercises[doneKey] = [];
-          data.exercises[doneKey].push({ date: todayISO(), ts: new Date().toISOString() });
-          await saveParticipante(state.codigo, state.nombre, data);
-          if(isDayDone(data, d)){ state.view = 'day-complete'; render(); return; }
-          render();
+          const finishCircuit = async ()=>{
+            const doneKey = btn.dataset.donekey;
+            if(!data.exercises[doneKey]) data.exercises[doneKey] = [];
+            data.exercises[doneKey].push({ date: todayISO(), ts: new Date().toISOString() });
+            await saveParticipante(state.codigo, state.nombre, data);
+            if(isDayDone(data, d)){ state.view = 'day-complete'; render(); return; }
+            render();
+          };
+          if(item.timerFinal && item.descansoEntre){
+            startCircuitRest(circuitKey, item.descansoEntre, finishCircuit);
+          } else {
+            finishCircuit();
+          }
         } else if(isLastExInRound){
           startCircuitRest(circuitKey, item.descansoRondas || 60, ()=>{
             cState.round++;
