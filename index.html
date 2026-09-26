@@ -967,11 +967,15 @@ function buildDaysForModelo(modelo){
       ] }
     ], '❤️ Hoy variamos el ritmo — 6 bloques de 5 min cada uno, con cronómetro. Cuando termine cada bloque, va a avisarte con un sonido y pasa solo al siguiente.\n\nEste tipo de cardio en intervalos tiene varios beneficios frente al trote parejo de siempre: quemas más calorías en el mismo tiempo, tu corazón se hace más eficiente al pasar por distintas intensidades, se hace más ameno, y tu cuerpo sigue quemando energía extra incluso después de terminar.'));
     DAYS.push(buildDay(10, 'fuerza', 'Full Body', [
-      { ejercicio:'Plancha con toque de hombros', series:'3 series', reps:'10', peso:'Sin peso', descanso:'45 seg', nota:'Cadera estable, sin balancear de lado a lado al tocar el hombro. Core apretado todo el tiempo — imaginá que tenés un vaso de agua en la espalda y no se puede derramar.', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
-      { ejercicio:'Flexiones (con o sin rodillas apoyadas)', series:'3 series', reps:'6 o las que salgan', peso:'Sin peso', descanso:'45 seg', nota:'Con rodillas apoyadas es una progresión válida, no una versión "más fácil" — hacé la que te permita mantener buena técnica.', video:'https://www.youtube.com/shorts/YN5pE2JmzHM' },
-      { ejercicio:'Sentadilla + press', series:'4 series', reps:'12', peso:'Con peso (arroz, pasta o lo que tengas)', descanso:'1 min', nota:'Subí los brazos con cuidado, y al bajar apoyá el peso sobre los hombros antes de la siguiente sentadilla. Dos paquetes de arroz o pasta funcionan perfecto como mancuernas caseras.', video:'https://www.youtube.com/shorts/pi4QlK7rIME' },
+      { ejercicio:'Plancha con toque de hombros', series:'3 series', reps:'10', peso:'Sin peso', descanso:'45 seg', nota:'Cadera estable, sin balancear de lado a lado al tocar el hombro. Core apretado todo el tiempo — imagina que tienes un vaso de agua en la espalda y no se puede derramar.', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
+      { ejercicio:'Flexiones (con o sin rodillas apoyadas)', series:'3 series', reps:'6 o las que salgan', peso:'Sin peso', descanso:'45 seg', nota:'Con rodillas apoyadas es una progresión válida, no una versión "más fácil" — haz la que te permita mantener buena técnica.', video:'https://www.youtube.com/shorts/YN5pE2JmzHM' },
+      { ejercicio:'Sentadilla + press', series:'4 series', reps:'12', peso:'Con peso (arroz, pasta o lo que tengas)', descanso:'1 min', nota:'Sube los brazos con cuidado, y al bajar apoya el peso sobre los hombros antes de la siguiente sentadilla. Dos paquetes de arroz o pasta funcionan perfecto como mancuernas caseras.', video:'https://www.youtube.com/shorts/pi4QlK7rIME' },
       { ejercicio:'Curl de bíceps', series:'3 series', reps:'15', peso:'Con peso (arroz, pasta o lo que tengas)', descanso:'30 seg', video:'https://www.youtube.com/shorts/c3Pl0072T7Q' },
       { ejercicio:'Elevaciones laterales', series:'2 series', reps:'15', peso:'Con peso (arroz, pasta o lo que tengas)', descanso:'30 seg', video:'https://www.youtube.com/shorts/zEANAIh1l9g' }
+    ]));
+    DAYS.push(buildDay(11, 'cardio', 'Cuerda matutina + Pasos', [
+      { ejercicio:'8000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', video:null },
+      { seccion:'🌅 En ayunas', ejercicio:'Salto con cuerda, simulando (sin cuerda) — saltos leves', series:'10 rondas', reps:'15-20 saltos', peso:'Sin peso', descanso:'25 seg', nota:'Como no tienes cuerda, simula el movimiento igual — el gesto del salto y el giro de muñecas es lo que importa. Que los saltos sean leves, sin buscar altura, cuidando rodillas y tobillos.\n\nAntes de arrancar, toma un vaso de agua y medio cambur — lo justo para tener algo de energía sin ir con el estómago pesado.\n\n¿Por qué así? Hacer cardio de mañana, livianita, aprovecha que tus reservas de glucógeno están bajas después de dormir, así el cuerpo recurre más a la grasa como combustible. El medio cambur te da potasio y un poco de energía rápida para que puedas saltar bien, sin sentirte pesada.\n\n⚠️ Seguridad: aterriza en la punta de los pies, rodillas con leve flexión, superficie plana.', video:null }
     ]));
   }
 
@@ -1037,7 +1041,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 15 : 11;
+  let dayCounter = modelo === 'gym' ? 15 : 12;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
