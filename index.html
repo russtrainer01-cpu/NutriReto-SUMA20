@@ -865,6 +865,13 @@ function buildDaysForModelo(modelo){
       { ejercicio:'8000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', video:null },
       { seccion:'🌅 En ayunas', ejercicio:'Salto con cuerda (a la mañana, antes de desayunar)', series:'10 rondas', reps:'15-20 saltos', peso:'Sin peso', descanso:'25 seg', nota:'Antes de arrancar, tomá un vaso de agua y medio cambur — lo justo para tener algo de energía sin ir con el estómago pesado.\n\n¿Por qué así? Hacer cardio de mañana, livianita, aprovecha que tus reservas de glucógeno están bajas después de dormir, así el cuerpo recurre más a la grasa como combustible. El medio cambur te da potasio y un poco de energía rápida para que puedas saltar bien, sin sentirte pesada.\n\n⚠️ Seguridad: aterrizá en la punta de los pies, rodillas con leve flexión, superficie plana y el giro de la cuerda desde la muñeca, no del hombro.', video:null }
     ]));
+    DAYS.push(buildDay(12, 'fuerza', 'Glúteos', [
+      { ejercicio:'Búlgaras con peso', series:'2 series', reps:'12', peso:'Con peso', descanso:'50 seg', video:'https://youtube.com/shorts/9OwbhU43pBw?si=UeqeAo1nh2TRNEEm' },
+      { ejercicio:'Hip Thrust con mancuerna o barra', series:'4 series', reps:'12', peso:'Mancuerna o barra', descanso:'50 seg', nota:'Elegí la variante que tengas disponible.', video:'https://www.youtube.com/shorts/wYT_Ru0yGD0', video2:'https://www.youtube.com/shorts/bup775DiMUE', video2label:'Ver variante con barra' },
+      { ejercicio:'Peso muerto con mancuernas', series:'3 series', reps:'12', peso:'Mancuernas', descanso:'1 min', video:'https://www.youtube.com/shorts/7BdVi5qJ7E4' },
+      { ejercicio:'Subida al cajón con peso', series:'3 series', reps:'10', peso:'Con peso', descanso:'45 seg', video:'https://www.youtube.com/shorts/Ey2H3-zmzSk' },
+      { ejercicio:'Patada de glúteos con polea o tobilleras', series:'3 series', reps:'15', peso:'Polea o tobilleras', descanso:'45 seg', nota:'Elegí la variante que tengas disponible.', video:'https://www.youtube.com/shorts/du6Va1m4MVE' }
+    ]));
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -970,7 +977,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 12 : 8;
+  let dayCounter = modelo === 'gym' ? 13 : 8;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
