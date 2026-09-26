@@ -861,6 +861,10 @@ function buildDaysForModelo(modelo){
       { seccion:'🧱 Abs', ejercicio:'Abs bici', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', video:null },
       { ejercicio:'Abs ranita', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', video:'https://www.youtube.com/shorts/k0Dp2cXRjM8' }
     ]));
+    DAYS.push(buildDay(11, 'cardio', 'Cuerda matutina + Pasos', [
+      { ejercicio:'8000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', video:null },
+      { seccion:'🌅 En ayunas', ejercicio:'Salto con cuerda (a la mañana, antes de desayunar)', series:'10 rondas', reps:'15-20 saltos', peso:'Sin peso', descanso:'25 seg', nota:'Antes de arrancar, tomá un vaso de agua y medio cambur — lo justo para tener algo de energía sin ir con el estómago pesado.\n\n¿Por qué así? Hacer cardio de mañana, livianita, aprovecha que tus reservas de glucógeno están bajas después de dormir, así el cuerpo recurre más a la grasa como combustible. El medio cambur te da potasio y un poco de energía rápida para que puedas saltar bien, sin sentirte pesada.\n\n⚠️ Seguridad: aterrizá en la punta de los pies, rodillas con leve flexión, superficie plana y el giro de la cuerda desde la muñeca, no del hombro.', video:null }
+    ]));
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -966,7 +970,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 11 : 8;
+  let dayCounter = modelo === 'gym' ? 12 : 8;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
