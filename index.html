@@ -943,6 +943,23 @@ function buildDaysForModelo(modelo){
       ] },
       { seccion:'🧘 Estiramiento', ejercicio:'Rutina de estiramientos', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/watch?v=K_8PuY5m1LI' }
     ], '❤️ Hoy toca exigirse un poco más: cardio de 30 minutos con formato 10x5x10x5 (10 min rápido, 5 min lento, otra vez 10 min rápido, y cerramos con 5 min lento).\n\nLa idea es mejorar tu ritmo respecto a semanas anteriores — que los tramos rápidos se sientan exigentes de verdad.\n\nSi en algún momento necesitás bajar el ritmo más de lo planeado, hazlo — no pasa nada. Lo único que importa es que completes los 30 minutos enteros, a tu manera si hace falta.'));
+    DAYS.push(buildDay(19, 'fuerza', 'Próximamente', []));
+    DAYS.push(buildDay(20, 'fuerza', 'Próximamente', []));
+    DAYS.push(buildDay(21, 'fuerza', 'Reto Abs Parte II + Meditación', [
+      { tipo:'circuito', titulo:'Reto Abs Parte II', rondas:3, descansoEntre:20, descansoRondas:45, ejercicios:[
+        { ejercicio:'Crunch inverso', reps:'12-15', peso:'Sin peso', video:'https://www.youtube.com/shorts/esYVzdEfs04' },
+        { ejercicio:'Plancha lateral (alterná lados)', reps:'20-30 seg por lado', peso:'Sin peso', video:'https://www.youtube.com/shorts/GaugOQIlUPs' },
+        { ejercicio:'Sit-up con disco', reps:'12', peso:'Disco', video:'https://www.youtube.com/shorts/hSP-u2ZArII' },
+        { ejercicio:'Plancha con toque de hombros', reps:'10 por brazo', peso:'Sin peso', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' }
+      ] },
+      { seccion:'🧘 Meditación', ejercicio:'Sesión de meditación — 21 días', series:'-', reps:'Sesión completa', peso:'-', tipo:'checklist', video:null }
+    ], '🔥 Reto Abs Parte II — otro estímulo distinto al del Día 16, pensado para durar unos 15 minutos. Ponle intensidad, pero con buena técnica.'));
+    DAYS[DAYS.length-1].instrucciones = '🏆 ¿Qué logré esta semana?\n\n' +
+      'Esta semana fue de exigirte todavía más: cardio más largo y más intenso, un press que antes no hacías, un reto de abs nuevo.\n\n' +
+      '💪 Metiste más tiempo y más intensidad en el cardio (30 min con bloques largos de ritmo rápido).\n' +
+      '🎯 Sumaste ejercicios nuevos a tu repertorio (press en Smith, isométricos, combos).\n' +
+      '🧘 Y le diste espacio a tu mente con la meditación de hoy.\n\n' +
+      'Cada semana el estímulo sube. Y tú sigues apareciendo. Reconócelo.';
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -1119,7 +1136,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 19 : 15;
+  let dayCounter = modelo === 'gym' ? 22 : 15;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
