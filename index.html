@@ -908,6 +908,15 @@ function buildDaysForModelo(modelo){
       '🤍 Y le hiciste espacio a tu historia con el ejercicio de hacer las paces.\n\n' +
       'Esta semana le exigiste más a tu cuerpo que la anterior. Eso no es poco — reconocelo.';
     DAYS.push(dia14);
+    DAYS.push(buildDay(15, 'fuerza', 'Piernas', [
+      { seccion:'❤️ Cinta', ejercicio:'Cinta (elevación 8, ritmo 5)', series:'-', reps:'10 min', peso:'Elevación 8', tipo:'checklist', video:null },
+      { ejercicio:'Clamshell', series:'3 series', reps:'15', peso:'Con peso', descanso:'45 seg', video:'https://youtube.com/shorts/z_OzBEkwtkE?si=3tJjZpq2UgFDXfqQ' },
+      { ejercicio:'Hip Thrust unilateral con peso', series:'3 series', reps:'12', peso:'Con peso', descanso:'45 seg', nota:'Apretá el glúteo de la pierna de apoyo en todo el recorrido, sin que la cadera rote hacia el lado libre.', video:'https://youtube.com/shorts/BdVZratpdY0?si=E9hyib43ujNMretN' },
+      { ejercicio:'Peso muerto unilateral', series:'3 series', reps:'12', peso:'Con peso', descanso:'45 seg', video:'https://www.youtube.com/shorts/V0SfMaC_t6c' },
+      { ejercicio:'Camilla femoral', series:'3 series', reps:'12', peso:'Máquina', descanso:'45 seg', video:'https://www.youtube.com/shorts/nmqG-tIr0hc' },
+      { ejercicio:'Sillón de cuádriceps', series:'3 secuencias', reps:'Serie 1: 12 · Serie 2: 12 · Serie 3: 15', peso:'Máquina', descanso:'45 seg', nota:'Serie 1: sube rápido, baja lento. Serie 2: sube lento, baja rápido. Serie 3 (15 reps): sube rápido, sostén 2 seg arriba, y baja rápido.', video:'https://www.youtube.com/shorts/D-_nNSzsWxY' },
+      { seccion:'❤️ Cierre cardio', ejercicio:'Cinta (elevación 10, ritmo 5.5)', series:'-', reps:'5 min', peso:'Elevación 10', tipo:'checklist', video:null }
+    ], '🎯 Ya vas por la mitad del reto.\n\n15 días atrás decidiste empezar. Hoy estás acá — en el ecuador de los 30 días.\n\nA esta altura, la motivación de los primeros días ya no alcanza sola. Motivación va y viene: algunos días te sobra, otros no aparece.\n\nLo que te va a sostener de acá en adelante no es sentirte con ganas. Es el compromiso que firmaste al empezar — esa decisión de sumar, aunque sean 20 minutos, cada día, la sientas o no.\n\nNo se trata de emoción. Se trata de decidir hacerlo, otra vez, hoy.\n\nVas por la mitad. Seguís por compromiso, no por impulso.'));
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -1084,7 +1093,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = 15;
+  let dayCounter = modelo === 'gym' ? 16 : 15;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
