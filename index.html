@@ -933,6 +933,16 @@ function buildDaysForModelo(modelo){
       { ejercicio:'Remo unilateral', series:'4 series', reps:'10', peso:'Mancuerna', descanso:'45 seg', video:'https://www.youtube.com/shorts/qTOaWaCxB8U' },
       { ejercicio:'Superman', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', video:'https://www.youtube.com/shorts/e_VshMf5eGg' }
     ]));
+    DAYS.push(buildDay(18, 'cardio', 'Cardio Semanal — Exigencia', [
+      { seccion:'🧘 Calentamiento', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
+      { tipo:'circuito', titulo:'Cardio 10x5x10x5', rondas:1, timerFinal:true, btnLabel:'▶ Empezar este bloque', ejercicios:[
+        { ejercicio:'Ritmo rápido', reps:'10 min', duracion:600 },
+        { ejercicio:'Ritmo lento', reps:'5 min', duracion:300 },
+        { ejercicio:'Ritmo rápido', reps:'10 min', duracion:600 },
+        { ejercicio:'Ritmo lento (cierre)', reps:'5 min', duracion:300 }
+      ] },
+      { seccion:'🧘 Estiramiento', ejercicio:'Rutina de estiramientos', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/watch?v=K_8PuY5m1LI' }
+    ], '❤️ Hoy toca exigirse un poco más: cardio de 30 minutos con formato 10x5x10x5 (10 min rápido, 5 min lento, otra vez 10 min rápido, y cerramos con 5 min lento).\n\nLa idea es mejorar tu ritmo respecto a semanas anteriores — que los tramos rápidos se sientan exigentes de verdad.\n\nSi en algún momento necesitás bajar el ritmo más de lo planeado, hazlo — no pasa nada. Lo único que importa es que completes los 30 minutos enteros, a tu manera si hace falta.'));
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -1109,7 +1119,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 18 : 15;
+  let dayCounter = modelo === 'gym' ? 19 : 15;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
@@ -2340,8 +2350,9 @@ function render(){
             if(isDayDone(data, d)){ state.view = 'day-complete'; render(); return; }
             render();
           };
-          if(item.timerFinal && item.descansoEntre){
-            startCircuitRest(circuitKey, item.descansoEntre, finishCircuit);
+          const finalSeconds = currentEx.duracion || item.descansoEntre;
+          if(item.timerFinal && finalSeconds){
+            startCircuitRest(circuitKey, finalSeconds, finishCircuit);
           } else {
             finishCircuit();
           }
@@ -2352,7 +2363,7 @@ function render(){
             render();
           });
         } else {
-          startCircuitRest(circuitKey, item.descansoEntre || 15, ()=>{
+          startCircuitRest(circuitKey, currentEx.duracion || item.descansoEntre || 15, ()=>{
             cState.exIdx++;
             render();
           });
