@@ -977,7 +977,20 @@ function buildDaysForModelo(modelo){
       { ejercicio:'8000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', video:null },
       { seccion:'🌅 En ayunas', ejercicio:'Salto con cuerda, simulando (sin cuerda) — saltos leves', series:'10 rondas', reps:'15-20 saltos', peso:'Sin peso', descanso:'25 seg', nota:'Como no tienes cuerda, simula el movimiento igual — el gesto del salto y el giro de muñecas es lo que importa. Que los saltos sean leves, sin buscar altura, cuidando rodillas y tobillos.\n\nAntes de arrancar, toma un vaso de agua y medio cambur — lo justo para tener algo de energía sin ir con el estómago pesado.\n\n¿Por qué así? Hacer cardio de mañana, livianita, aprovecha que tus reservas de glucógeno están bajas después de dormir, así el cuerpo recurre más a la grasa como combustible. El medio cambur te da potasio y un poco de energía rápida para que puedas saltar bien, sin sentirte pesada.\n\n⚠️ Seguridad: aterriza en la punta de los pies, rodillas con leve flexión, superficie plana.', video:null }
     ]));
-    DAYS.push(buildDay(12, 'fuerza', 'Próximamente', []));
+    DAYS.push(buildDay(12, 'fuerza', '3 Combos', [
+      { seccion:'🔗 Combo 1', tipo:'circuito', titulo:'Silla + Mountain Climber', rondas:3, descansoEntre:15, descansoRondas:45, ejercicios:[
+        { ejercicio:'Subida a la silla', reps:'12', peso:'Con peso', nota:'Bajá controlada después de cada subida.', video:'https://www.youtube.com/shorts/HQHorzj4G7A' },
+        { ejercicio:'Mountain Climber elevado en silla', reps:'12', peso:'Sin peso', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' }
+      ] },
+      { seccion:'🔗 Combo 2', tipo:'circuito', titulo:'Plancha + Crunch', rondas:3, descansoEntre:15, descansoRondas:45, ejercicios:[
+        { ejercicio:'Plancha frontal en silla', reps:'30 seg', peso:'Sin peso', video:'https://www.youtube.com/shorts/nARfq78Dd-M' },
+        { ejercicio:'Crunch con peso', reps:'12', peso:'Con peso', video:'https://www.youtube.com/shorts/BzYrN4o5X5o' }
+      ] },
+      { seccion:'💥 Combo 3 — ATRAVIÉSALO', tipo:'circuito', titulo:'💥 ATRAVIÉSALO 💥', rondas:3, descansoEntre:10, descansoRondas:50, ejercicios:[
+        { ejercicio:'Búlgara con apoyo', reps:'12', peso:'Con apoyo', video:'https://youtube.com/shorts/9OwbhU43pBw?si=UeqeAo1nh2TRNEEm' },
+        { ejercicio:'Sentadilla', reps:'12', peso:'Sin peso', video:'https://www.youtube.com/shorts/0WSUiP0cQDI' }
+      ] }
+    ], '💥 El Combo 3 es el más retador del día — dale con todo, atraviésalo.'));
     const dia13c = buildDay(13, 'amorpropio', 'Hacer las paces', [],
       '🌷 Hoy vamos a hacer las paces con nuestra historia — con lo lindo, y también con lo que todavía nos cuesta aceptar.'
     );
@@ -2135,7 +2148,7 @@ function render(){
           const summaryCard = document.createElement('div');
           summaryCard.className = 'card';
           summaryCard.innerHTML = `
-            <div style="font-weight:700; font-size:15px; margin-bottom:8px;">📋 Resumen del circuito (${item.rondas} ${item.rondas===1?'ronda':'rondas'})</div>
+            <div style="font-weight:700; font-size:15px; margin-bottom:8px;">📋 ${item.titulo ? escapeHtml(item.titulo) + ' — ' : ''}Resumen (${item.rondas} ${item.rondas===1?'ronda':'rondas'})</div>
             ${item.ejercicios.map((ex,i)=>`
               <div style="display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid var(--border);">
                 <span style="font-size:13px; font-weight:600;">${i+1}. ${escapeHtml(ex.ejercicio)}</span>
