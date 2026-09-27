@@ -977,6 +977,36 @@ function buildDaysForModelo(modelo){
       { ejercicio:'8000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', video:null },
       { seccion:'🌅 En ayunas', ejercicio:'Salto con cuerda, simulando (sin cuerda) — saltos leves', series:'10 rondas', reps:'15-20 saltos', peso:'Sin peso', descanso:'25 seg', nota:'Como no tienes cuerda, simula el movimiento igual — el gesto del salto y el giro de muñecas es lo que importa. Que los saltos sean leves, sin buscar altura, cuidando rodillas y tobillos.\n\nAntes de arrancar, toma un vaso de agua y medio cambur — lo justo para tener algo de energía sin ir con el estómago pesado.\n\n¿Por qué así? Hacer cardio de mañana, livianita, aprovecha que tus reservas de glucógeno están bajas después de dormir, así el cuerpo recurre más a la grasa como combustible. El medio cambur te da potasio y un poco de energía rápida para que puedas saltar bien, sin sentirte pesada.\n\n⚠️ Seguridad: aterriza en la punta de los pies, rodillas con leve flexión, superficie plana.', video:null }
     ]));
+    DAYS.push(buildDay(12, 'fuerza', 'Próximamente', []));
+    const dia13c = buildDay(13, 'amorpropio', 'Hacer las paces', [],
+      '🌷 Hoy vamos a hacer las paces con nuestra historia — con lo lindo, y también con lo que todavía nos cuesta aceptar.'
+    );
+    dia13c.instrucciones = '🤍 Parte 1 — 15 cosas que agradezco\n' +
+      'Escribí 15 cosas buenas de tu vida hoy. No tienen que ser enormes — pueden ser cosas como:\n' +
+      '✅ Una persona que amas\n' +
+      '✅ Tu cuerpo\n' +
+      '✅ Poder entrenar\n' +
+      '✅ Un logro que conseguiste\n' +
+      '✅ Una amistad\n' +
+      '✅ Algo pequeño que te alegró el día\n\n' +
+      '🪞 Parte 2 — 10 cosas que no agradezco... pero elijo aceptar\n' +
+      'Pensá en 10 situaciones que todavía te cuesta aceptar. No hace falta agradecer que algo malo haya pasado — podés agradecer lo que aprendiste de eso.\n' +
+      '✅ Ejemplo: "No agradezco haberme equivocado, pero agradezco todo lo que ese error me enseñó."\n\n' +
+      'Hacer las paces no es decir que todo estuvo bien. Es dejar de pelear con lo que ya es parte de tu historia.\n\n' +
+      '📓 Hacé este ejercicio en tu cuaderno — es privado, no hace falta que lo escribas acá.\n' +
+      '💬 Si querés compartir algo con el grupo, sos libre de hacerlo — así incentivás a las demás.';
+    DAYS.push(dia13c);
+    const dia14c = buildDay(14, 'elongacion', 'Estiramiento y Movilidad', [
+      { ejercicio:'Rutina de estiramientos', series:'-', reps:'Rutina completa', peso:'Sin peso', tipo:'checklist', nota:'Tomate tu tiempo, respirá profundo en cada posición, sin forzar.', video:'https://www.youtube.com/watch?v=K_8PuY5m1LI' }
+    ], '🧘 Hoy el cuerpo pide otra cosa — estirar y darle movilidad, no cargar más.');
+    dia14c.instrucciones = '🏆 ¿Qué logré esta semana?\n\n' +
+      'Esta semana subiste el nivel: más peso, movimientos más exigentes, cardio en intervalos y hasta entrenamientos en ayunas por la mañana. Tu cuerpo respondió a un estímulo más grande que la Semana 1 — eso es progreso real.\n\n' +
+      '💪 Sumaste más carga en piernas y brazos, con peso casero (arroz, pasta) cuando hizo falta.\n' +
+      '❤️ Te animaste al cardio en intervalos y a entrenar en ayunas por la mañana.\n' +
+      '🎯 Metiste movimientos más técnicos (sentadilla + press, combos de zancada).\n' +
+      '🤍 Y le hiciste espacio a tu historia con el ejercicio de hacer las paces.\n\n' +
+      'Esta semana le exigiste más a tu cuerpo que la anterior. Eso no es poco — reconocelo.';
+    DAYS.push(dia14c);
   }
 
   const dia6 = buildDay(6, 'amorpropio', 'Mírate con amor', [],
@@ -1041,7 +1071,7 @@ function buildDaysForModelo(modelo){
   ];
   DAYS.push(dia7);
 
-  let dayCounter = modelo === 'gym' ? 15 : 12;
+  let dayCounter = 15;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
