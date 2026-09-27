@@ -943,7 +943,21 @@ function buildDaysForModelo(modelo){
       ] },
       { seccion:'🧘 Estiramiento', ejercicio:'Rutina de estiramientos', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/watch?v=K_8PuY5m1LI' }
     ], '❤️ Hoy toca exigirse un poco más: cardio de 30 minutos con formato 10x5x10x5 (10 min rápido, 5 min lento, otra vez 10 min rápido, y cerramos con 5 min lento).\n\nLa idea es mejorar tu ritmo respecto a semanas anteriores — que los tramos rápidos se sientan exigentes de verdad.\n\nSi en algún momento necesitás bajar el ritmo más de lo planeado, hazlo — no pasa nada. Lo único que importa es que completes los 30 minutos enteros, a tu manera si hace falta.'));
-    DAYS.push(buildDay(19, 'fuerza', 'Próximamente', []));
+    DAYS.push(buildDay(19, 'fuerza', '3 Combos — Piernas', [
+      { seccion:'🔗 Combo 1', tipo:'circuito', titulo:'Curl + estocadas y Caminata cangrejo', rondas:3, descansoEntre:15, descansoRondas:45, ejercicios:[
+        { ejercicio:'Curl con estocadas', reps:'12', peso:'Con peso', nota:'Combiná el curl de bíceps con la bajada de la estocada — el brazo sube mientras la pierna baja.', video:'https://youtube.com/shorts/6MzW0lhzIHc?si=o79pCkHBBS6E6JFr' },
+        { ejercicio:'Caminata cangrejo', reps:'12 por pierna', peso:'Banda', video:'https://youtube.com/shorts/PZc3YuorNWc?si=m5p0tkbMqvHN3Ip6' }
+      ] },
+      { seccion:'🔗 Combo 2', tipo:'circuito', titulo:'Hip Thrust + Búlgaras', rondas:4, descansoEntre:15, descansoRondas:45, ejercicios:[
+        { ejercicio:'Hip Thrust', reps:'10', peso:'Con peso', video:'https://www.youtube.com/shorts/wYT_Ru0yGD0' },
+        { ejercicio:'Búlgaras', reps:'10', peso:'Con peso', video:'https://youtube.com/shorts/9OwbhU43pBw?si=UeqeAo1nh2TRNEEm' }
+      ] },
+      { seccion:'🔗 Combo 3', tipo:'circuito', titulo:'Gemelos + Abducción', rondas:4, descansoEntre:15, descansoRondas:45, ejercicios:[
+        { ejercicio:'Gemelos', reps:'12', peso:'Con peso', nota:'Hazlo al lado de la máquina de abducción, así no se la ocupan mientras la usas para el otro ejercicio del combo.', video:null },
+        { ejercicio:'Sillón de abducción', reps:'15', peso:'Máquina', video:'https://www.youtube.com/shorts/ghrWOwqn5eM' }
+      ] },
+      { seccion:'🏁 Cierre', ejercicio:'Sillón de aducción', series:'3 series', reps:'20', peso:'Máquina', descanso:'45 seg', video:null }
+    ]));
     DAYS.push(buildDay(20, 'fuerza', 'Próximamente', []));
     DAYS.push(buildDay(21, 'fuerza', 'Reto Abs Parte II + Meditación', [
       { tipo:'circuito', titulo:'Reto Abs Parte II', rondas:3, descansoEntre:20, descansoRondas:45, ejercicios:[
