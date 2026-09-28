@@ -973,6 +973,44 @@ function buildDaysForModelo(modelo){
       '🎯 Sumaste ejercicios nuevos a tu repertorio (press en Smith, isométricos, combos).\n' +
       '🧘 Y le diste espacio a tu mente con la meditación de hoy.\n\n' +
       'Cada semana el estímulo sube. Y tú sigues apareciendo. Reconócelo.';
+    DAYS.push(buildDay(22, 'fuerza', 'Full Body — Escalera', [
+      { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
+      { tipo:'circuito', titulo:'Escalera 5-10-15', rondas:3, descansoEntre:20, descansoRondas:45, ejercicios:[
+        { ejercicio:'Sentadilla en Smith', reps:'5 → 10 → 15', peso:'Smith', nota:'Pies un poco adelantados de la barra, controla la bajada.', video:'https://www.youtube.com/shorts/rQw8GUzpj1I' },
+        { ejercicio:'Remo en máquina', reps:'5 → 10 → 15', peso:'Máquina', nota:'Lleva los codos hacia atrás, apretando los omóplatos.', video:'https://www.youtube.com/shorts/I3Wi6GK0QMk' },
+        { ejercicio:'Press militar con mancuernas', reps:'5 → 10 → 15', peso:'Mancuernas', nota:'Core firme, sin arquear la zona lumbar. Si sientes molestia en el cuello, usa menos peso.', video:'https://www.youtube.com/shorts/H3JwesAsumc' },
+        { ejercicio:'Peso muerto con mancuernas', reps:'5 → 10 → 15', peso:'Mancuernas', nota:'Espalda neutra, las mancuernas pegadas a las piernas.', video:'https://www.youtube.com/shorts/SAdzug-v7D0' }
+      ] }
+    ], '📈 Hoy vas a subir por una escalera: en la primera ronda haces 5 repeticiones de cada ejercicio, en la segunda 10 y en la tercera 15.\n\nEl descanso entre ejercicios es corto (20 seg) para que el cuerpo no tenga tiempo de enfriarse.\n\nElige un peso con el que la ronda de 15 sea exigente, pero sin perder la técnica.'));
+    DAYS.push(buildDay(24, 'fuerza', 'Piernas en Combos de 3', [
+      { seccion:'🧘 Calentamiento', ejercicio:'Calentamiento tren inferior', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://youtube.com/shorts/VHkqEiJvtHQ' },
+      { seccion:'🔗 Combo 1', tipo:'circuito', titulo:'Smith + Zancadas + Hip Thrust', rondas:3, descansoEntre:10, descansoRondas:40, ejercicios:[
+        { ejercicio:'Sentadilla en Smith', reps:'12', peso:'Smith', nota:'Pies un poco adelantados de la barra, controla la bajada.', video:'https://www.youtube.com/shorts/rQw8GUzpj1I' },
+        { ejercicio:'Zancadas caminadas con peso', reps:'10 por pierna', peso:'Mancuernas', nota:'Paso largo, la rodilla de atrás roza el piso sin golpear.', video:'https://youtube.com/shorts/mGPqSadIIlc?si=ZaW0l2-D7p2sVKhW' },
+        { ejercicio:'Hip Thrust con mancuerna', reps:'12', peso:'Mancuerna', nota:'Aprieta el glúteo arriba, sin arquear la zona lumbar.', video:'https://www.youtube.com/shorts/wYT_Ru0yGD0' }
+      ] },
+      { seccion:'🔗 Combo 2', tipo:'circuito', titulo:'Peso muerto + Cajón + Patada', rondas:3, descansoEntre:10, descansoRondas:40, ejercicios:[
+        { ejercicio:'Peso muerto unilateral', reps:'10 por pierna', peso:'Con peso', nota:'Cadera y hombros alineados, sin rotar el tronco.', video:'https://www.youtube.com/shorts/V0SfMaC_t6c' },
+        { ejercicio:'Subida al cajón con peso', reps:'10 por pierna', peso:'Con peso', nota:'Empuja con el talón del pie de arriba, sin impulsarte con el de abajo.', video:'https://www.youtube.com/shorts/Ey2H3-zmzSk' },
+        { ejercicio:'Patada de glúteos con polea o tobilleras', reps:'15 por pierna', peso:'Polea o tobilleras', nota:'Elige la variante que tengas disponible. Movimiento controlado, sin balancear la cadera.', video:'https://www.youtube.com/shorts/BLZZt-qFu0M', video2:'https://www.youtube.com/shorts/du6Va1m4MVE', video2label:'Ver variante con tobilleras' }
+      ] },
+      { seccion:'🏁 Cierre', ejercicio:'Elevación de gemelos', series:'3 series', reps:'20', peso:'Con peso', descanso:'30 seg', nota:'Sube lento, sostén 1 segundo arriba y baja lento.', video:'https://www.youtube.com/shorts/EyHze_DHQq0' }
+    ], '🔗 Hoy los ejercicios vienen en combos de 3: los haces uno detrás del otro, con solo 10 segundos de pausa entre ellos, y descansas 40 segundos al terminar cada ronda.\n\nEs menos descanso que en otras sesiones de piernas, así que elige un peso que te permita mantener la técnica hasta la última ronda.'));
+    DAYS.push(buildDay(25, 'cardio', 'Cuerda al Amanecer + Pasos', [
+      { ejercicio:'10000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', nota:'Los puedes sumar en tu día a día o salir a caminar, como prefieras. Llévalos monitoreados en tu reloj o en el celu; si no sabes cómo, pregúntame.', video:null },
+      { seccion:'🌅 En ayunas', ejercicio:'Cuerda de la mañana (antes de desayunar)', series:'12 rondas', reps:'15-20 saltos', peso:'Sin peso', descanso:'20 seg', nota:'Antes de arrancar, toma un vaso de agua y medio cambur: energía justa sin ir con el estómago pesado.\n\nHacer cardio de mañana, suave, aprovecha que tus reservas de glucógeno están bajas después de dormir: el cuerpo recurre más a la grasa como combustible.\n\n⚠️ Seguridad: aterriza en la punta de los pies, rodillas con leve flexión, superficie plana y el giro de la cuerda desde la muñeca, no del hombro.', video:null }
+    ], '🌅 Hoy empiezas el día moviéndote: cuerda apenas te despiertas y 10000 pasos a lo largo del día.\\n\\nEs una jornada de constancia más que de fuerza: cuanto más simple parece, más suma.'));
+    DAYS.push(buildDay(26, 'fuerza', 'Hombros, Espalda y Core — Tempo', [
+      { seccion:'🤲 Hombros', ejercicio:'Press militar en Smith', series:'3 series', reps:'12', peso:'Smith', descanso:'1 min', nota:'Tempo: 3 segundos para bajar, 1 de pausa abajo y sube con fuerza. Si la Smith está ocupada, hazlo con mancuernas.', video:'https://www.youtube.com/shorts/zB0zueNEhFQ', video2:'https://www.youtube.com/shorts/H3JwesAsumc', video2label:'Ver variante con mancuernas' },
+      { ejercicio:'Elevaciones laterales', series:'3 series', reps:'10', peso:'Mancuernas', descanso:'45 seg', nota:'Sostén 3 segundos arriba en isométrico antes de bajar, en cada repetición.', video:'https://www.youtube.com/shorts/zEANAIh1l9g' },
+      { seccion:'🏋️ Espalda', ejercicio:'Remo unilateral', series:'4 series', reps:'10', peso:'Mancuerna', descanso:'45 seg', nota:'Pausa de 2 segundos con el codo atrás, apretando la espalda.', video:'https://www.youtube.com/shorts/qTOaWaCxB8U' },
+      { ejercicio:'Superman', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', nota:'Mantén 3 segundos arriba en cada repetición, mirando al piso para cuidar el cuello.', video:'https://www.youtube.com/shorts/e_VshMf5eGg' },
+      { seccion:'🧱 Core', tipo:'circuito', titulo:'Core en combo', rondas:3, descansoEntre:10, descansoRondas:40, ejercicios:[
+        { ejercicio:'Plancha lateral', reps:'30 seg por lado', peso:'Sin peso', nota:'Cuerpo en línea recta, sin dejar caer la cadera.', video:'https://www.youtube.com/shorts/GaugOQIlUPs' },
+        { ejercicio:'Crunch inverso', reps:'15', peso:'Sin peso', nota:'Sube la cadera del piso con el abdomen, no con impulso de piernas.', video:'https://www.youtube.com/shorts/esYVzdEfs04' },
+        { ejercicio:'Abs bicicleta', reps:'20', peso:'Sin peso', nota:'El codo toca la rodilla contraria, sin tironear del cuello.', video:'https://www.youtube.com/shorts/K79CoGMh7P0' }
+      ] }
+    ], '🐢 Hoy la clave es el control: cada repetición va lenta, con pausa e isométrico. Vas a sentir más con menos peso.\n\nSi haces la repetición rápido, pierdes el efecto. Cuenta mentalmente el tiempo de cada fase.'));
   } else {
     DAYS.push(buildDay(1, 'fuerza', 'Empezando desde donde estás', [
       { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
@@ -1150,6 +1188,44 @@ function buildDaysForModelo(modelo){
       '🎯 Sumaste ejercicios nuevos a tu repertorio, adaptados con lo que tienes en casa.\n' +
       '🧘 Y le diste espacio a tu mente con la meditación de hoy.\n\n' +
       'Cada semana el estímulo sube. Y tú sigues apareciendo. Reconócelo.';
+    DAYS.push(buildDay(22, 'fuerza', 'Full Body — Escalera', [
+      { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
+      { tipo:'circuito', titulo:'Escalera 5-10-15', rondas:3, descansoEntre:20, descansoRondas:45, ejercicios:[
+        { ejercicio:'Sentadilla con peso', reps:'5 → 10 → 15', peso:'Con peso casero', nota:'Pecho arriba, rodillas alineadas con la punta del pie.', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
+        { ejercicio:'Flexiones (con o sin rodillas apoyadas)', reps:'5 → 10 → 15', peso:'Sin peso', nota:'Cuerpo alineado, sin hundir la cadera. Baja la cantidad si pierdes la técnica.', video:'https://www.youtube.com/shorts/YN5pE2JmzHM' },
+        { ejercicio:'Remo unilateral con peso casero', reps:'5 → 10 → 15 por brazo', peso:'Mochila, bolsa o botella con peso', nota:'Apoya la mano libre en una silla firme pegada a la pared. Codo pegado al cuerpo.', video:'https://www.youtube.com/shorts/qTOaWaCxB8U' },
+        { ejercicio:'Puente de glúteos con peso', reps:'5 → 10 → 15', peso:'Con peso casero', nota:'Aprieta el glúteo arriba, sin arquear la zona lumbar.', video:'https://www.youtube.com/shorts/Cxp6D7LEqjM' }
+      ] }
+    ], '📈 Hoy vas a subir por una escalera: en la primera ronda haces 5 repeticiones de cada ejercicio, en la segunda 10 y en la tercera 15.\n\nEl descanso entre ejercicios es corto (20 seg) para que el cuerpo no tenga tiempo de enfriarse.\n\nElige un peso con el que la ronda de 15 sea exigente, pero sin perder la técnica.'));
+    DAYS.push(buildDay(24, 'fuerza', 'Piernas en Combos de 3', [
+      { seccion:'🧘 Calentamiento', ejercicio:'Calentamiento tren inferior', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://youtube.com/shorts/VHkqEiJvtHQ' },
+      { seccion:'🔗 Combo 1', tipo:'circuito', titulo:'Sentadilla + Zancada + Hip Thrust', rondas:3, descansoEntre:10, descansoRondas:40, ejercicios:[
+        { ejercicio:'Sentadilla con peso', reps:'12', peso:'Con peso casero', nota:'Pecho arriba, rodillas alineadas con la punta del pie.', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
+        { ejercicio:'Zancada estática con peso', reps:'10 por pierna', peso:'Con peso casero', nota:'La rodilla de atrás roza el piso sin golpear.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
+        { ejercicio:'Hip Thrust con peso', reps:'12', peso:'Con peso casero', nota:'Apoya la espalda alta en el borde de un sillón o sofá firme, que no se mueva. Aprieta el glúteo arriba.', video:'https://www.youtube.com/shorts/wYT_Ru0yGD0' }
+      ] },
+      { seccion:'🔗 Combo 2', tipo:'circuito', titulo:'Silla + Búlgaras + Cangrejo', rondas:3, descansoEntre:10, descansoRondas:40, ejercicios:[
+        { ejercicio:'Subida a la silla', reps:'10 por pierna', peso:'Con peso', nota:'⚠️ Pega la silla contra la pared para que no se resbale. Pisa firme, con todo el pie apoyado, y sube lento.', video:'https://www.youtube.com/shorts/HQHorzj4G7A' },
+        { ejercicio:'Búlgaras con apoyo', reps:'10 por pierna', peso:'Con apoyo', nota:'Usa una silla o pared para sostener el equilibrio. Baja controlado.', video:'https://youtube.com/shorts/9OwbhU43pBw?si=UeqeAo1nh2TRNEEm' },
+        { ejercicio:'Caminata cangrejo', reps:'12 por pierna', peso:'Sin peso', nota:'Rodillas ligeramente flexionadas, manteniendo la posición todo el recorrido.', video:'https://youtube.com/shorts/PZc3YuorNWc?si=m5p0tkbMqvHN3Ip6' }
+      ] },
+      { seccion:'🏁 Cierre', ejercicio:'Elevación de gemelos', series:'3 series', reps:'20', peso:'Con peso casero', descanso:'30 seg', nota:'Apóyate en una pared o una silla para mantener el equilibrio. Sube lento, sostén 1 segundo arriba y baja lento.', video:'https://www.youtube.com/shorts/EyHze_DHQq0' }
+    ], '🔗 Hoy los ejercicios vienen en combos de 3: los haces uno detrás del otro, con solo 10 segundos de pausa entre ellos, y descansas 40 segundos al terminar cada ronda.\n\nEs menos descanso que en otras sesiones de piernas, así que elige un peso que te permita mantener la técnica hasta la última ronda.'));
+    DAYS.push(buildDay(25, 'cardio', 'Cuerda al Amanecer + Pasos', [
+      { ejercicio:'10000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', nota:'Los puedes sumar en tu día a día o salir a caminar, como prefieras. Llévalos monitoreados en tu reloj o en el celu; si no sabes cómo, pregúntame.', video:null },
+      { seccion:'🌅 En ayunas', ejercicio:'Cuerda simulada de la mañana (antes de desayunar)', series:'12 rondas', reps:'15-20 saltos', peso:'Sin peso', descanso:'20 seg', nota:'Como no tienes cuerda, simula el movimiento igual: el gesto del salto y el giro de muñecas es lo que importa. Que los saltos sean leves, cuidando rodillas y tobillos.\\n\\nAntes de arrancar, toma un vaso de agua y medio cambur: energía justa sin ir con el estómago pesado.\n\nHacer cardio de mañana, suave, aprovecha que tus reservas de glucógeno están bajas después de dormir: el cuerpo recurre más a la grasa como combustible.\\n\\n⚠️ Seguridad: aterriza en la punta de los pies, rodillas con leve flexión, superficie plana.', video:null }
+    ], '🌅 Hoy empiezas el día moviéndote: cuerda simulada apenas te despiertas y 10000 pasos a lo largo del día.\\n\\nEs una jornada de constancia más que de fuerza: cuanto más simple parece, más suma.'));
+    DAYS.push(buildDay(26, 'fuerza', 'Hombros, Espalda y Core — Tempo', [
+      { seccion:'🤲 Hombros', ejercicio:'Press de hombros de pie con peso casero', series:'3 series', reps:'12', peso:'Botellas de agua, paquetes de arroz o pasta, o una mochila con peso', descanso:'1 min', nota:'Tempo: 3 segundos para bajar, 1 de pausa abajo y sube con fuerza. Si sientes molestia en el cuello, usa menos peso y mantén el cuello relajado.', video:'https://www.youtube.com/shorts/H3JwesAsumc' },
+      { ejercicio:'Elevaciones laterales', series:'3 series', reps:'10', peso:'Con peso (botellas de agua o lo que tengas)', descanso:'45 seg', nota:'Sostén 3 segundos arriba en isométrico antes de bajar, en cada repetición.', video:'https://www.youtube.com/shorts/zEANAIh1l9g' },
+      { seccion:'🏋️ Espalda', ejercicio:'Remo unilateral apoyado en una silla', series:'4 series', reps:'10', peso:'Mochila o bolsa con peso', descanso:'45 seg', nota:'⚠️ Pega la silla contra la pared para que no se mueva. Pausa de 2 segundos con el codo atrás, apretando la espalda.', video:'https://www.youtube.com/shorts/qTOaWaCxB8U' },
+      { ejercicio:'Superman', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', nota:'Mantén 3 segundos arriba en cada repetición, mirando al piso para cuidar el cuello.', video:'https://www.youtube.com/shorts/e_VshMf5eGg' },
+      { seccion:'🧱 Core', tipo:'circuito', titulo:'Core en combo', rondas:3, descansoEntre:10, descansoRondas:40, ejercicios:[
+        { ejercicio:'Plancha lateral', reps:'30 seg por lado', peso:'Sin peso', nota:'Cuerpo en línea recta, sin dejar caer la cadera.', video:'https://www.youtube.com/shorts/GaugOQIlUPs' },
+        { ejercicio:'Crunch inverso', reps:'15', peso:'Sin peso', nota:'Sube la cadera del piso con el abdomen, no con impulso de piernas.', video:'https://www.youtube.com/shorts/esYVzdEfs04' },
+        { ejercicio:'Abs bicicleta', reps:'20', peso:'Sin peso', nota:'El codo toca la rodilla contraria, sin tironear del cuello.', video:'https://www.youtube.com/shorts/K79CoGMh7P0' }
+      ] }
+    ], '🐢 Hoy la clave es el control: cada repetición va lenta, con pausa e isométrico. Vas a sentir más con menos peso.\n\nSi haces la repetición rápido, pierdes el efecto. Cuenta mentalmente el tiempo de cada fase.'));
   }
 
   const dia6 = buildDay(6, 'amorpropio', 'Mírate con amor', [],
@@ -1246,24 +1322,104 @@ function buildDaysForModelo(modelo){
     '💬 Si quieres compartir algo con el grupo, eres libre de hacerlo — así incentivas a los demás.';
   DAYS.push(dia20);
 
-  let dayCounter = 22;
-  const pattern = [
-    { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
-    { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
-    { tipo:'amorpropio', titulo:'Reto de amor propio', items: ()=>[] },
-    { tipo:'reflexion', titulo:'Reflexión de la semana', items: ()=>[] }
-  ];
-  let patternIdx = 0;
-  while(dayCounter <= 28){
-    const p = pattern[patternIdx % pattern.length];
-    if(dayCounter !== 20 && dayCounter !== 21){
-      DAYS.push(buildDay(dayCounter, p.tipo, p.titulo, p.items()));
-    }
-    dayCounter++;
-    patternIdx++;
-  }
-  DAYS.push(buildDay(29, 'fuerza', 'Fuerza', ejFuerza()));
-  DAYS.push(buildDay(30, 'cierre', '¡Completaste el reto! 🎉', []));
+  // ---------- SEMANA 4 (días compartidos) ----------
+  DAYS.push(buildDay(23, 'cardio', 'Cardio Pirámide', [
+    { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
+    { tipo:'circuito', titulo:'Pirámide 3-6-9-6-3', rondas:1, timerFinal:true, btnLabel:'▶ Empezar este bloque', ejercicios:[
+      { ejercicio:'Ritmo fuerte', reps:'3 min', duracion:180 },
+      { ejercicio:'Recuperación (ritmo suave)', reps:'1 min', duracion:60 },
+      { ejercicio:'Ritmo fuerte', reps:'6 min', duracion:360 },
+      { ejercicio:'Recuperación (ritmo suave)', reps:'1 min', duracion:60 },
+      { ejercicio:'Ritmo fuerte — la cima', reps:'9 min', duracion:540 },
+      { ejercicio:'Recuperación (ritmo suave)', reps:'1 min', duracion:60 },
+      { ejercicio:'Ritmo fuerte', reps:'6 min', duracion:360 },
+      { ejercicio:'Recuperación (ritmo suave)', reps:'1 min', duracion:60 },
+      { ejercicio:'Ritmo fuerte — cierre', reps:'3 min', duracion:180 }
+    ] },
+    { seccion:'🧘 Estiramiento', ejercicio:'Rutina de estiramientos', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/watch?v=K_8PuY5m1LI' }
+  ], '⛰️ Hoy el cardio se sube como una montaña: bloques de ritmo fuerte de 3, 6, 9, 6 y 3 minutos, separados por 1 minuto de recuperación suave.\n\nEn total son unos 30 minutos, en cinta o al aire libre. El bloque de 9 minutos es la cima: ahí es donde más te vas a exigir.\n\nSi necesitas bajar el ritmo, hazlo. Lo importante es completar la montaña entera.\n\nSubir y bajar la intensidad así entrena a tu corazón para recuperarse más rápido.'));
+
+  const dia27 = buildDay(27, 'amorpropio', 'Carta a mi yo del futuro', [],
+    '🌟 Hace unos días le escribiste a la persona que fuiste. Hoy le escribes a la persona que vas a ser.'
+  );
+  dia27.instrucciones = '🔁 Paso 1 — Vuelve a tu carta del Día 20\n' +
+    'Relee, en tu cuaderno, la promesa que te hiciste al final: “Te prometo que de ahora en adelante voy a intentar ______”.\n' +
+    '¿Cómo va esa promesa hoy?\n\n' +
+    '✍️ Paso 2 — Elige una versión futura de ti\n' +
+    'Puede ser:\n' +
+    '✅ Tu yo dentro de 6 meses\n' +
+    '✅ Tu yo dentro de un año\n' +
+    '✅ Tu yo dentro de 5 años\n' +
+    '✅ Tu yo cuando hayas logrado eso que hoy parece lejos\n\n' +
+    '💌 Paso 3 — Escríbele una carta\n' +
+    'Puedes empezar así:\n' +
+    'Querido/a yo de ______:\n' +
+    'Te escribo desde el día 27 de un reto que decidí terminar. Quiero contarte cómo me siento y qué estoy construyendo para ti.\n' +
+    'Estoy trabajando en ______.\n' +
+    'He aprendido que ______.\n' +
+    'Me da miedo ______, pero igual voy a seguir.\n' +
+    'Te pido que ______.\n' +
+    'Te prometo que voy a cuidar ______.\n' +
+    'Con amor,\n' +
+    'Tu yo de hoy. 💗\n\n' +
+    '🌷 Paso 4 — Cierra con una pregunta\n' +
+    'Después de escribirla, responde:\n' +
+    '“¿Qué necesito seguir haciendo cada día para llegar a esa versión de mí?”\n\n' +
+    'No hace falta que la carta suene perfecta ni segura. Puedes escribir dudas, miedos y también sueños grandes. Escribir hacia adelante también es un acto de amor propio.\n\n' +
+    '📓 Escribe todo esto en tu cuaderno — es privado, no hace falta que lo escribas aquí.\n' +
+    '💬 Si quieres compartir algo con el grupo, eres libre de hacerlo — así incentivas a los demás.';
+  DAYS.push(dia27);
+
+  const dia28 = buildDay(28, 'fuerza', 'Reto de Retos', [
+    { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
+    { tipo:'circuito', titulo:'Reto de Retos', rondas:2, descansoEntre:20, descansoRondas:60, ejercicios:[
+      { ejercicio:'Burpees (con o sin salto)', reps:'40 seg', peso:'Sin peso', nota:'Aterriza suave, controlando el impacto en las rodillas.', video:'https://www.youtube.com/shorts/EkK3oVBA__Q', video2:'https://www.youtube.com/shorts/ki3RoA1Umxw', video2label:'Ver variante sin salto' },
+      { ejercicio:'Sentadilla (con o sin peso)', reps:'40 seg', peso:'Con peso casero, mancuernas o sin peso', nota:'Pecho arriba, rodillas alineadas con la punta del pie.', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
+      { ejercicio:'Zancada atrás alternada', reps:'40 seg', peso:'Sin peso', nota:'Ritmo constante, sin perder el equilibrio al cambiar de pierna.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
+      { ejercicio:'Russian Twist', reps:'40 seg', peso:'Sin peso', nota:'Rota desde el torso, no solo con los brazos.', video:'https://www.youtube.com/shorts/Xvm7zSiFyak' },
+      { ejercicio:'Tijeras', reps:'40 seg', peso:'Sin peso', nota:'Zona lumbar pegada al piso todo el tiempo.', video:'https://www.youtube.com/shorts/rOjMnYe2BkY' },
+      { ejercicio:'Mountain Climbers', reps:'40 seg', peso:'Sin peso', nota:'Cadera baja y estable, sin dejarla subir en cada rodillazo.', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' },
+      { ejercicio:'Plancha con toque de hombros', reps:'40 seg', peso:'Sin peso', nota:'Cadera estable, sin balancear de lado a lado al tocar el hombro.', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
+      { ejercicio:'Skaters (con o sin salto)', reps:'40 seg', peso:'Sin peso', nota:'Si se te hace fuerte, hazlo sin salto: solo un paso amplio hacia el lado.', video:'https://www.youtube.com/shorts/_C5YduL30Ho' }
+    ] }
+  ], '🏁 Hoy es el Reto de Retos: 8 estaciones de 40 segundos de trabajo y 20 de descanso, dos vueltas seguidas. Es la sesión más intensa de todo el reto.\n\nDale con todo, pero cuidando la técnica.');
+  dia28.instrucciones = '🔍 ¿Notaste algo?\n' +
+    'Estos movimientos ya los conocías: los hiciste en las semanas anteriores, en distintos días y con otros formatos. La diferencia es que hoy los haces más rápido, con más control y con menos descanso.\n\n' +
+    '🏆 ¿Qué lograste en este reto?\n' +
+    '💪 Empezaste con movimientos básicos y hoy los haces con más peso, más ritmo y menos descanso.\n' +
+    '❤️ Tu cardio pasó de bloques cortos a una pirámide de 30 minutos.\n' +
+    '🎯 Sumaste técnica: isométricos, tempos lentos y combos.\n' +
+    '🤍 Cuidaste tu mente con las cartas, la meditación y el amor propio.\n\n' +
+    'Eso es progreso de verdad: no fue hacer algo distinto, fue hacer lo mismo mejor. Reconócelo.';
+  DAYS.push(dia28);
+
+  DAYS.push(buildDay(29, 'fuerza', 'Circuito Final', [
+    { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
+    { tipo:'circuito', titulo:'Circuito Final', rondas:4, descansoEntre:15, descansoRondas:60, ejercicios:[
+      { ejercicio:'Sentadilla + press (con peso o sin peso)', reps:'12', peso:'Con peso casero, mancuernas o sin peso', nota:'Sube los brazos con cuidado, y al bajar apoya el peso sobre los hombros antes de la siguiente sentadilla.', video:'https://www.youtube.com/shorts/pi4QlK7rIME' },
+      { ejercicio:'Flexiones (con o sin rodillas apoyadas)', reps:'10', peso:'Sin peso', nota:'Cuerpo alineado, sin hundir la cadera.', video:'https://www.youtube.com/shorts/YN5pE2JmzHM' },
+      { ejercicio:'Zancada atrás alternada', reps:'12 por pierna', peso:'Sin peso', nota:'La rodilla de atrás roza el piso sin golpear.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
+      { ejercicio:'Plancha con toque de hombros', reps:'10 por brazo', peso:'Sin peso', nota:'Cadera estable, sin balancear de lado a lado.', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
+      { ejercicio:'Puente de glúteos', reps:'15', peso:'Sin peso', nota:'Aprieta el glúteo arriba, sin arquear la zona lumbar.', video:'https://www.youtube.com/shorts/Cxp6D7LEqjM' }
+    ] },
+    { seccion:'🧘 Estiramiento', ejercicio:'Rutina de estiramientos', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/watch?v=K_8PuY5m1LI' }
+  ], '🔥 Última sesión de fuerza del reto: un circuito de 5 ejercicios en 4 rondas que junta lo mejor de lo que aprendiste.\n\nMañana es el cierre. Hoy es el día de dejarlo todo.'));
+
+  const dia30 = buildDay(30, 'cierre', '¡Completaste el reto! 🎉', [],
+    '🎉 Lo hiciste. 30 días. Decidiste empezar y decidiste seguir cada día, incluso cuando no tenías ganas.'
+  );
+  dia30.instrucciones = '🏆 Lo que construiste\n' +
+    '💪 Fuerza: pasaste de movimientos básicos a rutinas con más carga, combos y tempos.\n' +
+    '❤️ Cardio: de bloques cortos a una pirámide de 30 minutos.\n' +
+    '🧘 Movilidad y descanso: aprendiste que estirar y descansar también es entrenar.\n' +
+    '🤍 Amor propio: miraste tu historia, te agradeciste y le escribiste a tu yo del futuro.\n\n' +
+    '🌱 ¿Y ahora qué sigue?\n' +
+    'Este reto termina, pero el hábito no. Ya sabes que no necesitas motivación para seguir: decidir cada día es lo que te sostiene.\n\n' +
+    '💬 Cuéntanos\n' +
+    'Compartir tu experiencia en el grupo inspira a los demás. Cuéntanos qué fue lo que más te costó y qué fue lo que más disfrutaste.\n\n' +
+    '💗 Gracias por confiar en este proceso.';
+  DAYS.push(dia30);
+
   return DAYS;
 }
 const NUTRIRETO_DAYS_CASA = buildDaysForModelo('casa');
