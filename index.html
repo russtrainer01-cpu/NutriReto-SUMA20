@@ -1086,13 +1086,22 @@ function buildDaysForModelo(modelo){
       'Esta semana le exigiste más a tu cuerpo que la anterior. Eso no es poco — reconócelo.';
     DAYS.push(dia14c);
     DAYS.push(buildDay(15, 'fuerza', 'Full Body', [
-      { ejercicio:'Rodilla al pecho', series:'10 rondas', reps:'20 seg on / 20 seg off', peso:'Sin peso', descanso:'-', nota:'Sube la rodilla hacia el pecho con el abdomen apretado, sin encorvar la espalda. Los 20 seg de "off" son tu descanso entre rondas.', video:null },
+      { ejercicio:'Rodilla al pecho', series:'10 rondas', reps:'20 seg on / 20 seg off', peso:'Sin peso', descanso:'-', nota:'Puedes sostenerte de algo (una pared o una silla firme) para mantener el equilibrio. Sube la rodilla hacia el pecho con el abdomen apretado, sin encorvar la espalda. Los 20 seg de "off" son tu descanso entre rondas.', video:'https://www.youtube.com/shorts/sARXQFNZOQ8' },
       { ejercicio:'Flexiones en pared', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', nota:'Cuerpo alineado en línea recta, sin hundir la cadera. Cuanto más lejos pongas los pies de la pared, más difícil se vuelve.', video:'https://www.youtube.com/shorts/YN5pE2JmzHM' },
       { ejercicio:'Plancha frontal', series:'2 series', reps:'30 seg', peso:'Sin peso', descanso:'30 seg', nota:'Antebrazos debajo de los hombros, cuerpo en línea recta desde la cabeza hasta los talones.', video:'https://www.youtube.com/shorts/MczN_Wu94Hc' },
       { ejercicio:'Sentadilla con press', series:'4 series', reps:'15', peso:'Con peso (arroz, pasta o lo que tengas)', descanso:'30 seg', nota:'Sube los brazos con cuidado, y al bajar apoya el peso sobre los hombros antes de la siguiente sentadilla.', video:'https://www.youtube.com/shorts/pi4QlK7rIME' },
-      { ejercicio:'Skaters', series:'2 series', reps:'15', peso:'Sin peso', descanso:'30 seg', nota:'Salta de lado con la rodilla de aterrizaje ligeramente flexionada; la pierna de atrás pasa por detrás sin tocar el piso. Si se te hace fuerte, hazlo sin salto: solo un paso amplio hacia el lado.', video:null },
+      { ejercicio:'Skaters', series:'2 series', reps:'15', peso:'Sin peso', descanso:'30 seg', nota:'Salta de lado con la rodilla de aterrizaje ligeramente flexionada; la pierna de atrás pasa por detrás sin tocar el piso. Si se te hace fuerte, hazlo sin salto: solo un paso amplio hacia el lado.', video:'https://www.youtube.com/shorts/_C5YduL30Ho' },
       { ejercicio:'Fondo de tríceps (en silla)', series:'2 series', reps:'8', peso:'Sin peso', descanso:'30 seg', nota:'⚠️ Pega la silla contra la pared para que no se mueva. Codos hacia atrás (no abiertos), baja hasta unos 90° y sube sin bloquear del todo los codos.', video:'https://www.youtube.com/shorts/oVs-HluNKP0' }
     ], '🎯 Ya vas por la mitad del reto.\n\n15 días atrás decidiste empezar. Hoy estás acá — en el ecuador de los 30 días.\n\nA esta altura, la motivación de los primeros días ya no alcanza sola. Motivación va y viene: algunos días te sobra, otros no aparece.\n\nLo que te va a sostener de acá en adelante no es sentirte con ganas. Es el compromiso que firmaste al empezar — esa decisión de sumar, aunque sean 20 minutos, cada día, la sientas o no.\n\nNo se trata de emoción. Se trata de decidir hacerlo, otra vez, hoy.\n\nVas por la mitad. Sigues por compromiso, no por impulso.'));
+    DAYS.push(buildDay(16, 'fuerza', 'Abs Explosivos', [
+      { ejercicio:'9000 pasos', series:'-', reps:'En el día', peso:'-', tipo:'checklist', video:null },
+      { tipo:'circuito', titulo:'Abs Explosivos', rondas:4, descansoEntre:20, descansoRondas:50, ejercicios:[
+        { ejercicio:'Tijeras', reps:'12-15', peso:'Sin peso', nota:'Zona lumbar pegada al piso todo el tiempo.', video:'https://www.youtube.com/shorts/rOjMnYe2BkY' },
+        { ejercicio:'Russian Twist', reps:'12-15', peso:'Sin peso', nota:'Rota desde el torso, no solo con los brazos.', video:'https://www.youtube.com/shorts/Xvm7zSiFyak' },
+        { ejercicio:'Abs bicicleta', reps:'12-15', peso:'Sin peso', nota:'El codo toca la rodilla contraria, sin tironear del cuello.', video:'https://www.youtube.com/shorts/K79CoGMh7P0' },
+        { ejercicio:'Mountain Climbers', reps:'12-15', peso:'Sin peso', nota:'Cadera baja y estable, sin dejarla subir en cada rodillazo.', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' }
+      ] }
+    ], '💥 Hoy los abs se trabajan con intención, no en piloto automático.\n\nCada repetición es explosiva en el esfuerzo, pero nunca descontrolada: exhala con fuerza por la boca en el momento de mayor contracción (cuando "explota" el movimiento), e inhala por la nariz al volver a la posición inicial.\n\nNo se trata de ir rápido por ir rápido — se trata de sentir cada repetición. Pon fuerza real en el esfuerzo, no solo velocidad.'));
     DAYS.push(buildDay(21, 'fuerza', 'Reto Abs Parte II + Meditación', [
       { tipo:'circuito', titulo:'Reto Abs Parte II', rondas:3, descansoEntre:20, descansoRondas:45, ejercicios:[
         { ejercicio:'Crunch inverso', reps:'12-15', peso:'Sin peso', nota:'Sube la cadera del piso con el abdomen, no con impulso de piernas.', video:'https://www.youtube.com/shorts/esYVzdEfs04' },
@@ -1204,7 +1213,7 @@ function buildDaysForModelo(modelo){
     '💬 Si quieres compartir algo con el grupo, eres libre de hacerlo — así incentivas a los demás.';
   DAYS.push(dia20);
 
-  let dayCounter = modelo === 'gym' ? 22 : 16;
+  let dayCounter = modelo === 'gym' ? 22 : 17;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
