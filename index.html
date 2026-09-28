@@ -1111,6 +1111,15 @@ function buildDaysForModelo(modelo){
         { ejercicio:'Superman', reps:'12', peso:'Sin peso', nota:'Sube brazos y piernas a la vez, mirando al piso para cuidar el cuello.', video:'https://www.youtube.com/shorts/e_VshMf5eGg' }
       ] }
     ]));
+    DAYS.push(buildDay(18, 'cardio', 'Cardio Metabólico', [
+      { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
+      { tipo:'circuito', titulo:'Cardio Metabólico', rondas:4, descansoEntre:20, descansoRondas:60, ejercicios:[
+        { ejercicio:'Jumping Jacks (con o sin salto)', reps:'40 seg', peso:'Sin peso', nota:'Con o sin salto, a elegir. Si eliges sin salto, lleva un pie al costado y luego el otro, manteniendo el ritmo rápido con los brazos.', video:'https://www.youtube.com/shorts/bT2iY8IjEU0' },
+        { ejercicio:'Rodilla al pecho', reps:'40 seg', peso:'Sin peso', nota:'Puedes sostenerte de algo (una pared o una silla firme) para mantener el equilibrio. Sube la rodilla hacia el pecho alternando piernas, con el abdomen apretado.', video:'https://www.youtube.com/shorts/sARXQFNZOQ8' },
+        { ejercicio:'Mountain Climbers', reps:'40 seg', peso:'Sin peso', nota:'Cadera baja y estable. Si las muñecas o los hombros molestan, apoya las manos en el asiento de una silla firme, pegada a la pared.', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' },
+        { ejercicio:'Skaters', reps:'40 seg', peso:'Sin peso', nota:'Salta de lado con la rodilla de aterrizaje ligeramente flexionada. Si se te hace fuerte, hazlo sin salto: solo un paso amplio hacia el lado.', video:'https://www.youtube.com/shorts/_C5YduL30Ho' }
+      ] }
+    ], '🔥 Hoy el cardio es metabólico: 4 ejercicios, 4 rondas, sin parar. Cada ejercicio dura 40 segundos de trabajo, con 20 segundos de descanso entre uno y otro, y 1 minuto de descanso entre rondas.\n\nEs intenso pero corto. Si necesitas bajar el impacto, usa la versión sin salto: lo importante es mantener el ritmo alto todo el tiempo.\n\nEste tipo de trabajo mantiene tu pulso alto de principio a fin, quema muchas calorías en poco tiempo y tu cuerpo sigue gastando energía incluso después de terminar.'));
     DAYS.push(buildDay(21, 'fuerza', 'Reto Abs Parte II + Meditación', [
       { tipo:'circuito', titulo:'Reto Abs Parte II', rondas:3, descansoEntre:20, descansoRondas:45, ejercicios:[
         { ejercicio:'Crunch inverso', reps:'12-15', peso:'Sin peso', nota:'Sube la cadera del piso con el abdomen, no con impulso de piernas.', video:'https://www.youtube.com/shorts/esYVzdEfs04' },
@@ -1222,7 +1231,7 @@ function buildDaysForModelo(modelo){
     '💬 Si quieres compartir algo con el grupo, eres libre de hacerlo — así incentivas a los demás.';
   DAYS.push(dia20);
 
-  let dayCounter = modelo === 'gym' ? 22 : 18;
+  let dayCounter = modelo === 'gym' ? 22 : 19;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
