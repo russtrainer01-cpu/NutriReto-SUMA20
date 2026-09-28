@@ -1120,6 +1120,20 @@ function buildDaysForModelo(modelo){
         { ejercicio:'Skaters', reps:'40 seg', peso:'Sin peso', nota:'Salta de lado con la rodilla de aterrizaje ligeramente flexionada. Si se te hace fuerte, hazlo sin salto: solo un paso amplio hacia el lado.', video:'https://www.youtube.com/shorts/_C5YduL30Ho' }
       ] }
     ], '🔥 Hoy el cardio es metabólico: 4 ejercicios, 4 rondas, sin parar. Cada ejercicio dura 40 segundos de trabajo, con 20 segundos de descanso entre uno y otro, y 1 minuto de descanso entre rondas.\n\nEs intenso pero corto. Si necesitas bajar el impacto, usa la versión sin salto: lo importante es mantener el ritmo alto todo el tiempo.\n\nEste tipo de trabajo mantiene tu pulso alto de principio a fin, quema muchas calorías en poco tiempo y tu cuerpo sigue gastando energía incluso después de terminar.'));
+    DAYS.push(buildDay(19, 'fuerza', 'Squat & Lunges Challenge II — con peso', [
+      { seccion:'🧘 Calentamiento', ejercicio:'Calentamiento tren inferior', series:'-', reps:'2-3 min', peso:'Sin peso', tipo:'checklist', video:'https://youtube.com/shorts/VHkqEiJvtHQ' },
+      { tipo:'circuito', titulo:'Squat & Lunges Challenge II', rondas:1, descansoEntre:20, ejercicios:[
+        { ejercicio:'Sentadilla con peso', reps:'30 seg', peso:'Con peso casero', nota:'Sostén el peso pegado al pecho. Pecho arriba, rodillas alineadas con la punta del pie.', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
+        { ejercicio:'Zancada atrás derecha con peso', reps:'30 seg', peso:'Con peso casero', nota:'Peso en las manos, a los costados. La rodilla de atrás roza el piso sin golpear.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
+        { ejercicio:'Zancada atrás izquierda con peso', reps:'30 seg', peso:'Con peso casero', nota:'Peso en las manos, a los costados. La rodilla de atrás roza el piso sin golpear.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
+        { ejercicio:'Sentadilla con pausa abajo', reps:'30 seg', peso:'Con peso casero', nota:'Sostén 1-2 seg abajo antes de subir, con el peso pegado al pecho.', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
+        { ejercicio:'Zancada alternada con peso', reps:'30 seg', peso:'Con peso casero', nota:'Ritmo constante, sin perder el equilibrio al cambiar de pierna.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
+        { ejercicio:'Sentadilla + 2 pulsitos', reps:'30 seg', peso:'Con peso casero', nota:'Bajas, y abajo haces 2 pulsos cortos antes de subir del todo.', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
+        { ejercicio:'Zancada atrás alternada con peso', reps:'30 seg', peso:'Con peso casero', nota:'Ritmo constante, sin perder el equilibrio al cambiar de pierna.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
+        { ejercicio:'Sentadilla → zancada atrás', reps:'30 seg', peso:'Con peso casero', nota:'Combina los dos movimientos, alternando.', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
+        { ejercicio:'Sentadilla con peso (final)', reps:'30 seg', peso:'Con peso casero', nota:'Última estación: mantén la técnica hasta el final.', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' }
+      ] }
+    ], '🍑 Squat & Lunges Challenge, segunda vuelta — ahora con peso.\n⏱️ ~7 minutos · Formato: 30 seg de trabajo + 20 seg de descanso, una sola vuelta por las 9 estaciones.\n\nUsa un peso con el que puedas mantener buena técnica los 30 segundos: botellas de agua, paquetes de arroz o pasta, o una mochila con peso. Si no tienes nada a mano, hazlo igual sin peso.\n\nAcortamos cada estación de 40 a 30 segundos porque, con peso, cada una exige más que la primera vez.'));
     DAYS.push(buildDay(21, 'fuerza', 'Reto Abs Parte II + Meditación', [
       { tipo:'circuito', titulo:'Reto Abs Parte II', rondas:3, descansoEntre:20, descansoRondas:45, ejercicios:[
         { ejercicio:'Crunch inverso', reps:'12-15', peso:'Sin peso', nota:'Sube la cadera del piso con el abdomen, no con impulso de piernas.', video:'https://www.youtube.com/shorts/esYVzdEfs04' },
@@ -1231,7 +1245,7 @@ function buildDaysForModelo(modelo){
     '💬 Si quieres compartir algo con el grupo, eres libre de hacerlo — así incentivas a los demás.';
   DAYS.push(dia20);
 
-  let dayCounter = modelo === 'gym' ? 22 : 19;
+  let dayCounter = 22;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
