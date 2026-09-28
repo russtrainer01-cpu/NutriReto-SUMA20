@@ -1102,6 +1102,14 @@ function buildDaysForModelo(modelo){
         { ejercicio:'Mountain Climbers', reps:'12-15', peso:'Sin peso', nota:'Cadera baja y estable, sin dejarla subir en cada rodillazo.', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' }
       ] }
     ], '💥 Hoy los abs se trabajan con intención, no en piloto automático.\n\nCada repetición es explosiva en el esfuerzo, pero nunca descontrolada: exhala con fuerza por la boca en el momento de mayor contracción (cuando "explota" el movimiento), e inhala por la nariz al volver a la posición inicial.\n\nNo se trata de ir rápido por ir rápido — se trata de sentir cada repetición. Pon fuerza real en el esfuerzo, no solo velocidad.'));
+    DAYS.push(buildDay(17, 'fuerza', 'Hombros y Espalda', [
+      { seccion:'🤲 Hombros', ejercicio:'Press de hombros de pie con peso casero', series:'3 series', reps:'15', peso:'Botellas de agua, paquetes de arroz o pasta, o una mochila con peso', descanso:'45 seg', nota:'Core firme, sin arquear la zona lumbar. Empuja hacia arriba sin bloquear los codos. Si sientes molestia en el cuello, usa menos peso y mantén el cuello relajado.', video:'https://www.youtube.com/shorts/H3JwesAsumc' },
+      { ejercicio:'Elevaciones laterales', series:'3 series', reps:'8', peso:'Con peso (botellas de agua o lo que tengas)', descanso:'45 seg', nota:'El reto de hoy: sostén 2 segundos arriba en isométrico antes de bajar, en cada repetición. Codos con leve flexión, sube hasta la altura del hombro.', video:'https://www.youtube.com/shorts/zEANAIh1l9g' },
+      { ejercicio:'Elevación frontal', series:'3 series', reps:'8', peso:'Poco peso', descanso:'30 seg', nota:'Hazla de pie, subiendo hasta la altura del hombro, sin balancear el cuerpo.', video:'https://www.youtube.com/shorts/0DXumqp_Rxs' },
+      { seccion:'🏋️ Espalda', ejercicio:'Remo unilateral apoyado en una silla', series:'4 series', reps:'10', peso:'Mochila o bolsa con peso', descanso:'45 seg', nota:'⚠️ Pega la silla contra la pared para que no se mueva. Apoya una mano y la rodilla del mismo lado en la silla. Codo pegado al cuerpo, lleva el peso hacia la cadera.', video:'https://www.youtube.com/shorts/qTOaWaCxB8U' },
+      { seccion:'🧱 Core', ejercicio:'Plancha con toque de hombros', series:'3 series', reps:'10', peso:'Sin peso', descanso:'45 seg', nota:'Cadera estable, sin balancear de lado a lado al tocar el hombro. Core apretado todo el tiempo.', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
+      { ejercicio:'Superman', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', nota:'Sube brazos y piernas a la vez, mirando al piso para cuidar el cuello.', video:'https://www.youtube.com/shorts/e_VshMf5eGg' }
+    ]));
     DAYS.push(buildDay(21, 'fuerza', 'Reto Abs Parte II + Meditación', [
       { tipo:'circuito', titulo:'Reto Abs Parte II', rondas:3, descansoEntre:20, descansoRondas:45, ejercicios:[
         { ejercicio:'Crunch inverso', reps:'12-15', peso:'Sin peso', nota:'Sube la cadera del piso con el abdomen, no con impulso de piernas.', video:'https://www.youtube.com/shorts/esYVzdEfs04' },
@@ -1213,7 +1221,7 @@ function buildDaysForModelo(modelo){
     '💬 Si quieres compartir algo con el grupo, eres libre de hacerlo — así incentivas a los demás.';
   DAYS.push(dia20);
 
-  let dayCounter = modelo === 'gym' ? 22 : 17;
+  let dayCounter = modelo === 'gym' ? 22 : 18;
   const pattern = [
     { tipo:'fuerza', titulo:'Fuerza', items: ejFuerza },
     { tipo:'cardio', titulo:'Cardio SUMA20', items: ejCardio },
