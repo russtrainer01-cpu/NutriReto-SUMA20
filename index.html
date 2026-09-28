@@ -1107,8 +1107,10 @@ function buildDaysForModelo(modelo){
       { ejercicio:'Elevaciones laterales', series:'3 series', reps:'8', peso:'Con peso (botellas de agua o lo que tengas)', descanso:'45 seg', nota:'El reto de hoy: sostén 2 segundos arriba en isométrico antes de bajar, en cada repetición. Codos con leve flexión, sube hasta la altura del hombro.', video:'https://www.youtube.com/shorts/zEANAIh1l9g' },
       { ejercicio:'Elevación frontal', series:'3 series', reps:'8', peso:'Poco peso', descanso:'30 seg', nota:'Hazla de pie, subiendo hasta la altura del hombro, sin balancear el cuerpo.', video:'https://www.youtube.com/shorts/0DXumqp_Rxs' },
       { seccion:'🏋️ Espalda', ejercicio:'Remo unilateral apoyado en una silla', series:'4 series', reps:'10', peso:'Mochila o bolsa con peso', descanso:'45 seg', nota:'⚠️ Pega la silla contra la pared para que no se mueva. Apoya una mano y la rodilla del mismo lado en la silla. Codo pegado al cuerpo, lleva el peso hacia la cadera.', video:'https://www.youtube.com/shorts/qTOaWaCxB8U' },
-      { seccion:'🧱 Core', ejercicio:'Plancha con toque de hombros', series:'3 series', reps:'10', peso:'Sin peso', descanso:'45 seg', nota:'Cadera estable, sin balancear de lado a lado al tocar el hombro. Core apretado todo el tiempo.', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
-      { ejercicio:'Superman', series:'3 series', reps:'12', peso:'Sin peso', descanso:'30 seg', nota:'Sube brazos y piernas a la vez, mirando al piso para cuidar el cuello.', video:'https://www.youtube.com/shorts/e_VshMf5eGg' }
+      { seccion:'🔗 Combo final', tipo:'circuito', titulo:'Plancha + Superman (intercalados)', rondas:3, descansoEntre:10, descansoRondas:45, ejercicios:[
+        { ejercicio:'Plancha con toque de hombros', reps:'10', peso:'Sin peso', nota:'Cadera estable, sin balancear de lado a lado al tocar el hombro. Core apretado todo el tiempo.', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
+        { ejercicio:'Superman', reps:'12', peso:'Sin peso', nota:'Sube brazos y piernas a la vez, mirando al piso para cuidar el cuello.', video:'https://www.youtube.com/shorts/e_VshMf5eGg' }
+      ] }
     ]));
     DAYS.push(buildDay(21, 'fuerza', 'Reto Abs Parte II + Meditación', [
       { tipo:'circuito', titulo:'Reto Abs Parte II', rondas:3, descansoEntre:20, descansoRondas:45, ejercicios:[
