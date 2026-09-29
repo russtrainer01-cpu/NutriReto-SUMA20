@@ -1277,7 +1277,7 @@ function buildDaysForModelo(modelo){
 
   const dia7 = buildDay(7, 'fuerza', 'Squat & Lunges Challenge', [
     { tipo:'circuito', titulo:'Squat & Lunges Challenge', rondas:1, descansoEntre:20, ejercicios:[
-      { ejercicio:'Sentadilla', reps:'40 seg', peso:'Sin peso', nota:'Pecho arriba, rodillas alineadas con la punta del pie.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI' },
+      { ejercicio:'Sentadilla', reps:'40 seg', peso:'Sin peso', nota:'Pecho arriba, rodillas alineadas con la punta del pie.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI', video2:'https://drive.google.com/file/d/14_IqtgtFaf-P7RQjhdCNY1LQqAcptWYB/view?usp=drivesdk', video2label:'Ver cómo se hace el reto completo' },
       { ejercicio:'Zancada atrás derecha', reps:'40 seg', peso:'Sin peso', nota:'Rodilla de atrás roza el piso sin golpear.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
       { ejercicio:'Zancada atrás izquierda', reps:'40 seg', peso:'Sin peso', nota:'Rodilla de atrás roza el piso sin golpear.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
       { ejercicio:'Sentadilla con pausa abajo', reps:'40 seg', peso:'Sin peso', nota:'Sostén 1-2 seg abajo antes de subir.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI' },
@@ -1610,6 +1610,8 @@ async function onRestFinished(key){
 }
 function youtubeEmbedUrl(url){
   if(!url) return null;
+  const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if(driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
   let id = null;
   const shortsMatch = url.match(/\/shorts\/([^?&]+)/);
   const watchMatch = url.match(/[?&]v=([^&]+)/);
