@@ -1445,7 +1445,7 @@ const AMORPROPIO_RETOS = [
   'Agradécele a tu cuerpo por lo que hizo esta semana.'
 ];
 
-let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, uiRestAlert:null, uiCircuit:{}, sigDrawing:false, sigHasContent:false, sigCtx:null, adminData:null, adminSelected:null, historial:[] };
+let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiRestingLabel:{}, uiComment:{}, uiRestAlert:null, uiCircuit:{}, sigDrawing:false, sigHasContent:false, sigCtx:null, adminData:null, adminSelected:null, historial:[] };
 let restTimerHandles = {};
 let restTimerEndTimes = {};
 document.addEventListener('pointerdown', function unlockAudioOnce(){
@@ -1507,8 +1507,9 @@ function startRestTimer(key, seconds){
   render();
   restTimerHandles[key] = setInterval(()=> tickRestTimer(key), 1000);
 }
-function startCircuitRest(key, seconds, callback){
+function startCircuitRest(key, seconds, callback, label){
   restFinishedCallbacks[key] = callback;
+  state.uiRestingLabel[key] = label || 'Descanso';
   ensureRestAudio();
   startSilentKeepAlive(key);
   if(restTimerHandles[key]) clearInterval(restTimerHandles[key]);
@@ -2479,7 +2480,7 @@ function render(){
       const overlay = document.createElement('div');
       overlay.className = 'rest-overlay' + (state.uiResting[rKey] <= 10 ? ' blinking' : '');
       overlay.innerHTML = `
-        <div class="rest-overlay-label">Descanso</div>
+        <div class="rest-overlay-label">${escapeHtml(state.uiRestingLabel[rKey] || 'Descanso')}</div>
         <div class="rest-overlay-time">${state.uiResting[rKey]}</div>
         <button class="rest-overlay-cancel" id="rest-cancel-btn">Cancelar</button>
       `;
@@ -2528,9 +2529,13 @@ function render(){
           const next = isRoundRest
             ? (isLastRoundNow ? null : item.ejercicios[0])
             : item.ejercicios[cState.exIdx + 1];
+          const esBloqueDeTrabajo = !!currentEx.duracion;
           card.innerHTML = `
             <div class="sub" style="font-weight:700; margin-bottom:6px;">Ronda ${cState.round} de ${item.rondas}</div>
-            <div class="rest-active">⏱️ ${isRoundRest ? 'Descanso entre rondas' : 'Descanso'}... <strong>${resting}s</strong></div>
+            ${esBloqueDeTrabajo
+              ? `<div class="rest-active">🏃 ${escapeHtml(currentEx.ejercicio)} — en curso... <strong>${resting}s</strong></div>`
+              : `<div class="rest-active">⏱️ ${isRoundRest ? 'Descanso entre rondas' : 'Descanso'}... <strong>${resting}s</strong></div>`
+            }
             ${next ? `<div class="sub" style="margin-top:8px; text-align:center;">👉 A continuación: <strong>${escapeHtml(next.ejercicio)}</strong></div>` : ''}
           `;
         } else {
@@ -2674,7 +2679,7 @@ function render(){
           };
           const finalSeconds = currentEx.duracion || item.descansoEntre;
           if(item.timerFinal && finalSeconds){
-            startCircuitRest(circuitKey, finalSeconds, finishCircuit);
+            startCircuitRest(circuitKey, finalSeconds, finishCircuit, currentEx.duracion ? currentEx.ejercicio + ' — en curso' : 'Descanso');
           } else {
             finishCircuit();
           }
@@ -2683,12 +2688,12 @@ function render(){
             cState.round++;
             cState.exIdx = 0;
             render();
-          });
+          }, 'Descanso entre rondas');
         } else {
           startCircuitRest(circuitKey, currentEx.duracion || item.descansoEntre || 15, ()=>{
             cState.exIdx++;
             render();
-          });
+          }, currentEx.duracion ? currentEx.ejercicio + ' — en curso' : 'Descanso');
         }
       };
     });
