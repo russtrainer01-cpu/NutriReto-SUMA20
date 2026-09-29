@@ -1523,6 +1523,12 @@ function cancelRestTimer(key){
   delete restTimerEndTimes[key];
   delete state.uiResting[key];
   stopSilentKeepAlive(key);
+  if(restFinishedCallbacks[key]){
+    const cb = restFinishedCallbacks[key];
+    delete restFinishedCallbacks[key];
+    cb();
+    return;
+  }
   render();
 }
 function tickRestTimer(key){
@@ -2518,9 +2524,14 @@ function render(){
         const exKey = circuitKey + ':' + currentEx.ejercicio;
         if(resting !== undefined){
           const isRoundRest = cState.exIdx >= item.ejercicios.length - 1;
+          const isLastRoundNow = cState.round >= item.rondas;
+          const next = isRoundRest
+            ? (isLastRoundNow ? null : item.ejercicios[0])
+            : item.ejercicios[cState.exIdx + 1];
           card.innerHTML = `
             <div class="sub" style="font-weight:700; margin-bottom:6px;">Ronda ${cState.round} de ${item.rondas}</div>
             <div class="rest-active">⏱️ ${isRoundRest ? 'Descanso entre rondas' : 'Descanso'}... <strong>${resting}s</strong></div>
+            ${next ? `<div class="sub" style="margin-top:8px; text-align:center;">👉 A continuación: <strong>${escapeHtml(next.ejercicio)}</strong></div>` : ''}
           `;
         } else {
           card.innerHTML = `
