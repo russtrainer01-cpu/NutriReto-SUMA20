@@ -1382,47 +1382,30 @@ function buildDaysForModelo(modelo){
     '💬 Si quieres compartir algo con el grupo, eres libre de hacerlo — así incentivas a los demás.';
   DAYS.push(dia27);
 
-  const dia28 = buildDay(28, 'fuerza', 'Reto de Retos', [
+  DAYS.push(buildDay(28, 'fuerza', 'Mini Reto: 100 Reps', [
     { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'6 reps por movimiento', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
-    { tipo:'circuito', titulo:'Reto de Retos', rondas:2, descansoEntre:20, descansoRondas:60, ejercicios:[
-      { ejercicio:'Burpees (con o sin salto)', reps:'40 seg', peso:'Sin peso', nota:'Aterriza suave, controlando el impacto en las rodillas.', video:'https://www.youtube.com/shorts/EkK3oVBA__Q', video2:'https://www.youtube.com/shorts/ki3RoA1Umxw', video2label:'Ver variante sin salto' },
-      { ejercicio:'Sentadilla (con o sin peso)', reps:'40 seg', peso:'Con peso casero, mancuernas o sin peso', nota:'Pecho arriba, rodillas alineadas con la punta del pie.', video:'https://youtube.com/shorts/1bOp8mO4xB8?si=sYBi1dsHYECMbMvV' },
-      { ejercicio:'Zancada atrás alternada', reps:'40 seg', peso:'Sin peso', nota:'Ritmo constante, sin perder el equilibrio al cambiar de pierna.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
-      { ejercicio:'Russian Twist', reps:'40 seg', peso:'Sin peso', nota:'Rota desde el torso, no solo con los brazos.', video:'https://www.youtube.com/shorts/Xvm7zSiFyak' },
-      { ejercicio:'Tijeras', reps:'40 seg', peso:'Sin peso', nota:'Zona lumbar pegada al piso todo el tiempo.', video:'https://www.youtube.com/shorts/rOjMnYe2BkY' },
-      { ejercicio:'Mountain Climbers', reps:'40 seg', peso:'Sin peso', nota:'Cadera baja y estable, sin dejarla subir en cada rodillazo.', video:'https://www.youtube.com/shorts/tQkpdUWK8KU' },
-      { ejercicio:'Plancha con toque de hombros', reps:'40 seg', peso:'Sin peso', nota:'Cadera estable, sin balancear de lado a lado al tocar el hombro.', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
-      { ejercicio:'Skaters (con o sin salto)', reps:'40 seg', peso:'Sin peso', nota:'Si se te hace fuerte, hazlo sin salto: solo un paso amplio hacia el lado.', video:'https://www.youtube.com/shorts/_C5YduL30Ho' }
-    ] }
-  ], '🏁 Hoy es el Reto de Retos: 8 estaciones de 40 segundos de trabajo y 20 de descanso, dos vueltas seguidas. Es la sesión más intensa de todo el reto.\n\nDale con todo, pero cuidando la técnica.');
-  dia28.instrucciones = '🔍 ¿Notaste algo?\n' +
-    'Estos movimientos ya los conocías: los hiciste en las semanas anteriores, en distintos días y con otros formatos. La diferencia es que hoy los haces más rápido, con más control y con menos descanso.\n\n' +
-    '🏆 ¿Qué lograste en este reto?\n' +
-    '💪 Empezaste con movimientos básicos y hoy los haces con más peso, más ritmo y menos descanso.\n' +
-    '❤️ Tu cardio pasó de bloques cortos a una pirámide de 30 minutos.\n' +
-    '🎯 Sumaste técnica: isométricos, tempos lentos y combos.\n' +
-    '🤍 Cuidaste tu mente con las cartas, la meditación y el amor propio.\n\n' +
-    'Eso es progreso de verdad: no fue hacer algo distinto, fue hacer lo mismo mejor. Reconócelo.';
-  DAYS.push(dia28);
+    { ejercicio:'100 sentadillas', series:'-', reps:'100 (en las series que necesites)', peso:'Sin peso o con peso casero', tipo:'checklist', nota:'Para a descansar las veces que haga falta — lo importante es completar las 100, no hacerlas todas seguidas. Si quieres, cronometra cuánto tardas con el reloj de tu celular: dentro de unas semanas podrás repetir este reto y comparar tu tiempo.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI' }
+  ], '🏁 Hoy el reto es distinto: 100 sentadillas, en las series que necesites. No importa cuánto tardes — importa que las completes todas.'));
 
-  DAYS.push(buildDay(29, 'fuerza', 'Circuito Final', [
+  DAYS.push(buildDay(29, 'cardio', 'Día de Correr', [
+    { seccion:'🧘 Calentamiento', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'6 reps por movimiento', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
+    { ejercicio:'Trote continuo', series:'-', reps:'20-25 min', peso:'Cinta o aire libre', tipo:'checklist', nota:'A diferencia de otros días, hoy no hay intervalos: es un trote sostenido, a un ritmo que puedas mantener del principio al fin sin pararte. Si necesitas caminar un poco, está bien — pero intenta que sea la excepción, no la regla.', video:null },
+    { seccion:'🧘 Estiramiento', ejercicio:'Rutina de estiramientos', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/watch?v=K_8PuY5m1LI' }
+  ], '🏃 Hoy es el Día de Correr: un trote continuo de 20 a 25 minutos, sin cambios de ritmo. Mañana es el cierre del reto — hoy es para soltar el cuerpo y despejar la cabeza.'));
+
+  const dia30 = buildDay(30, 'fuerza', '¡Completaste el reto! 🎉 — Reto de Retos', [
     { seccion:'🧘 Movilidad', ejercicio:'Movilidad cuerpo completo', series:'-', reps:'6 reps por movimiento', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/shorts/KNPnEmf2Qnc' },
-    { tipo:'circuito', titulo:'Circuito Final', rondas:4, descansoEntre:15, descansoRondas:60, ejercicios:[
+    { tipo:'circuito', titulo:'Reto de Retos', rondas:4, descansoEntre:15, descansoRondas:60, ejercicios:[
       { ejercicio:'Sentadilla + press (con peso o sin peso)', reps:'12', peso:'Con peso casero, mancuernas o sin peso', nota:'Sube los brazos con cuidado, y al bajar apoya el peso sobre los hombros antes de la siguiente sentadilla.', video:'https://www.youtube.com/shorts/pi4QlK7rIME' },
       { ejercicio:'Flexiones (con o sin rodillas apoyadas)', reps:'10', peso:'Sin peso', nota:'Cuerpo alineado, sin hundir la cadera.', video:'https://www.youtube.com/shorts/YN5pE2JmzHM' },
       { ejercicio:'Zancada atrás alternada', reps:'12 por pierna', peso:'Sin peso', nota:'La rodilla de atrás roza el piso sin golpear.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
       { ejercicio:'Plancha con toque de hombros', reps:'10 por brazo', peso:'Sin peso', nota:'Cadera estable, sin balancear de lado a lado.', video:'https://www.youtube.com/shorts/sGZhZVfuKk0' },
       { ejercicio:'Puente de glúteos', reps:'15', peso:'Sin peso', nota:'Aprieta el glúteo arriba, sin arquear la zona lumbar.', video:'https://www.youtube.com/shorts/Cxp6D7LEqjM' }
-    ] },
-    { seccion:'🧘 Estiramiento', ejercicio:'Rutina de estiramientos', series:'-', reps:'3-5 min', peso:'Sin peso', tipo:'checklist', video:'https://www.youtube.com/watch?v=K_8PuY5m1LI' }
-  ], '🔥 Última sesión de fuerza del reto: un circuito de 5 ejercicios en 4 rondas que junta lo mejor de lo que aprendiste.\n\nMañana es el cierre. Hoy es el día de dejarlo todo.'));
-
-  const dia30 = buildDay(30, 'cierre', '¡Completaste el reto! 🎉', [],
-    '🎉 Lo hiciste. 30 días. Decidiste empezar y decidiste seguir cada día, incluso cuando no tenías ganas.'
-  );
-  dia30.instrucciones = '🏆 Lo que construiste\n' +
+    ] }
+  ], '🔍 ¿Notaste algo?\nEstos movimientos ya los conocías: los hiciste en las semanas anteriores, en distintos días y con otros formatos. Hoy los haces en un circuito de 4 rondas, uniendo todo lo que aprendiste.\n\n🎉 Y con esto, hoy completas el reto. 30 días. Decidiste empezar y decidiste seguir cada día, incluso cuando no tenías ganas.');
+  dia30.instrucciones = '🏆 Lo que construiste en estas 4 semanas\n' +
     '💪 Fuerza: pasaste de movimientos básicos a rutinas con más carga, combos y tempos.\n' +
-    '❤️ Cardio: de bloques cortos a una pirámide de 30 minutos.\n' +
+    '❤️ Cardio: de caminatas y trotes cortos a una pirámide de 30 minutos.\n' +
     '🧘 Movilidad y descanso: aprendiste que estirar y descansar también es entrenar.\n' +
     '🤍 Amor propio: miraste tu historia, te agradeciste y le escribiste a tu yo del futuro.\n\n' +
     '🌱 ¿Y ahora qué sigue?\n' +
