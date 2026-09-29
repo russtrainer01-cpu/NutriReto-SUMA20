@@ -1277,7 +1277,7 @@ function buildDaysForModelo(modelo){
 
   const dia7 = buildDay(7, 'fuerza', 'Squat & Lunges Challenge', [
     { tipo:'circuito', titulo:'Squat & Lunges Challenge', rondas:1, descansoEntre:20, ejercicios:[
-      { ejercicio:'Sentadilla', reps:'40 seg', peso:'Sin peso', nota:'Pecho arriba, rodillas alineadas con la punta del pie.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI', video2:'https://drive.google.com/file/d/14_IqtgtFaf-P7RQjhdCNY1LQqAcptWYB/view?usp=drivesdk', video2label:'Ver cómo se hace el reto completo' },
+      { ejercicio:'Sentadilla', reps:'40 seg', peso:'Sin peso', nota:'Pecho arriba, rodillas alineadas con la punta del pie.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI', video2:'https://drive.google.com/uc?export=view&id=14_IqtgtFaf-P7RQjhdCNY1LQqAcptWYB', video2isImage:true, video2label:'Ver cómo se hace el reto completo' },
       { ejercicio:'Zancada atrás derecha', reps:'40 seg', peso:'Sin peso', nota:'Rodilla de atrás roza el piso sin golpear.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
       { ejercicio:'Zancada atrás izquierda', reps:'40 seg', peso:'Sin peso', nota:'Rodilla de atrás roza el piso sin golpear.', video:'https://www.youtube.com/shorts/K69_pVU11qs' },
       { ejercicio:'Sentadilla con pausa abajo', reps:'40 seg', peso:'Sin peso', nota:'Sostén 1-2 seg abajo antes de subir.', video:'https://www.youtube.com/shorts/0WSUiP0cQDI' },
@@ -2534,7 +2534,10 @@ function render(){
             ` : ''}
             ${currentEx.video2 ? `
               <button class="video-btn" data-videotoggle="${exKey}-2">🎥 ${state.uiVideoOpen[exKey+'-2'] ? 'Ocultar variante' : (currentEx.video2label || 'Ver otra variante')}</button>
-              ${state.uiVideoOpen[exKey+'-2'] ? `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(currentEx.video2))}" allow="encrypted-media"></iframe></div>` : ''}
+              ${state.uiVideoOpen[exKey+'-2'] ? (currentEx.video2isImage
+                ? `<div class="video-embed-wrap"><img src="${escapeHtml(currentEx.video2)}" alt="${escapeHtml(currentEx.video2label || 'Demostración')}" style="width:100%; border-radius:10px;" /></div>`
+                : `<div class="video-embed-wrap"><iframe src="${escapeHtml(youtubeEmbedUrl(currentEx.video2))}" allow="encrypted-media"></iframe></div>`
+              ) : ''}
             ` : ''}
             ${currentEx.nota ? `<div class="tip">💡 ${escapeHtml(currentEx.nota)}</div>` : ''}
             <button class="btn-primary circuit-register-btn" data-circuitkey="${circuitKey}" data-donekey="${doneKey}" data-dayidx="${idx}" style="margin-top:8px;">${item.btnLabel || '✓ Registrar y descansar'}</button>
