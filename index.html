@@ -107,6 +107,11 @@
     padding:16px;
     margin-bottom:12px;
   }
+  .card-done{
+    background:#f2f8ee;
+    border:1px solid #cfe6bd;
+    border-left:4px solid var(--green);
+  }
   .error{
     color:#a32d2d;
     font-size:12px;
@@ -1443,6 +1448,18 @@ const AMORPROPIO_RETOS = [
 let state = { view:'login', codigo:'', nombre:'', data:null, selectedDay:null, uiSets:{}, uiFeeling:{}, uiVideoOpen:{}, uiResting:{}, uiComment:{}, uiRestAlert:null, uiCircuit:{}, sigDrawing:false, sigHasContent:false, sigCtx:null, adminData:null, adminSelected:null, historial:[] };
 let restTimerHandles = {};
 let restTimerEndTimes = {};
+document.addEventListener('pointerdown', function unlockAudioOnce(){
+  ensureRestAudio();
+  document.removeEventListener('pointerdown', unlockAudioOnce);
+}, { once:true });
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'visible'){
+    Object.keys(restTimerEndTimes).forEach(key=> tickRestTimer(key));
+  }
+});
+window.addEventListener('focus', ()=>{
+  Object.keys(restTimerEndTimes).forEach(key=> tickRestTimer(key));
+});
 let restAudioCtx = null;
 async function ensureRestAudio(){
   if(!restAudioCtx){
@@ -1534,6 +1551,7 @@ function getRestMessage(){
   return msg.replace('{nombre}', state.nombre.split(' ')[0]);
 }
 function playTickSoundNr(){
+  if(navigator.vibrate) navigator.vibrate(15);
   try{
     ensureRestAudio().then(ctx=>{
       if(!ctx) return;
@@ -1583,7 +1601,7 @@ async function onRestFinished(key){
       lfo.stop(now + 0.9);
     }
   }catch(e){}
-  if(navigator.vibrate) navigator.vibrate([250,100,250]);
+  if(navigator.vibrate) navigator.vibrate([300,100,300,100,300]);
   document.querySelectorAll('.rest-overlay').forEach(el=> el.remove());
   if(restFinishedCallbacks[key]){
     const cb = restFinishedCallbacks[key];
@@ -2486,7 +2504,7 @@ function render(){
           wrap.appendChild(summaryCard);
         }
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'card' + (circuitDoneToday ? ' card-done' : '');
         if(circuitDoneToday){
           card.innerHTML = `
             <div style="font-weight:700; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(item.titulo || 'Circuito')}</div>
@@ -2530,7 +2548,7 @@ function render(){
 
       if(item.tipo === 'checklist'){
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'card' + (lastToday ? ' card-done' : '');
         if(lastToday){
           card.innerHTML = `
             <div style="font-weight:700; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(item.ejercicio)}</div>
@@ -2557,11 +2575,11 @@ function render(){
       const selectedFeeling = state.uiFeeling[key];
 
       const card = document.createElement('div');
-      card.className = 'card';
+      card.className = 'card' + (lastToday ? ' card-done' : '');
       if(lastToday){
         card.innerHTML = `
           <div style="font-weight:700; font-size:18px; color:var(--pink); margin-bottom:2px;">${escapeHtml(item.ejercicio)}</div>
-          <div class="sub" style="margin:4px 0 0;">✓ Ya registrado hoy — ${lastToday.reps} × ${lastToday.sets}${lastToday.feeling ? ' · ' + lastToday.feeling : ''}</div>
+          <div class="sub" style="margin:4px 0 0; color:var(--green); font-weight:700;">✓ Ya registrado hoy — ${lastToday.reps} × ${lastToday.sets}${lastToday.feeling ? ' · ' + lastToday.feeling : ''}</div>
         `;
       } else {
         const resting = state.uiResting[key];
@@ -2619,6 +2637,7 @@ function render(){
     });
     wrap.querySelectorAll('.circuit-register-btn').forEach(btn=>{
       btn.onclick = async ()=>{
+        if(navigator.vibrate) navigator.vibrate(40);
         const circuitKey = btn.dataset.circuitkey;
         const dayIdx = Number(btn.dataset.dayidx);
         const item = info.items[dayIdx];
@@ -2664,6 +2683,7 @@ function render(){
     });
     wrap.querySelectorAll('.checklist-done-btn').forEach(btn=>{
       btn.onclick = async ()=>{
+        if(navigator.vibrate) navigator.vibrate(40);
         const key = btn.dataset.key;
         const entry = { date: todayISO(), ts: new Date().toISOString(), reps: btn.dataset.reps, sets: 1, feeling: '' };
         if(!data.exercises[key]) data.exercises[key] = [];
@@ -2684,6 +2704,7 @@ function render(){
     });
     wrap.querySelectorAll('.registrar-btn').forEach(btn=>{
       btn.onclick = async ()=>{
+        if(navigator.vibrate) navigator.vibrate(40);
         const key = btn.dataset.key;
         const target = Number(btn.dataset.target) || 0;
         const trackedSets = state.uiSets[key] || 0;
