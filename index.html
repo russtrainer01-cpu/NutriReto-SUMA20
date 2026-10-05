@@ -730,6 +730,32 @@
     border-radius:10px;
     margin-bottom:14px;
   }
+  .bell-btn{
+    position:relative;
+    top:3px;
+    background:none;
+    border:none;
+    font-size:20px;
+    line-height:1;
+    cursor:pointer;
+    padding:4px;
+  }
+  .bell-badge{
+    position:absolute;
+    top:-2px;
+    right:-2px;
+    background:var(--pink);
+    color:#fff;
+    font-size:10px;
+    font-weight:700;
+    min-width:16px;
+    height:16px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 3px;
+  }
 </style>
 </head>
 <body>
@@ -1764,6 +1790,17 @@ function lastActivityDate(data){
   });
   return last;
 }
+function trainedOnDate(data, dateStr){
+  let yes = false;
+  Object.keys(data.exercises || {}).forEach(k=>{
+    (data.exercises[k]||[]).forEach(e=>{ if(e.date === dateStr) yes = true; });
+  });
+  Object.keys(data.completados || {}).forEach(k=>{
+    const c = data.completados[k];
+    if(c && c.done && c.date === dateStr) yes = true;
+  });
+  return yes;
+}
 function daysSinceISO(dateStr){
   if(!dateStr) return null;
   const d1 = new Date(dateStr);
@@ -2198,13 +2235,29 @@ function render(){
     comentariosPendientes.sort((a,b)=> (b.entry.ts||'').localeCompare(a.entry.ts||''));
     const ordenados = [...withStats].sort((a,b)=> b.completed - a.completed);
 
+    const today2 = todayISO();
+    const entrenaronHoyTop = withStats.filter(p=> trainedOnDate(p.data, today2));
+
     app.innerHTML = `
       <div class="topbar">
         <div>
           <div class="brand-kicker">NUTRIRETO</div>
           <div class="brand-title" style="font-size:20px;">Panel</div>
         </div>
-        <button class="link-btn" id="admin-exit-btn">Salir</button>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button class="bell-btn" id="admin-bell-btn">🔔${comentariosPendientes.length > 0 ? `<span class="bell-badge">${comentariosPendientes.length}</span>` : ''}</button>
+          <button class="link-btn" id="admin-exit-btn">Salir</button>
+        </div>
+      </div>
+
+      <div class="trained-today-card">
+        <div class="trained-today-title">✅ Ya entrenaron hoy</div>
+        <div class="trained-today-date">${new Date().toLocaleDateString('es-AR',{weekday:'long', day:'numeric', month:'long'})}</div>
+        ${entrenaronHoyTop.length ? `
+          <div class="trained-today-count">${entrenaronHoyTop.length} ${entrenaronHoyTop.length===1?'guerrera':'guerreras'} 💪</div>
+          <div class="trained-today-names">${entrenaronHoyTop.map(p=>`<span class="trained-today-chip">${escapeHtml(p.nombre)}</span>`).join('')}</div>
+          <div class="trained-today-cheer">¡Felicidades, guerreras! 🌸</div>
+        ` : `<div class="trained-today-empty">Aún nadie entrenó hoy</div>`}
       </div>
 
       <div class="admin-stat-grid">
@@ -2214,14 +2267,11 @@ function render(){
         <div class="admin-stat-card"><div class="admin-stat-num">${sinFirmar.length}</div><div class="admin-stat-label">SIN FIRMAR COMPROMISO</div></div>
       </div>
 
+      <button class="btn-ghost" id="historial-tab-btn" style="width:100%; margin-bottom:10px;">📖 Historial de alumnas confirmadas (${(state.historial||[]).length})</button>
+
       ${abandonando.length ? `
         <div class="admin-section-title">🚨 Riesgo de abandono (${abandonando.length})</div>
         <div id="admin-abandono"></div>
-      ` : ''}
-
-      ${comentariosPendientes.length ? `
-        <div class="admin-section-title">💬 Comentarios pendientes (${comentariosPendientes.length})</div>
-        <div id="admin-comentarios"></div>
       ` : ''}
 
       ${sinFirmar.length ? `
@@ -2229,50 +2279,12 @@ function render(){
         <div id="admin-sinfirmar"></div>
       ` : ''}
 
-      <div class="admin-section-title">📖 Historial de alumnas confirmadas (${(state.historial||[]).length})</div>
-      <div id="admin-historial"></div>
-      <button class="btn-ghost" id="historial-add-btn" style="width:100%; margin-bottom:10px;">+ Agregar alumna al historial</button>
-      <div id="historial-form" class="hidden card">
-        <label>Nombre</label>
-        <input type="text" id="hist-nombre" placeholder="Ej: Yanzivi Berrios" />
-        <label>Edad</label>
-        <input type="text" id="hist-edad" placeholder="Ej: 25" />
-        <label>Duración de entrenamiento preferida</label>
-        <input type="text" id="hist-duracion" placeholder="Ej: 45 min" />
-        <label>Notas / restricciones</label>
-        <input type="text" id="hist-notas" placeholder="Ej: Evitar peso muerto (protrusión discal)" />
-        <button class="btn-primary" id="hist-save-btn" style="margin-top:8px;">Guardar</button>
-      </div>
-
       <div class="admin-section-title">📋 Todas las participantes</div>
       <div id="admin-lista"></div>
     `;
     document.getElementById('admin-exit-btn').onclick = ()=>{ state.view='login'; state.adminData=null; render(); };
-    document.getElementById('historial-add-btn').onclick = ()=>{
-      document.getElementById('historial-form').classList.toggle('hidden');
-    };
-    document.getElementById('hist-save-btn').onclick = async ()=>{
-      const nombre = document.getElementById('hist-nombre').value.trim();
-      const edad = document.getElementById('hist-edad').value.trim();
-      const duracion = document.getElementById('hist-duracion').value.trim();
-      const notas = document.getElementById('hist-notas').value.trim();
-      if(!nombre) return;
-      state.historial = state.historial || [];
-      state.historial.push({ nombre, edad, duracion, notas, fecha: todayISO() });
-      await saveHistorial(state.historial);
-      render();
-    };
-    const histC = document.getElementById('admin-historial');
-    (state.historial||[]).forEach((h, hi)=>{
-      const box = document.createElement('div');
-      box.className = 'admin-row';
-      box.innerHTML = `
-        <div class="admin-row-name">${escapeHtml(h.nombre)}${h.edad ? ' · ' + escapeHtml(h.edad) + ' años' : ''}</div>
-        <div class="admin-row-sub">${h.duracion ? 'Entrena ' + escapeHtml(h.duracion) : ''}</div>
-        ${h.notas ? `<div class="admin-comment-box">⚠️ ${escapeHtml(h.notas)}</div>` : ''}
-      `;
-      histC.appendChild(box);
-    });
+    document.getElementById('admin-bell-btn').onclick = ()=>{ state.view='admin-comments'; render(); };
+    document.getElementById('historial-tab-btn').onclick = ()=>{ state.view='admin-historial'; render(); };
 
     function renderParticipantRow(container, p, opts){
       const pct = Math.round((p.completed/30)*100);
@@ -2291,8 +2303,41 @@ function render(){
       const c = document.getElementById('admin-abandono');
       abandonando.forEach(p=> renderParticipantRow(c, p, {warn:true}));
     }
-    if(comentariosPendientes.length){
-      const c = document.getElementById('admin-comentarios');
+    if(sinFirmar.length){
+      const c = document.getElementById('admin-sinfirmar');
+      sinFirmar.forEach(p=> renderParticipantRow(c, p));
+    }
+    const listaC = document.getElementById('admin-lista');
+    ordenados.forEach(p=> renderParticipantRow(listaC, p));
+    return;
+  }
+
+  if(state.view === 'admin-comments'){
+    const all = state.adminData || [];
+    const comentariosPendientes = [];
+    all.forEach(p=>{
+      Object.keys(p.data.exercises||{}).forEach(k=>{
+        (p.data.exercises[k]||[]).forEach(e=>{
+          if(e.comment && !e.respondido) comentariosPendientes.push({ participante:p, ejercicio:k, entry:e });
+        });
+      });
+    });
+    comentariosPendientes.sort((a,b)=> (b.entry.ts||'').localeCompare(a.entry.ts||''));
+    app.innerHTML = `
+      <button class="back" id="back-btn">&larr; Volver</button>
+      <div class="brand-header">
+        <div class="brand-kicker">NUTRIRETO</div>
+        <div class="brand-title">SUMA20</div>
+      </div>
+      <h1 style="text-align:center;">🔔 Comentarios</h1>
+      <p class="sub" style="text-align:center;">Toca "Marcar como visto" cuando lo hayas resuelto.</p>
+      <div id="admin-comentarios"></div>
+    `;
+    document.getElementById('back-btn').onclick = ()=>{ state.view='admin-panel'; render(); };
+    const c = document.getElementById('admin-comentarios');
+    if(!comentariosPendientes.length){
+      c.innerHTML = '<div class="empty">No tienes comentarios pendientes. 🎉</div>';
+    } else {
       comentariosPendientes.forEach(({participante,ejercicio,entry})=>{
         const box = document.createElement('div');
         box.className = 'admin-row warn';
@@ -2305,19 +2350,66 @@ function render(){
         c.appendChild(box);
       });
       c.querySelectorAll('.admin-mark-btn').forEach(btn=>{
-        btn.onclick = async (ev)=>{
-          ev.stopPropagation();
+        btn.onclick = async ()=>{
           await markCommentSeen(btn.dataset.id, btn.dataset.ex, btn.dataset.ts);
           render();
         };
       });
     }
-    if(sinFirmar.length){
-      const c = document.getElementById('admin-sinfirmar');
-      sinFirmar.forEach(p=> renderParticipantRow(c, p));
+    return;
+  }
+
+  if(state.view === 'admin-historial'){
+    app.innerHTML = `
+      <button class="back" id="back-btn">&larr; Volver</button>
+      <div class="brand-header">
+        <div class="brand-kicker">NUTRIRETO</div>
+        <div class="brand-title">SUMA20</div>
+      </div>
+      <h1 style="text-align:center;">📖 Historial de alumnas confirmadas</h1>
+      <div id="admin-historial"></div>
+      <button class="btn-ghost" id="historial-add-btn" style="width:100%; margin-bottom:10px;">+ Agregar alumna al historial</button>
+      <div id="historial-form" class="hidden card">
+        <label>Nombre</label>
+        <input type="text" id="hist-nombre" placeholder="Ej: Yanzivi Berrios" />
+        <label>Edad</label>
+        <input type="text" id="hist-edad" placeholder="Ej: 25" />
+        <label>Duración de entrenamiento preferida</label>
+        <input type="text" id="hist-duracion" placeholder="Ej: 45 min" />
+        <label>Notas / restricciones</label>
+        <input type="text" id="hist-notas" placeholder="Ej: Evitar peso muerto (protrusión discal)" />
+        <button class="btn-primary" id="hist-save-btn" style="margin-top:8px;">Guardar</button>
+      </div>
+    `;
+    document.getElementById('back-btn').onclick = ()=>{ state.view='admin-panel'; render(); };
+    document.getElementById('historial-add-btn').onclick = ()=>{
+      document.getElementById('historial-form').classList.toggle('hidden');
+    };
+    document.getElementById('hist-save-btn').onclick = async ()=>{
+      const nombre = document.getElementById('hist-nombre').value.trim();
+      const edad = document.getElementById('hist-edad').value.trim();
+      const duracion = document.getElementById('hist-duracion').value.trim();
+      const notas = document.getElementById('hist-notas').value.trim();
+      if(!nombre) return;
+      state.historial = state.historial || [];
+      state.historial.push({ nombre, edad, duracion, notas, fecha: todayISO() });
+      await saveHistorial(state.historial);
+      render();
+    };
+    const histC = document.getElementById('admin-historial');
+    if(!(state.historial||[]).length){
+      histC.innerHTML = '<div class="empty">Todavía no agregaste a nadie.</div>';
     }
-    const listaC = document.getElementById('admin-lista');
-    ordenados.forEach(p=> renderParticipantRow(listaC, p));
+    (state.historial||[]).forEach((h)=>{
+      const box = document.createElement('div');
+      box.className = 'admin-row';
+      box.innerHTML = `
+        <div class="admin-row-name">${escapeHtml(h.nombre)}${h.edad ? ' · ' + escapeHtml(h.edad) + ' años' : ''}</div>
+        <div class="admin-row-sub">${h.duracion ? 'Entrena ' + escapeHtml(h.duracion) : ''}</div>
+        ${h.notas ? `<div class="admin-comment-box">⚠️ ${escapeHtml(h.notas)}</div>` : ''}
+      `;
+      histC.appendChild(box);
+    });
     return;
   }
 
