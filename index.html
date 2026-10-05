@@ -745,10 +745,29 @@
   .trained-today-names{ display:flex; flex-wrap:wrap; justify-content:center; gap:6px; }
   .trained-today-chip{
     background:#f0ece0;
+    border:none;
     border-radius:20px;
     padding:6px 12px;
     font-size:13px;
     font-weight:600;
+    font-family:inherit;
+    color:var(--text);
+    cursor:pointer;
+  }
+  .name-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--pink);
+    color:#fff;
+    font-size:10px;
+    font-weight:700;
+    min-width:18px;
+    height:18px;
+    border-radius:9px;
+    padding:0 5px;
+    margin-left:6px;
+    vertical-align:middle;
   }
   .trained-today-cheer{ margin-top:12px; font-size:13px; color:var(--green); font-weight:600; }
   .trained-today-empty{ margin-top:10px; font-size:13px; color:var(--text-muted); }
@@ -1812,6 +1831,20 @@ function lastActivityDate(data){
   });
   return last;
 }
+function pendingCommentsOf(p){
+  const out = [];
+  Object.keys(p.data.exercises||{}).forEach(k=>{
+    (p.data.exercises[k]||[]).forEach(e=>{
+      if(e.comment && !e.respondido) out.push({ ejercicio:k, entry:e });
+    });
+  });
+  out.sort((a,b)=> (b.entry.ts||'').localeCompare(a.entry.ts||''));
+  return out;
+}
+function nameBadge(p){
+  const n = pendingCommentsOf(p).length;
+  return n ? `<span class="name-badge">💬 ${n}</span>` : '';
+}
 function trainedOnDate(data, dateStr){
   let yes = false;
   Object.keys(data.exercises || {}).forEach(k=>{
@@ -2277,7 +2310,7 @@ function render(){
         <div class="trained-today-date">${new Date().toLocaleDateString('es-AR',{weekday:'long', day:'numeric', month:'long'})}</div>
         ${entrenaronHoyTop.length ? `
           <div class="trained-today-count">${entrenaronHoyTop.length} ${entrenaronHoyTop.length===1?'guerrera':'guerreras'} 💪</div>
-          <div class="trained-today-names">${entrenaronHoyTop.map(p=>`<span class="trained-today-chip">${escapeHtml(p.nombre)}</span>`).join('')}</div>
+          <div class="trained-today-names">${entrenaronHoyTop.map(p=>`<button class="trained-today-chip" data-id="${escapeHtml(p.id)}">${escapeHtml(p.nombre)}${nameBadge(p)}</button>`).join('')}</div>
           <div class="trained-today-cheer">¡Felicidades, guerreras! 🌸</div>
         ` : `<div class="trained-today-empty">Aún nadie entrenó hoy</div>`}
       </div>
@@ -2307,13 +2340,16 @@ function render(){
     document.getElementById('admin-exit-btn').onclick = ()=>{ state.view='login'; state.adminData=null; render(); };
     document.getElementById('admin-bell-btn').onclick = ()=>{ state.view='admin-comments'; render(); };
     document.getElementById('historial-tab-btn').onclick = ()=>{ state.view='admin-historial'; render(); };
+    document.querySelectorAll('.trained-today-chip').forEach(ch=>{
+      ch.onclick = ()=>{ state.adminSelected = ch.dataset.id; state.view='admin-detail'; render(); };
+    });
 
     function renderParticipantRow(container, p, opts){
       const pct = Math.round((p.completed/30)*100);
       const row = document.createElement('div');
       row.className = 'admin-row' + (opts && opts.warn ? ' warn' : '') + (p.completed>=30 ? ' done' : '');
       row.innerHTML = `
-        <div class="admin-row-name">${escapeHtml(p.nombre)}</div>
+        <div class="admin-row-name">${escapeHtml(p.nombre)}${nameBadge(p)}</div>
         <div class="admin-row-sub">${p.completed}/30 días${p.daysSince !== null ? ' · Última actividad hace ' + p.daysSince + ' día' + (p.daysSince===1?'':'s') : ' · Sin actividad todavía'}</div>
         <div class="admin-progress-mini"><div class="admin-progress-mini-fill" style="width:${pct}%;"></div></div>
       `;
@@ -2447,6 +2483,7 @@ function render(){
         <div class="brand-title" style="font-size:20px;">${escapeHtml(p.nombre)}</div>
       </div>
       <p class="sub" style="text-align:center;">${completed}/30 días · Compromiso: ${p.data.compromisoFirmado ? '✅ firmado' : '❌ sin firmar'}</p>
+      <div id="admin-detail-comments"></div>
       ${sharedPhotos.length ? `
         <div class="admin-section-title">📸 Fotos compartidas contigo</div>
         <div class="photos-grid" id="admin-shared-photos"></div>
@@ -2454,6 +2491,30 @@ function render(){
       <div id="admin-detail-days"></div>
     `;
     document.getElementById('back-btn').onclick = ()=>{ state.view='admin-panel'; render(); };
+    const pend = pendingCommentsOf(p);
+    const cBox = document.getElementById('admin-detail-comments');
+    if(pend.length){
+      cBox.innerHTML = `<div class="admin-section-title">💬 Comentarios pendientes (${pend.length})</div>`;
+      pend.forEach(({ejercicio, entry})=>{
+        const box = document.createElement('div');
+        box.className = 'admin-row warn';
+        box.innerHTML = `
+          <div class="admin-row-sub">${escapeHtml(ejercicio)} · ${formatDateAdmin(entry.date)}</div>
+          <div class="admin-comment-box">💬 ${escapeHtml(entry.comment)}</div>
+          <button class="btn-ghost admin-mark-btn" data-ex="${escapeHtml(ejercicio)}" data-ts="${escapeHtml(entry.ts||'')}" style="margin-top:8px; padding:6px 12px; font-size:11px;">✓ Marcar como visto</button>
+        `;
+        cBox.appendChild(box);
+      });
+      cBox.querySelectorAll('.admin-mark-btn').forEach(btn=>{
+        btn.onclick = async (ev)=>{
+          ev.stopPropagation();
+          await markCommentSeen(p.id, btn.dataset.ex, btn.dataset.ts);
+          render();
+        };
+      });
+    } else {
+      cBox.innerHTML = '<div class="sub" style="text-align:center;">Sin comentarios pendientes 🎉</div>';
+    }
     if(sharedPhotos.length){
       const photosC = document.getElementById('admin-shared-photos');
       sharedPhotos.sort((a,b)=>a-b).forEach(week=>{
