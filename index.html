@@ -1506,6 +1506,7 @@ document.addEventListener('pointerdown', function unlockAudioOnce(){
 }, { once:true });
 document.addEventListener('visibilitychange', ()=>{
   if(document.visibilityState === 'visible'){
+    if(Object.keys(restTimerEndTimes).length) nrWake();
     Object.keys(restTimerEndTimes).forEach(key=> tickRestTimer(key));
   }
 });
@@ -1549,6 +1550,7 @@ function stopSilentKeepAlive(key){
 }
 let restFinishedCallbacks = {};
 function startRestTimer(key, seconds){
+  nrWake();
   ensureRestAudio();
   startSilentKeepAlive(key);
   const current = state.uiSets[key] !== undefined ? state.uiSets[key] : 0;
@@ -1559,8 +1561,82 @@ function startRestTimer(key, seconds){
   render();
   restTimerHandles[key] = setInterval(()=> tickRestTimer(key), 1000);
 }
-function startCircuitRest(key, seconds, callback, label){
-  restFinishedCallbacks[key] = callback;
+function circuitCallback(circuitKey, desc){
+  return async ()=>{
+    const cState = state.uiCircuit[circuitKey];
+    if(desc.t === 'finish'){
+      const data = state.data;
+      if(!data.exercises[desc.doneKey]) data.exercises[desc.doneKey] = [];
+      data.exercises[desc.doneKey].push({ date: todayISO(), ts: new Date().toISOString() });
+      await saveParticipante(state.codigo, state.nombre, data);
+      if(isDayDone(data, state.selectedDay)){ state.view = 'day-complete'; render(); return; }
+      render();
+    } else if(desc.t === 'round'){
+      if(cState){ cState.round++; cState.exIdx = 0; }
+      render();
+    } else {
+      if(cState) cState.exIdx++;
+      render();
+    }
+  };
+}
+let restDescs = {};
+let nrWakeLock = null;
+async function nrWake(){
+  try{
+    if('wakeLock' in navigator && !nrWakeLock){
+      nrWakeLock = await navigator.wakeLock.request('screen');
+      nrWakeLock.addEventListener('release', ()=>{ nrWakeLock = null; });
+    }
+  }catch(e){}
+}
+function nrWakeRelease(){
+  try{ if(nrWakeLock && !Object.keys(restTimerEndTimes).length){ nrWakeLock.release(); nrWakeLock = null; } }catch(e){}
+}
+function persistNr(){
+  try{
+    if(!state.codigo || !state.nombre || state.view === 'admin-loading' || state.view === 'admin-panel') return;
+    const rests = {};
+    Object.keys(restTimerEndTimes).forEach(k=>{
+      if(restDescs[k]) rests[k] = { end: restTimerEndTimes[k], label: state.uiRestingLabel[k] || 'Descanso', desc: restDescs[k] };
+    });
+    localStorage.setItem('nr_sesion', JSON.stringify({ codigo: state.codigo, nombre: state.nombre, view: state.view, day: state.selectedDay, circuit: state.uiCircuit, rests, d: todayISO() }));
+  }catch(e){}
+}
+async function restoreNr(){
+  try{
+    if(/[?&]salir/.test(location.search)){ localStorage.removeItem('nr_sesion'); return; }
+    const raw = localStorage.getItem('nr_sesion');
+    if(!raw) return;
+    const sv = JSON.parse(raw);
+    if(!sv || !sv.codigo || !sv.nombre || String(sv.codigo).toUpperCase() !== ACCESS_CODE.toUpperCase()) return;
+    const data = await loadParticipante(sv.codigo, sv.nombre);
+    if(state.view !== 'login') return;
+    state.codigo = sv.codigo; state.nombre = sv.nombre; state.data = data;
+    if(!data.compromisoFirmado) state.view = 'compromiso';
+    else if(!data.modelo) state.view = 'elegir-modelo';
+    else if(sv.view === 'day' && sv.day){ state.selectedDay = sv.day; state.view = 'day'; }
+    else state.view = 'dashboard';
+    const rests = (sv.d === todayISO() && state.view === 'day') ? (sv.rests || {}) : {};
+    if(sv.d === todayISO() && state.view === 'day') state.uiCircuit = sv.circuit || {};
+    Object.keys(rests).forEach(k=>{
+      const r = rests[k];
+      restTimerEndTimes[k] = r.end;
+      state.uiResting[k] = Math.max(0, Math.round((r.end - Date.now())/1000));
+      state.uiRestingLabel[k] = r.label;
+      restDescs[k] = r.desc;
+      restFinishedCallbacks[k] = circuitCallback(k, r.desc);
+      restTimerHandles[k] = setInterval(()=> tickRestTimer(k), 1000);
+    });
+    render();
+    Object.keys(rests).forEach(k=> tickRestTimer(k));
+    nrWake();
+  }catch(e){}
+}
+function startCircuitRest(key, seconds, desc, label){
+  restDescs[key] = desc;
+  restFinishedCallbacks[key] = circuitCallback(key, desc);
+  nrWake();
   state.uiRestingLabel[key] = label || 'Descanso';
   ensureRestAudio();
   startSilentKeepAlive(key);
@@ -1575,6 +1651,8 @@ function cancelRestTimer(key){
   delete restTimerHandles[key];
   delete restTimerEndTimes[key];
   delete state.uiResting[key];
+  delete restDescs[key];
+  nrWakeRelease();
   stopSilentKeepAlive(key);
   if(restFinishedCallbacks[key]){
     const cb = restFinishedCallbacks[key];
@@ -1593,6 +1671,8 @@ function tickRestTimer(key){
     delete restTimerHandles[key];
     delete restTimerEndTimes[key];
     delete state.uiResting[key];
+    delete restDescs[key];
+    nrWakeRelease();
     onRestFinished(key);
   } else {
     render();
@@ -1946,6 +2026,10 @@ function currentDayNum(data){
 }
 
 function render(){
+  renderCore();
+  persistNr();
+}
+function renderCore(){
   const app = document.getElementById('app');
 
   if(state.view === 'login'){
@@ -2855,31 +2939,18 @@ function render(){
         const isLastRound = cState.round >= item.rondas;
 
         if(isLastExInRound && isLastRound){
-          const finishCircuit = async ()=>{
-            const doneKey = btn.dataset.donekey;
-            if(!data.exercises[doneKey]) data.exercises[doneKey] = [];
-            data.exercises[doneKey].push({ date: todayISO(), ts: new Date().toISOString() });
-            await saveParticipante(state.codigo, state.nombre, data);
-            if(isDayDone(data, d)){ state.view = 'day-complete'; render(); return; }
-            render();
-          };
+          const finishDesc = { t:'finish', doneKey: btn.dataset.donekey };
+          const finishCircuit = circuitCallback(circuitKey, finishDesc);
           const finalSeconds = currentEx.duracion || item.descansoEntre;
           if(item.timerFinal && finalSeconds){
-            startCircuitRest(circuitKey, finalSeconds, finishCircuit, currentEx.duracion ? currentEx.ejercicio + ' — en curso' : 'Descanso');
+            startCircuitRest(circuitKey, finalSeconds, finishDesc, currentEx.duracion ? currentEx.ejercicio + ' — en curso' : 'Descanso');
           } else {
             finishCircuit();
           }
         } else if(isLastExInRound){
-          startCircuitRest(circuitKey, item.descansoRondas || 60, ()=>{
-            cState.round++;
-            cState.exIdx = 0;
-            render();
-          }, 'Descanso entre rondas');
+          startCircuitRest(circuitKey, item.descansoRondas || 60, { t:'round' }, 'Descanso entre rondas');
         } else {
-          startCircuitRest(circuitKey, currentEx.duracion || item.descansoEntre || 15, ()=>{
-            cState.exIdx++;
-            render();
-          }, currentEx.duracion ? currentEx.ejercicio + ' — en curso' : 'Descanso');
+          startCircuitRest(circuitKey, currentEx.duracion || item.descansoEntre || 15, { t:'next' }, currentEx.duracion ? currentEx.ejercicio + ' — en curso' : 'Descanso');
         }
       };
     });
@@ -3051,6 +3122,7 @@ function fireConfetti(){
 }
 
 render();
+restoreNr();
 </script>
 </body>
 </html>
