@@ -1864,8 +1864,47 @@ function compressImage(file, maxSize){
     reader.readAsDataURL(file);
   });
 }
+// Une lo que hay en la nube con lo que tiene este celular antes de guardar (solo suma, nunca borra),
+// para que una sesion abierta con datos viejos no pise lo que se guardo despues (otro dispositivo o la entrenadora).
+function mergeParticipanteData(server, local){
+  if(!server || typeof server !== 'object') return;
+  const sx = server.exercises || {};
+  Object.keys(sx).forEach(k=>{
+    const sArr = Array.isArray(sx[k]) ? sx[k] : [];
+    if(!Array.isArray(local.exercises[k])){ local.exercises[k] = sArr.slice(); return; }
+    const byTs = {};
+    local.exercises[k].forEach(e=>{ if(e && e.ts) byTs[e.ts] = e; });
+    sArr.forEach(e=>{
+      if(!e) return;
+      if(!e.ts){ return; }
+      if(!byTs[e.ts]){ local.exercises[k].push(e); byTs[e.ts] = e; }
+      else if(e.respondido && !byTs[e.ts].respondido){ byTs[e.ts].respondido = true; }
+    });
+  });
+  const sc = server.completados || {};
+  Object.keys(sc).forEach(k=>{
+    if(!local.completados[k]) local.completados[k] = sc[k];
+    else if(sc[k] && sc[k].done && !local.completados[k].done) local.completados[k] = Object.assign({}, local.completados[k], sc[k]);
+  });
+  if(server.compromisoFirmado) local.compromisoFirmado = true;
+  if(!local.modelo && server.modelo) local.modelo = server.modelo;
+  (server.badges || []).forEach(b=>{ if(local.badges.indexOf(b) < 0) local.badges.push(b); });
+  ['photos','photosShared'].forEach(f=>{
+    const sv = server[f] || {};
+    Object.keys(sv).forEach(k=>{ if(local[f][k] === undefined) local[f][k] = sv[k]; });
+  });
+}
 async function saveParticipante(codigo, nombre, data){
   const id = storageKey(codigo, nombre);
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/nutrireto_participantes?id=eq.${encodeURIComponent(id)}&select=data`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+    });
+    if(res.ok){
+      const rows = await res.json();
+      if(rows.length) mergeParticipanteData(rows[0].data, data);
+    }
+  }catch(e){}
   try{
     await fetch(`${SUPABASE_URL}/rest/v1/nutrireto_participantes`, {
       method:'POST',
@@ -1961,13 +2000,7 @@ async function markCommentSeen(participantId, exerciseKey, ts){
   const entries = p.data.exercises[exerciseKey] || [];
   const entry = entries.find(e=> (e.ts||'') === ts);
   if(entry) entry.respondido = true;
-  try{
-    await fetch(`${SUPABASE_URL}/rest/v1/nutrireto_participantes`, {
-      method:'POST',
-      headers:{ apikey:SUPABASE_KEY, Authorization:`Bearer ${SUPABASE_KEY}`, 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates' },
-      body: JSON.stringify({ id: p.id, codigo: p.codigo, nombre: p.nombre, data: p.data })
-    });
-  }catch(e){}
+  await saveParticipante(p.codigo, p.nombre, normalizeData(p.data));
 }
 
 function dayInfo(dayNum, modelo){
