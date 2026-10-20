@@ -1522,8 +1522,11 @@ async function ensureRestAudio(){
   return restAudioCtx;
 }
 function firstNumberSecs(str){
-  const m = String(str).match(/\d+/);
-  return m ? Number(m[0]) : 30;
+  const t = String(str).toLowerCase();
+  const m = t.match(/\d+(?:[.,]\d+)?/);
+  if(!m) return 30;
+  const n = Number(m[0].replace(',', '.'));
+  return Math.round(/min/.test(t) ? n * 60 : n);
 }
 let silentOscillators = {};
 function startSilentKeepAlive(key){
