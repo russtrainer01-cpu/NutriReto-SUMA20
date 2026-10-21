@@ -1518,7 +1518,8 @@ async function ensureRestAudio(){
   if(!restAudioCtx){
     try{ restAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; }
   }
-  try{ await restAudioCtx.resume(); }catch(e){}
+  // En algunos celulares resume() nunca responde (pantalla bloqueada, llamada, app en segundo plano): no esperar mas de 400 ms para que el cronometro no se quede trabado en 0
+  try{ await Promise.race([restAudioCtx.resume(), new Promise(r=> setTimeout(r, 400))]); }catch(e){}
   return restAudioCtx;
 }
 function firstNumberSecs(str){
