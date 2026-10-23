@@ -2026,9 +2026,19 @@ function computeDayProgressPct(data, dayNum, items){
   const opciones = items.filter(it=> it.esOpcion);
   const total = regulares.length + (opciones.length ? 1 : 0);
   if(!total) return 0;
+  const itemFraction = (item, idx)=>{
+    if(item.tipo === 'circuito'){
+      if(isItemDone(item, idx)) return 1;
+      const ck = dayNum + ':circuito' + idx;
+      const hechos = item.ejercicios.reduce((n,ex)=> n + ((data.exercises[ck + ':' + ex.ejercicio] || []).length), 0);
+      const totalPasos = (item.rondas || 1) * item.ejercicios.length;
+      return totalPasos ? Math.min(1, hechos/totalPasos) : 0;
+    }
+    return isItemDone(item, idx) ? 1 : 0;
+  };
   let done = 0;
-  regulares.forEach((item)=>{ if(isItemDone(item, items.indexOf(item))) done++; });
-  if(opciones.length && opciones.some((item)=> isItemDone(item, items.indexOf(item)))) done++;
+  regulares.forEach((item)=>{ done += itemFraction(item, items.indexOf(item)); });
+  if(opciones.length) done += Math.max.apply(null, opciones.map((item)=> itemFraction(item, items.indexOf(item))));
   return Math.round((done/total)*100);
 }
 function isDayDone(data, dayNum){
@@ -2038,6 +2048,7 @@ function isDayDone(data, dayNum){
     return !!(data.completados['dia'+dayNum] && data.completados['dia'+dayNum].done);
   }
   if(d.items.length === 0) return false;
+  if(data.completados['fin'+dayNum] && data.completados['fin'+dayNum].done) return true;
   const opciones = d.items.filter(it=> it.esOpcion);
   const regulares = d.items.filter(it=> !it.esOpcion);
   const isItemDone = (item, idx)=>{
@@ -2247,6 +2258,8 @@ function renderCore(){
     const done = completedCount(state.data);
     const pct = Math.round((done/30)*100);
     const frase = getFraseForDay(d);
+    const finRec = state.data.completados['fin'+d];
+    const rutPct = (finRec && finRec.done && typeof finRec.pct === 'number') ? finRec.pct : null;
     const hitos = [];
     if(done === 7) hitos.push('🏅 Primera semana completa');
     if(done === 15) hitos.push('🎉 Mitad del camino');
@@ -2258,7 +2271,8 @@ function renderCore(){
         <div class="share-card-sub">Completé mi</div>
         <div class="share-card-day">Día ${d}</div>
         <div class="share-card-of">de 30 💪</div>
-        <div class="share-card-progress-track"><div class="share-card-progress-fill" style="width:${pct}%;"></div></div>
+        ${rutPct !== null && rutPct < 100 ? `<div style="font-size:12px; font-weight:700; color:var(--pink-dark); margin-bottom:6px;">Rutina de hoy al ${rutPct}%</div>` : ''}
+        <div class="share-card-progress-track"><div class="share-card-progress-fill" style="width:${(rutPct !== null && rutPct < 100) ? rutPct : pct}%;"></div></div>
         ${hitos.length ? `<div class="share-card-hito">${escapeHtml(hitos[0])}</div>` : ''}
         <div class="share-card-quote">"${escapeHtml(frase.replace(/[\u{1F300}-\u{1FAFF}]/gu,'').trim())}"</div>
         <div class="share-card-tags">#NutriReto #SUMA20 #NoMeSuelto</div>
@@ -2934,6 +2948,40 @@ function renderCore(){
       }
       wrap.appendChild(card);
     });
+
+    const pctHoy = computeDayProgressPct(data, d, info.items);
+    if(!isDayDone(data, d) && pctHoy > 0){
+      const finCard = document.createElement('div');
+      finCard.className = 'card';
+      finCard.style.textAlign = 'center';
+      finCard.style.marginTop = '22px';
+      finCard.innerHTML = `
+        <p class="sub" style="margin:0 0 10px;">¿Hoy no pudiste hacerlo todo?<br>Está bien, cada paso cuenta 💗</p>
+        <button class="btn-ghost" id="finalizar-rutina-btn" style="border:1.5px solid var(--pink); color:var(--pink); font-weight:700;">Finalizar rutina · ${pctHoy}%</button>
+      `;
+      wrap.appendChild(finCard);
+      finCard.querySelector('#finalizar-rutina-btn').onclick = ()=>{
+        const ov = document.createElement('div');
+        ov.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px;';
+        ov.innerHTML = `
+          <div style="background:#fff; border-radius:18px; padding:22px; max-width:320px; width:100%; text-align:center; box-shadow:0 8px 30px rgba(0,0,0,.25);">
+            <div style="font-size:30px;">💪</div>
+            <div style="font-weight:700; font-size:16px; margin:6px 0;">¿Finalizar la rutina al ${pctHoy}%?</div>
+            <p class="sub" style="margin:0 0 14px;">Se guarda como completada con lo que hiciste hoy.</p>
+            <button class="btn-primary" id="fin-si">Sí, finalizar</button>
+            <button class="btn-ghost" id="fin-no" style="margin-top:8px;">Seguir entrenando</button>
+          </div>`;
+        document.body.appendChild(ov);
+        ov.querySelector('#fin-no').onclick = ()=> ov.remove();
+        ov.querySelector('#fin-si').onclick = async ()=>{
+          ov.remove();
+          data.completados['fin'+d] = { done:true, date:todayISO(), ts:new Date().toISOString(), pct:pctHoy };
+          await saveParticipante(state.codigo, state.nombre, data);
+          state.view = 'day-complete';
+          render();
+        };
+      };
+    }
 
     wrap.querySelectorAll('.rest-start-btn').forEach(btn=>{
       btn.onclick = ()=>{ startRestTimer(btn.dataset.key, Number(btn.dataset.seconds)); };
